@@ -26,7 +26,7 @@ chmod 600 zesty64docker-key.pem
 
 
 echo "Creating instance..."
-INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 run-instances --image-id $AMIID --security-group-ids $SGID --count 1 --instance-type t2.micro --key-name zesty64docker-key --query 'Instances[0].InstanceId'`
+INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 run-instances --image-id $AMIID --security-group-ids $SGID --count 1 --instance-type t2.nano --key-name zesty64docker-key --query 'Instances[0].InstanceId'`
 echo $INSTID
 
 
