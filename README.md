@@ -8,8 +8,12 @@ Simple scripts for launching Amazon EC2 instances with L2TP VPN server running o
 ## Prerequisites
 A Linux system (Ubuntu, Debian RHEL/CentOS etc.) is necessary
 
-## Amazon AWS command line interface installation on Ubuntu/Debian
-`$ sudo apt-get isnstall python-pip; pip install --user awscli`
+Amazon AWS command line interface installation on Ubuntu/Debian
+```
+$ sudo apt-get update
+$ sudo apt-get isnstall python-pip
+$ pip install awscli --upgrade --user
+```
 
 ## Server Instance creation
 `$ sh zesty64-create.sh`
@@ -20,7 +24,7 @@ A Linux system (Ubuntu, Debian RHEL/CentOS etc.) is necessary
 ## VPN credential and user management
 Please modify docker-sevpn/sevpn.env before server instance creation
 ```
-$ cat docker-sevpn/sevpn.env 
+$ cat docker-sevpn/sevpn.env
 PSK=SHARE-SECRET
 USERS=user0:pass0;user1:pass1;
 SPW=SRV-MGT-PASS
@@ -29,4 +33,3 @@ HPW=HUB-MGT-PASS
 
 ## How to setup on client side
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
-
