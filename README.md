@@ -16,10 +16,14 @@ A Linux system (Ubuntu, Debian RHEL/CentOS etc.) is necessary
 ## Server Instance deletion
 `$ sh zesty64-delete.sh`
 
-## VPN user management
-Modify the "USERS" section in docker-sevpn/sevpn.env before server instance creation
+## VPN credential and user management
+Please modify docker-sevpn/sevpn.env before server instance creation
 ```
+$ cat docker-sevpn/sevpn.env 
+PSK=SHARE-SECRET
 USERS=user0:pass0;user1:pass1;
+SPW=SRV-MGT-PASS
+HPW=HUB-MGT-PASS
 ```
 
 ## How to setup on client side
