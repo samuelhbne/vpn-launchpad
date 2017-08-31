@@ -15,6 +15,9 @@ $ sudo apt-get isnstall python-pip
 $ pip install awscli --upgrade --user
 ```
 
+Credential setup for AWS cli
+<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
+
 ## Server Instance creation
 `$ sh zesty64-create.sh`
 
