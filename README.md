@@ -1,4 +1,5 @@
-# Simple scripts for launching Amazon EC2 instances with L2TP VPN server running out of the box
+# vpn-launchpad
+Simple scripts for launching Amazon EC2 instances with L2TP VPN server running out of the box
 
 ## Why? With vpn-launchpad, you can:
  - Create a L2TP server instance on demand with the rate as low as $0.0059 per hour ATM.
