@@ -1,4 +1,4 @@
-# Simple scripts for launching Amazon EC2 instances with L2TP server running out of the box
+# Simple scripts for launching Amazon EC2 instances with L2TP VPN server running out of the box
 
 ## Before we go
    A Linux system (Ubuntu, Debian RHEL/CentOS etc.) is necessary
@@ -14,4 +14,4 @@
 
 ## VPN user management
    Modify the "USERS" section in docker-sevpn/sevpn.env
-   `USERS=user0:pass0;user1:pass1;`
+   ```USERS=user0:pass0;user1:pass1;```
