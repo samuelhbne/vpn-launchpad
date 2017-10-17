@@ -1,5 +1,8 @@
 #!/bin/bash
 
+DIR=`readlink -f $0`
+DIR=`dirname $DIR`
+
 AMIID="ami-d511e5b3"
 PROFILE="default"
 REGION="ap-northeast-1"
@@ -25,5 +28,5 @@ done
 
 echo "Deleting SSH Key-Pair..."
 aws --profile $PROFILE --region $REGION --output text ec2 delete-key-pair --key-name zesty64docker-key
-rm -rf zesty64docker-key.pem
+rm -rf $DIR/zesty64docker-key.pem
 
