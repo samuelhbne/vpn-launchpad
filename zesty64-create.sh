@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DIR=`dirname $0`
+VLPHOME="$HOME/.vpn-launchpad"
 
 AMIID="ami-1913e77f"
 PROFILE="default"
@@ -23,8 +24,11 @@ aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-gro
 
 
 echo "Creating Key-Pair..."
-aws --profile $PROFILE --region $REGION ec2 create-key-pair --key-name zesty64docker-key --query 'KeyMaterial' --output text > $DIR/zesty64docker-key.pem
-chmod 600 $DIR/zesty64docker-key.pem
+if [ ! -d "$VLPHOME" ]; then
+	mkdir $VLPHOME
+fi
+aws --profile $PROFILE --region $REGION ec2 create-key-pair --key-name zesty64docker-key --query 'KeyMaterial' --output text > $VLPHOME/zesty64docker-key.pem
+chmod 600 $VLPHOME/zesty64docker-key.pem
 
 
 echo "Creating instance..."
@@ -61,13 +65,14 @@ done
 
 echo "Instance provisioning..."
 ssh-keyscan -H $IPPUB >> ~/.ssh/known_hosts
-ssh -i $DIR/zesty64docker-key.pem ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io python-pip git"
-ssh -i $DIR/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
-ssh -i $DIR/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
-ssh -i $DIR/zesty64docker-key.pem ubuntu@$IPPUB "sudo sysctl -p"
-ssh -i $DIR/zesty64docker-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
-scp -i $DIR/zesty64docker-key.pem -r $DIR/docker-sevpn ubuntu@$IPPUB:
-ssh -i $DIR/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-sevpn; cat sevpn.sh; sh sevpn.sh"
+ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io python-pip git"
+ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
+ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
+ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sysctl -p"
+ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
+scp -i $VLPHOME/zesty64docker-key.pem -r $DIR/docker-sevpn ubuntu@$IPPUB:
+ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-sevpn; cat sevpn.sh; sh sevpn.sh"
 
+echo
 echo "New Instance is up on $IPPUB"
 echo "Enjoy."

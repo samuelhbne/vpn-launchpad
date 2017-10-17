@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DIR=`dirname $0`
+VLPHOME="$HOME/.vpn-launchpad"
 
 AMIID="ami-d511e5b3"
 PROFILE="default"
@@ -27,5 +28,5 @@ done
 
 echo "Deleting SSH Key-Pair..."
 aws --profile $PROFILE --region $REGION --output text ec2 delete-key-pair --key-name zesty64docker-key
-rm -rf $DIR/zesty64docker-key.pem
+rm -rf $VLPHOME/zesty64docker-key.pem
 
