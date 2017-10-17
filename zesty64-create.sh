@@ -3,7 +3,7 @@
 DIR=`dirname $0`
 VLPHOME="$HOME/.vpn-launchpad"
 
-AMIID="ami-1913e77f"
+AMIID="ami-fb58869d"
 PROFILE="default"
 REGION="ap-northeast-1"
 
