@@ -1,7 +1,6 @@
 #!/bin/bash
 
-DIR=`readlink -f $0`
-DIR=`dirname $DIR`
+DIR=`dirname $0`
 
 AMIID="ami-1913e77f"
 PROFILE="default"
