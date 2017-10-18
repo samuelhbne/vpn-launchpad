@@ -6,7 +6,7 @@ VLPHOME="$HOME/.vpn-launchpad"
 AMIID="ami-fb58869d"
 PROFILE="default"
 REGION="ap-northeast-1"
-
+INSTYPE="t2.nano"
 
 echo "Creating Security Group..."
 SGID=`aws --profile $PROFILE --region $REGION --output text ec2 create-security-group --group-name zesty64docker-sg --description 'security group for zesty64 docker environment in EC2'`
@@ -32,7 +32,7 @@ chmod 600 $VLPHOME/zesty64docker-key.pem
 
 
 echo "Creating instance..."
-INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 run-instances --image-id $AMIID --security-group-ids $SGID --count 1 --instance-type t2.nano --key-name zesty64docker-key --query 'Instances[0].InstanceId'`
+INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 run-instances --image-id $AMIID --security-group-ids $SGID --count 1 --instance-type $INSTYPE --key-name zesty64docker-key --query 'Instances[0].InstanceId'`
 echo $INSTID
 
 
@@ -74,5 +74,5 @@ scp -i $VLPHOME/zesty64docker-key.pem -r $DIR/docker-sevpn ubuntu@$IPPUB:
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-sevpn; cat sevpn.sh; sh sevpn.sh"
 
 echo
-echo "New Instance is up on $IPPUB"
+echo "New L2TP server Instance is up on $IPPUB"
 echo "Enjoy."
