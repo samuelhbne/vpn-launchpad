@@ -7,7 +7,7 @@ With vpn-launchpad, you can:
  - Delete the server instance after using to avoid unnecessary cost.
 
 ## Prerequisites
-A Linux system (Ubuntu, Debian RHEL/CentOS etc.) or MacOSX with ssh nc and awsclii (Amazon Command line Interface) installed  is necessary
+A Linux system (Ubuntu, Debian RHEL/CentOS etc.) or MacOSX system with ssh nc and awsclii (Amazon Command line Interface) installed  is necessary for vpn-launchpad running
 
 Instructions for awscli installation on Ubuntu/Debian
 ```
