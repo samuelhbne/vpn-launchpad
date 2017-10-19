@@ -9,7 +9,7 @@ With vpn-launchpad, you can:
 ## Prerequisites
 A Linux system (Ubuntu, Debian RHEL/CentOS etc.) or MacOSX with ssh nc and awsclii (Amazon Command line Interface) installed  is necessary
 
-Instructions for Amazon AWS command line interface installation on Ubuntu/Debian
+Instructions for awscli installation on Ubuntu/Debian
 ```
 $ sudo apt-get update
 $ sudo apt-get install python-pip
@@ -18,7 +18,7 @@ $ ~/.local/bin/aws --version
 aws-cli/1.11.161 Python/2.7.13 Linux/4.12.1-kirkwood-tld-1 botocore/1.7.19
 ```
 
-Credential setup for AWS cli
+Credential setup for awscli
 
 <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
 
