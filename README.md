@@ -7,13 +7,15 @@ With vpn-launchpad, you can:
  - Delete the server instance after using to avoid unnecessary cost.
 
 ## Prerequisites
-A Linux system (Ubuntu, Debian RHEL/CentOS etc.) is necessary
+A Linux system (Ubuntu, Debian RHEL/CentOS etc.) or MacOSX with ssh nc and awsclii (Amazon Command line Interface) installed  is necessary
 
-Amazon AWS command line interface installation on Ubuntu/Debian
+Instructions for Amazon AWS command line interface installation on Ubuntu/Debian
 ```
 $ sudo apt-get update
-$ sudo apt-get isnstall python-pip
+$ sudo apt-get install python-pip
 $ pip install awscli --upgrade --user
+$ ~/.local/bin/aws --version
+aws-cli/1.11.161 Python/2.7.13 Linux/4.12.1-kirkwood-tld-1 botocore/1.7.19
 ```
 
 Credential setup for AWS cli
@@ -38,5 +40,5 @@ SPW=SRV-MGT-PASS
 HPW=HUB-MGT-PASS
 ```
 
-## How to setup clients:
+## How to setup L2TP client on iPhone, Android, Linux, Mac or Windows:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
