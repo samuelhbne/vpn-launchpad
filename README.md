@@ -36,7 +36,7 @@ Credential setup for awscli
  - Run zesty64-delete.sh to destroy existing VPN server instance if any
  - Run zesty64-create.sh to create a new VPN server with the updated L2TP login credential.
 
-Here's what the sevpn.env looks like
+Here's what docker-sevpn/sevpn.env looks like
 ```
 $ cat docker-sevpn/sevpn.env
 PSK=YOUR-SHARED-SECRET
