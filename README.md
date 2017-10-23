@@ -4,7 +4,7 @@ Simple scripts for launching Amazon EC2 instances with L2TP VPN server running o
 
 ## Why vpn-launchpad?
 With vpn-launchpad, you can:
- - Create a L2TP server instance on demand with the rate as low as $0.0059 per hour ATM.
+ - Create a L2TP server instance on demand with the rate as low as $0.0058 (t2.nano instance locate in Ohio) per hour ATM.
  - Delete the server instance after using to avoid unnecessary cost.
 
 
@@ -51,3 +51,6 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 ## How to setup L2TP client on iPhone, Android, Linux, Mac or Windows:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
 
+
+## Non-free tier AWS user
+If you are not the free tier AWS user (first year after registration), please change the INSTYPE (in zesty64-create.sh) from "t2.micro" into "t2.nano" to half your hourly rate ($0.0116 to $0.0058 when using instance locate in Ohio ATM)

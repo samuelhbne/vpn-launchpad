@@ -6,7 +6,7 @@ VLPHOME="$HOME/.vpn-launchpad"
 AMIID="ami-fb58869d"
 PROFILE="default"
 REGION="ap-northeast-1"
-INSTYPE="t2.nano"
+INSTYPE="t2.micro"
 
 echo "Creating Security Group..."
 SGID=`aws --profile $PROFILE --region $REGION --output text ec2 create-security-group --group-name zesty64docker-sg --description 'security group for zesty64 docker environment in EC2'`
