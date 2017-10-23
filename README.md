@@ -53,4 +53,4 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 
 
 ## Non-free tier AWS user
-If you are not the free tier AWS user (first year after registration), please change the INSTYPE (in zesty64-create.sh) from "t2.micro" into "t2.nano" to half your hourly rate ($0.0116 to $0.0058 when using instance locate in Ohio ATM)
+If you are not free tier AWS user (first year after registration), please change the INSTYPE (in zesty64-create.sh) from "t2.micro" into "t2.nano" to half your hourly rate.
