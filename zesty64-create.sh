@@ -7,6 +7,7 @@ AMIID="ami-fb58869d"
 PROFILE="default"
 REGION="ap-northeast-1"
 INSTYPE="t2.micro"
+SSSPORT="8388"
 
 echo "Creating Security Group..."
 SGID=`aws --profile $PROFILE --region $REGION --output text ec2 create-security-group --group-name zesty64docker-sg --description 'security group for zesty64 docker environment in EC2'`
@@ -20,6 +21,8 @@ aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-gro
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol tcp --port 1701 --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol tcp --port $SSSPORT --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol udp --port $SSSPORT --cidr 0.0.0.0/0
 #aws --profile $PROFILE --region $REGION --output text ec2 describe-security-groups --group-name zesty64docker-sg
 
 
@@ -65,14 +68,18 @@ done
 
 echo "Instance provisioning..."
 ssh-keyscan -H $IPPUB >> ~/.ssh/known_hosts
-ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io python-pip git"
+ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io docker-compose python-pip git"
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sysctl -p"
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
+echo "L2TP provisioning..."
 scp -i $VLPHOME/zesty64docker-key.pem -r $DIR/docker-sevpn ubuntu@$IPPUB:
-ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-sevpn; cat sevpn.sh; sh sevpn.sh"
+ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-sevpn; sh sevpn.sh"
+echo "shadowsocks-libev provisioning..."
+scp -i $VLPHOME/zesty64docker-key.pem -r $DIR/docker-shadowsocks-libev ubuntu@$IPPUB:
+ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-shadowsocks-libev; sh shadowsocks-libev.sh"
 
 echo
-echo "New L2TP server Instance is up on $IPPUB"
+echo "New VPN server Instance is up on $IPPUB"
 echo "Enjoy."
