@@ -73,9 +73,13 @@ ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sysctl -p"
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
+
+echo
 echo "L2TP provisioning..."
 scp -i $VLPHOME/zesty64docker-key.pem -r $DIR/docker-sevpn ubuntu@$IPPUB:
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-sevpn; sh sevpn.sh"
+
+echo
 echo "shadowsocks-libev provisioning..."
 scp -i $VLPHOME/zesty64docker-key.pem -r $DIR/docker-shadowsocks-libev ubuntu@$IPPUB:
 ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-shadowsocks-libev; sh shadowsocks-libev.sh"
