@@ -35,10 +35,10 @@ Credential setup for awscli
 `$ vlp-rm`
 
 
-## How can I change the VPN connection login credentials? L2TP Username, password, preshared secret, etc:
- - Modify docker-sevpn/sevpn.env
+## How can I change the L2TP login credentials? Username, password, preshared secret, etc:
+ - Modify USERS and PSK configurations in docker-sevpn/sevpn.env please
  - Run vlp-rm to destroy existing VPN server instance if any
- - Run vlp-build to create a new VPN server with the updated L2TP login credential.
+ - Run vlp-build to create a new VPN server with updated login credential.
 
 Here's what docker-sevpn/sevpn.env looks like
 ```
@@ -54,6 +54,12 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 
 ## How to setup L2TP client on iPhone, Android, Linux, Mac or Windows:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
+
+
+## How can I change the shadowsocks password?
+ - Modify PASSWORD configuration in docker-shadowsocks-libev/shadowsocks-libev.sh please
+ - Run vlp-rm to destroy existing VPN server instance if any
+ - Run vlp-build to create a new VPN server with updated login credential.
 
 
 ## Non-free tier AWS user
