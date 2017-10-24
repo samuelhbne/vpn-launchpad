@@ -24,17 +24,21 @@ Credential setup for awscli
 
 
 ## How to create VPN server:
-`$ sh zesty64-create.sh`
+`$ ./vlp-build`
+
+
+## How to query existing server status:
+`$ ./vlp-query`
 
 
 ## How to remove the existing VPN server instance and the resources associated:
-`$ sh zesty64-delete.sh`
+`$ vlp-rm`
 
 
 ## How can I change the VPN connection login credentials? L2TP Username, password, preshared secret, etc:
  - Modify docker-sevpn/sevpn.env
- - Run zesty64-delete.sh to destroy existing VPN server instance if any
- - Run zesty64-create.sh to create a new VPN server with the updated L2TP login credential.
+ - Run vlp-rm to destroy existing VPN server instance if any
+ - Run vlp-build to create a new VPN server with the updated L2TP login credential.
 
 Here's what docker-sevpn/sevpn.env looks like
 ```
@@ -53,4 +57,4 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 
 
 ## Non-free tier AWS user
-If you are not free tier AWS user (first year after registration), please change the INSTYPE (in zesty64-create.sh) from "t2.micro" into "t2.nano" to half your hourly rate.
+If you are not free tier AWS user (first year after registration), please change the INSTYPE (in vlp-build) from "t2.micro" into "t2.nano" to half your hourly rate.

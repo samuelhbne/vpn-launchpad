@@ -1,0 +1,11 @@
+#!/bin/bash
+
+DIR=`dirname $0`
+VLPHOME="$HOME/.vpn-launchpad"
+
+AMIID="ami-fb58869d"
+PROFILE="default"
+REGION="ap-northeast-1"
+
+echo "Querying Instance..."
+aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=zesty64docker-key" --query 'Reservations[].Instances[0]'
