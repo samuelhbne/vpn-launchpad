@@ -32,12 +32,12 @@ Credential setup for awscli
 
 
 ## How to remove the existing VPN server instance and the resources associated:
-`$ vlp-rm`
+`$ vlp-purge`
 
 
 ## How can I change the L2TP login credentials? Username, password, preshared secret, etc:
  - Modify USERS and PSK configurations in docker-sevpn/sevpn.env please
- - Run vlp-rm to destroy existing VPN server instance if any
+ - Run vlp-purge to destroy existing VPN server instance if any
  - Run vlp-build to create a new VPN server with updated login credential.
 
 Here's what docker-sevpn/sevpn.env looks like
@@ -58,7 +58,7 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 
 ## How can I change the shadowsocks password?
  - Modify PASSWORD configuration in docker-shadowsocks-libev/shadowsocks-libev.sh please
- - Run vlp-rm to destroy existing VPN server instance if any
+ - Run vlp-purge to destroy existing VPN server instance if any
  - Run vlp-build to create a new VPN server with updated login credential.
 
 
