@@ -32,7 +32,7 @@ Credential setup for awscli
 
 
 ## How to remove the existing VPN server instance and the resources associated:
-`$ vlp-purge`
+`$ ./vlp-purge`
 
 
 ## How can I change the L2TP login credentials? Username, password, preshared secret, etc:
@@ -57,10 +57,14 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 
 
 ## How can I change the shadowsocks password?
- - Modify PASSWORD configuration in docker-shadowsocks-libev/shadowsocks-libev.sh please
- - Run vlp-purge to destroy existing VPN server instance if any
+ - Modify "SSPASS" field in docker-shadowsocks-libev/shadowsocks-libev.sh please.
+ - Run vlp-purge to destroy existing VPN server instance if any.
  - Run vlp-build to create a new VPN server with updated login credential.
 
 
+## AWS free-tier user
+If you are AWS free-tier user (First 12 month after your AWS account registeraion). You can run the scripts out off the box after filling ~/.aws/credential with your credential. Follow this guider please for more details:
+<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
+
 ## Non-free tier AWS user
-If you are not free tier AWS user (first year after registration), please change the INSTYPE (in vlp-build) from "t2.micro" into "t2.nano" to half your hourly rate.
+If you are not free tier AWS user, please modify the "INSTYPE" field in vlp-build from "t2.micro" into "t2.nano" to half your hourly rate.
