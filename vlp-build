@@ -8,38 +8,41 @@ PROFILE="default"
 REGION="ap-northeast-1"
 INSTYPE="t2.micro"
 SSSPORT="8388"
+STACKID="zesty64docker"
 
-echo "Creating Security Group..."
-SGID=`aws --profile $PROFILE --region $REGION --output text ec2 create-security-group --group-name zesty64docker-sg --description 'security group for zesty64 docker environment in EC2'`
-#aws --profile $PROFILE --region $REGION --output text ec2 describe-security-groups
-
-
-echo "Creating Firewall rules..."
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol udp --port 500 --cidr 0.0.0.0/0
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol udp --port 4500 --cidr 0.0.0.0/0
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol tcp --port 1701 --cidr 0.0.0.0/0
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol tcp --port $SSSPORT --cidr 0.0.0.0/0
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name zesty64docker-sg --protocol udp --port $SSSPORT --cidr 0.0.0.0/0
-#aws --profile $PROFILE --region $REGION --output text ec2 describe-security-groups --group-name zesty64docker-sg
+if [ ! -z $1 ]; then
+	STACKID="$1";
+fi
+		
+echo "Creating Security Group of $STACKID..."
+SGID=`aws --profile $PROFILE --region $REGION --output text ec2 create-security-group --group-name $STACKID-sg --description "Security group for $STACKID. Created by vpn-launchpad."`
 
 
-echo "Creating Key-Pair..."
+echo "Creating Firewall rules of $STACKID..."
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 500 --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 4500 --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 1701 --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSSPORT --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSSPORT --cidr 0.0.0.0/0
+
+
+echo "Creating Key-Pair of $STACKID..."
 if [ ! -d "$VLPHOME" ]; then
 	mkdir $VLPHOME
 fi
-aws --profile $PROFILE --region $REGION ec2 create-key-pair --key-name zesty64docker-key --query 'KeyMaterial' --output text > $VLPHOME/zesty64docker-key.pem
-chmod 600 $VLPHOME/zesty64docker-key.pem
+aws --profile $PROFILE --region $REGION ec2 create-key-pair --key-name $STACKID-key --query 'KeyMaterial' --output text > $VLPHOME/$STACKID-key.pem
+chmod 600 $VLPHOME/$STACKID-key.pem
 
 
-echo "Creating instance..."
-INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 run-instances --image-id $AMIID --security-group-ids $SGID --count 1 --instance-type $INSTYPE --key-name zesty64docker-key --query 'Instances[0].InstanceId'`
+echo "Creating instance of $STACKID..."
+INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 run-instances --image-id $AMIID --security-group-ids $SGID --count 1 --instance-type $INSTYPE --key-name $STACKID-key --query 'Instances[0].InstanceId'`
 echo $INSTID
 
 
-echo "Waiting for instance creation..."
+echo "Waiting for the instance creation of $STACKID..."
 while true; do
   sleep 10
   IPPUB=`aws --profile $PROFILE --region $REGION ec2 describe-instances --instance-ids $INSTID --query 'Reservations[0].Instances[0].PublicIpAddress'`
@@ -49,8 +52,8 @@ while true; do
 done
 
 
-echo "Taging..."
-aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags 'Key=Name,Value=Zesty64Docker'
+echo "Taging instance of $STACKID..."
+aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=Name,Value=$STACKID"
 
 
 IPPUB=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --instance-ids $INSTID --query 'Reservations[0].Instances[0].PublicIpAddress'`
@@ -68,21 +71,21 @@ done
 
 echo "Instance provisioning..."
 ssh-keyscan -H $IPPUB >> ~/.ssh/known_hosts
-ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io docker-compose python-pip git"
-ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
-ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
-ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo sysctl -p"
-ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io docker-compose python-pip git"
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sysctl -p"
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
 
 echo
 echo "L2TP provisioning..."
-scp -i $VLPHOME/zesty64docker-key.pem -r $DIR/docker-sevpn ubuntu@$IPPUB:
-ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-sevpn; sh sevpn.sh"
+scp -i $VLPHOME/$STACKID-key.pem -r $DIR/docker-sevpn ubuntu@$IPPUB:
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd docker-sevpn; sh sevpn.sh"
 
 echo
 echo "shadowsocks-libev provisioning..."
-scp -i $VLPHOME/zesty64docker-key.pem -r $DIR/docker-shadowsocks-libev ubuntu@$IPPUB:
-ssh -i $VLPHOME/zesty64docker-key.pem ubuntu@$IPPUB "cd docker-shadowsocks-libev; sh shadowsocks-libev.sh"
+scp -i $VLPHOME/$STACKID-key.pem -r $DIR/docker-shadowsocks-libev ubuntu@$IPPUB:
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd docker-shadowsocks-libev; sh shadowsocks-libev.sh"
 
 echo
 echo "New VPN server Instance is up on $IPPUB"

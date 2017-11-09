@@ -6,6 +6,11 @@ VLPHOME="$HOME/.vpn-launchpad"
 AMIID="ami-fb58869d"
 PROFILE="default"
 REGION="ap-northeast-1"
+STACKID="zesty64docker"
 
-echo "Querying Instance..."
-aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=zesty64docker-key" --query 'Reservations[].Instances[0]'
+if [ ! -z $1 ]; then
+	STACKID="$1";
+fi
+
+echo "Querying Instance of $STACKID..."
+aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0]'
