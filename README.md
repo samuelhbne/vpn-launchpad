@@ -56,11 +56,22 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
 
 
-## How can I change the shadowsocks password?
- - Modify "SSPASS" field in docker-shadowsocks-libev/shadowsocks-libev.sh please.
+## How can I change the shadowsocks configuration like port, password and encryption method?
+ - Modify the fields in docker-shadowsocks-libev/shadowsocks-libev.sh accordingly.
  - Run vlp-purge to destroy existing VPN server instance if any.
  - Run vlp-build to create a new VPN server with updated login credential.
 
+Here's the sample configuration in shadowsocks-libev.sh
+```
+$ head -n7 shadowsocks-libev.sh 
+#!/bin/sh
+
+SSPASS="YOUR-SHADOWSOCKS-PASS"
+SSTCPPORT="18388"
+SSUDPPORT="18388"
+SSMETHOD="aes-256-cfb"
+
+```
 
 ## AWS free-tier user
 If you are AWS free-tier user (First 12 month after your AWS account registeraion). You can run the scripts out off the box after filling ~/.aws/credential with your credential. Follow this guider please for more details:
