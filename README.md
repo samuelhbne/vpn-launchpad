@@ -11,12 +11,14 @@ With vpn-launchpad, you can:
 ## Prerequisites
 A Linux system (Ubuntu, Debian RHEL/CentOS etc.) or MacOSX system with ssh, nc and awsclii (Amazon Command line Interface) installed  is necessary for vpn-launchpad running
 
-Instructions for awscli installation on Ubuntu/Debian
+Simple instructions for awscli installation on Ubuntu/Debian Linux
 ```
 $ sudo apt-get update
 $ sudo apt-get install python-pip
 $ pip install awscli --upgrade --user
-$ ~/.local/bin/aws --version
+$ echo -e "\nexport PATH=$PATH:~/.local/bin" >>~/.bashrc
+$ export PATH=$PATH:~/.local/bin
+$ aws --version
 aws-cli/1.11.161 Python/2.7.13 Linux/4.12.1-kirkwood-tld-1 botocore/1.7.19
 ```
 Credential setup for awscli
