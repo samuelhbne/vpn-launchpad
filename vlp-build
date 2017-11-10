@@ -7,7 +7,8 @@ AMIID="ami-fb58869d"
 PROFILE="default"
 REGION="ap-northeast-1"
 INSTYPE="t2.micro"
-SSSPORT="8388"
+SSTCPPORT=`grep "SSTCPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2`
+SSUDPPORT=`grep "SSUDPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2`
 STACKID="zesty64docker"
 
 if [ ! -z $1 ]; then
@@ -25,8 +26,8 @@ aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-gro
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 1701 --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSSPORT --cidr 0.0.0.0/0
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSSPORT --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSTCPPORT --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSUDPPORT --cidr 0.0.0.0/0
 
 
 echo "Creating Key-Pair of $STACKID..."
