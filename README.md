@@ -23,16 +23,25 @@ Credential setup for awscli
 <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
 
 
+## AWS free-tier user
+If you are AWS free-tier user (First 12 month after your AWS account registeraion). You can run the scripts out off the box after filling ~/.aws/credential with your credential. Follow this guider please for more details:
+<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
+
+
+## Non-free tier AWS user
+Please modify the "INSTYPE" field in vlp-build from "t2.micro" into "t2.nano" to half your hourly rate.
+
+
 ## How to create VPN server:
-`$ ./vlp-build`
+`$ ./vlp-build [OPTIONAL-STACK-NAME]`
 
 
 ## How to query existing server status:
-`$ ./vlp-query`
+`$ ./vlp-query [OPTIONAL-STACK-NAME]`
 
 
 ## How to remove the existing VPN server instance and the resources associated:
-`$ ./vlp-purge`
+`$ ./vlp-purge [OPTIONAL-STACK-NAME]`
 
 
 ## How can I change the L2TP login credentials? Username, password, preshared secret, etc:
@@ -71,10 +80,3 @@ SSTCPPORT="8388"
 SSUDPPORT="8388"
 SSMETHOD="aes-256-cfb"
 ```
-
-## AWS free-tier user
-If you are AWS free-tier user (First 12 month after your AWS account registeraion). You can run the scripts out off the box after filling ~/.aws/credential with your credential. Follow this guider please for more details:
-<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
-
-## Non-free tier AWS user
-If you are not free tier AWS user, please modify the "INSTYPE" field in vlp-build from "t2.micro" into "t2.nano" to half your hourly rate.
