@@ -67,8 +67,8 @@ $ head -n7 shadowsocks-libev.sh
 #!/bin/sh
 
 SSPASS="YOUR-SHADOWSOCKS-PASS"
-SSTCPPORT="18388"
-SSUDPPORT="18388"
+SSTCPPORT="8388"
+SSUDPPORT="8388"
 SSMETHOD="aes-256-cfb"
 ```
 
