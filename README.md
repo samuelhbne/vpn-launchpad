@@ -4,8 +4,8 @@ Simple scripts for launching Amazon EC2 instances with L2TP VPN server running o
 
 ## Why vpn-launchpad?
 With vpn-launchpad, you can:
- - Create a L2TP server instance on demand with the rate as low as $0.0058 (t2.nano instance locate in Ohio) per hour ATM.
- - Delete the server instance after using to avoid unnecessary cost.
+ - Create a VPN server instance on demand with the rate as low as $0.0058 (t2.nano instance locate in Ohio) per hour ATM.
+ - Destory the server instance after using to avoid trail leaking as well as unnecessary cost.
 
 
 ## Prerequisites
