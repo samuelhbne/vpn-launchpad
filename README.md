@@ -1,15 +1,15 @@
 # vpn-launchpad
-Simple scripts for launching Amazon EC2 instances with L2TP VPN server running out of the box
+Simple scripts for launching Amazon EC2 instances with L2TP and Shadowsocks VPN running out of box
 
 
 ## Why vpn-launchpad?
 With vpn-launchpad, you can:
- - Create a VPN server instance on demand with the rate as low as $0.0058 (t2.nano instance locate in Ohio) per hour ATM.
- - Destory the server instance after using to avoid trail leaking as well as unnecessary cost.
+ - Create VPN server on demand with the rate as low as $0.0058 per hour (t2.nano instance locate in Ohio) ATM.
+ - Destory the server after using to avoid trail leaking as well as unnecessary cost.
 
 
 ## Prerequisites
-A Linux system (Ubuntu, Debian RHEL/CentOS etc.) or MacOSX system with ssh, nc and awsclii (Amazon Command line Interface) installed  is necessary for vpn-launchpad running
+A Linux system (Ubuntu, Debian RHEL/CentOS etc.) or MacOSX system with ssh, nc and awsclii (Amazon Command line Interface) installed  is necessary for running vpn-launchpad
 
 Simple instructions for awscli installation on Ubuntu/Debian Linux
 ```
@@ -21,7 +21,17 @@ $ export PATH=$PATH:~/.local/bin
 $ aws --version
 aws-cli/1.11.161 Python/2.7.13 Linux/4.12.1-kirkwood-tld-1 botocore/1.7.19
 ```
-Credential setup for awscli
+
+Simple instructions for awscli installation on MacOSX10
+ - Download Python-3.6.3 from the following link <https://www.python.org/ftp/python/3.6.3/python-3.6.3-macosx10.6.pkg>
+ - Double click downloaded file to install it
+ - Run the following command from Terminal
+```
+$ curl -O https://bootstrap.pypa.io/get-pip.py
+$ python3 get-pip.py
+$ pip3 install --user awscli
+```
+Following this link to config credential for awscli
 <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
 
 
@@ -74,11 +84,12 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 
 Here's the sample configuration in shadowsocks-libev.sh
 ```
-$ head -n7 shadowsocks-libev.sh 
+$ cat shadowsocks-libev.sh
 #!/bin/sh
 
 SSPASS="YOUR-SHADOWSOCKS-PASS"
 SSTCPPORT="8388"
 SSUDPPORT="8388"
 SSMETHOD="aes-256-cfb"
+...
 ```
