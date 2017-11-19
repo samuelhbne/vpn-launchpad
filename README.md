@@ -55,11 +55,11 @@ Please modify the "INSTYPE" field in vlp-build from "t2.micro" into "t2.nano" to
 `$ ./vlp-purge [OPTIONAL-STACK-NAME]`
 
 
-## How to setup L2TP client on iPhone, Android, Linux, Mac or Windows:
+## How to connect to the newly created VPN server from MacOSX/Windows/Android/iOS via L2TP:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
 
 
-## How to connect to the newly created VPN server from Linux/MacOSX/Windows/Android/iOS
+## How to connect to the newly created VPN server from Linux/MacOSX/Windows/Android/iOS via ShadowSocks:
 <https://shadowsocks.org/en/download/clients.html>
 
 
