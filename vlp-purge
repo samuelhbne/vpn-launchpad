@@ -19,7 +19,7 @@ echo "Deleting Instance of $STACKID..."
 aws --profile $PROFILE --region $REGION --output text ec2 terminate-instances --instance-id $INSTID
 
 
-for i in `seq 4 -1 0`; do
+for i in `seq 5 -1 0`; do
   echo "Waiting Instance shutdown..."
   sleep 5
   echo "Deleteing Security Group of $STACKID..."
