@@ -96,7 +96,5 @@ SSMETHOD="aes-256-cfb"
 
 
 ## Maintainers
-Maintainers of this project:
 
     Samuel Huang <samuelh2006@gmail.com>
-    Kai <kai.yeung13@gmail.com >
