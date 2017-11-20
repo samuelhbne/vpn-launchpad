@@ -93,8 +93,3 @@ SSTCPPORT="8388"
 SSUDPPORT="8388"
 SSMETHOD="aes-256-cfb"
 ```
-
-
-## Maintainers
-
-    Samuel Huang <samuelh2006@gmail.com>
