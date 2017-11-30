@@ -1,0 +1,51 @@
+#!/bin/bash
+
+DIR=`dirname $0`
+VLPHOME="$HOME/.vpn-launchpad"
+RESOURCE="vpngroup"
+VM="vpnserver"
+REGION="westus2"
+ssh="$VLPHOME/id_rsa.pub"
+AzureCLI="/usr/local/bin/az"
+
+#az login
+echo " checking for AzureCLI intallation "
+if [ ! -d "$AzureCLI" ]; then
+	brew install az
+fi
+
+echo "Creating Key-Pair of $VM..."
+if [ ! -d "$VLPHOME" ]; then
+	mkdir $VLPHOME
+fi
+#Generating rsa key
+ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -b 2048 -N ''
+
+#Creating a resource group
+echo "Creating resource group $RESOURCE....."
+az group create -n $RESOURCE -l $REGION
+
+#Creating virtual machine
+echo "Creating instance of $VM....."
+
+az vm create -n $VM -g $RESOURCE --image UbuntuLTS --data-disk-sizes-gb 10 #--generate-ssh-keys
+
+az network public-ip list > $VLPHOME/ip.txt
+IPPUB=`cat $VLPHOME/ip.txt | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+echo "You Public IP address is $IPPUB"
+
+echo "Instance provisioning..."
+ssh-keyscan -H $IPPUB >> ~/.ssh/known_hosts
+ssh $USER@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io docker-compose python-pip git"
+ssh $USER@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
+ssh $USER@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
+ssh $USER@$IPPUB "sudo sysctl -p"
+ssh $USER@$IPPUB "sudo usermod -aG docker $USER"
+echo
+echo "L2TP provisioning..."
+scp -r $DIR/docker-sevpn $USER@$IPPUB:
+ssh $USER@$IPPUB "cd docker-sevpn; sh sevpn.sh"
+echo
+echo "shadowsocks-libev provisioning..."
+scp -r $DIR/docker-shadowsocks-libev $USER@$IPPUB:
+ssh $USER@$IPPUB "cd docker-shadowsocks-libev; sh shadowsocks-libev.sh"
