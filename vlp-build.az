@@ -48,6 +48,15 @@ az network nsg rule create --resource-group $RESOURCE --nsg-name $VM"NSG" --name
 az network vnet subnet update --resource-group $RESOURCE --vnet-name $VM"VNET" --name $VM"Subnet" --network-security-group $VM"NSG"
 echo
 
+echo "Waiting for SSH up..."
+while true; do
+  sleep 5
+  nc -zv $IPPUB 22
+  if [ "$?" -eq "0" ]; then
+    break;
+  fi
+done
+
 echo "Instance provisioning..."
 ssh-keyscan -H $IPPUB >> ~/.ssh/known_hosts
 ssh -i $VLPHOME/$sshkey $USER@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io docker-compose python-pip git"
