@@ -11,6 +11,4 @@ az vm delete -n $VM -g $RESOURCE -y
 echo "Deleting resource group $RESOURCE....."
 az group delete -n $RESOURCE -y
 
-cd ~/.ssh
-rm -rf *
 rm -rf $VLPHOME
