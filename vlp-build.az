@@ -1,0 +1,65 @@
+#!/bin/bash
+
+DIR=`dirname $0`
+VLPHOME="$HOME/.vpn-launchpad"
+RESOURCE="vpngroup"
+VM="vpnserver"
+REGION="westus2"
+ssh="$VLPHOME/id_rsa.pub"
+AzureCLI="/usr/local/bin/az"
+VMNETWORK="vpnnet"
+
+#az login
+echo " checking for AzureCLI intallation "
+if [ ! -d "$AzureCLI" ]; then
+	brew install az
+fi
+
+echo "Creating Key-Pair of $VM..."
+if [ ! -d "$VLPHOME" ]; then
+	mkdir $VLPHOME
+fi
+#Generating rsa key
+ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -b 2048 -N ''
+
+#Creating a resource group
+echo "Creating resource group $RESOURCE....."
+az group create -n $RESOURCE -l $REGION
+
+#Creating virtual machine
+echo "Creating instance of $VM....."
+
+az vm create -n $VM -g $RESOURCE --image UbuntuLTS --data-disk-sizes-gb 10 #--generate-ssh-keys
+
+az network public-ip list > $VLPHOME/ip.txt
+IPPUB=`cat $VLPHOME/ip.txt | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+echo "You Public IP address is $IPPUB"
+
+echo " Creating Firewall rules"
+az network nsg rule create --resource-group $RESOURCE --nsg-name $VM"NSG" --name Rule1 --protocol udp --priority 100 --destination-port-range 500
+az network nsg rule create --resource-group $RESOURCE --nsg-name $VM"NSG" --name Rule2 --protocol udp --priority 101 --destination-port-range 4500
+az network nsg rule create --resource-group $RESOURCE --nsg-name $VM"NSG" --name Rule3 --protocol tcp --priority 102 --destination-port-range 1701
+az network nsg rule create --resource-group $RESOURCE --nsg-name $VM"NSG" --name Rule4 --protocol udp --priority 103 --destination-port-range 1194
+az network nsg rule create --resource-group $RESOURCE --nsg-name $VM"NSG" --name Rule5 --protocol tcp --priority 104 --destination-port-range 555
+az network nsg rule create --resource-group $RESOURCE --nsg-name $VM"NSG" --name Rule6 --protocol udp --priority 105 --destination-port-range 8388
+az network nsg rule create --resource-group $RESOURCE --nsg-name $VM"NSG" --name Rule7 --protocol tcp --priority 106 --destination-port-range 8388
+az network vnet subnet update --resource-group $RESOURCE --vnet-name $VM"VNET" --name $VM"Subnet" --network-security-group $VM"NSG"
+echo
+
+echo "Instance provisioning..."
+ssh-keyscan -H $IPPUB >> ~/.ssh/known_hosts
+ssh $USER@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io docker-compose python-pip git"
+ssh $USER@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
+ssh $USER@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
+ssh $USER@$IPPUB "sudo sysctl -p"
+ssh $USER@$IPPUB "sudo usermod -aG docker $USER"
+echo
+
+echo "L2TP provisioning..."
+scp -r $DIR/docker-sevpn $USER@$IPPUB:
+ssh $USER@$IPPUB "cd docker-sevpn; sh sevpn.sh"
+echo
+
+echo "shadowsocks-libev provisioning..."
+scp -r $DIR/docker-shadowsocks-libev $USER@$IPPUB:
+ssh $USER@$IPPUB "cd docker-shadowsocks-libev; sh shadowsocks-libev.sh"
