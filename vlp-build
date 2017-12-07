@@ -7,8 +7,8 @@ AMIID="ami-fb58869d"
 PROFILE="default"
 REGION="ap-northeast-1"
 INSTYPE="t2.micro"
-SSTCPPORT=`grep "SSTCPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2`
-SSUDPPORT=`grep "SSUDPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2`
+SSTCPPORT=`grep "SSTCPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2|sed 's/\"//g'`
+SSUDPPORT=`grep "SSUDPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2|sed 's/\"//g'`
 STACKID="zesty64docker"
 
 if [ ! -z $1 ]; then
