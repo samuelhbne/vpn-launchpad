@@ -1,0 +1,25 @@
+#!/bin/bash
+
+name="vpntest"
+imgname="vpnimg"
+
+echo building docker container
+docker build -t $imgname .
+echo
+
+echo creating docker network
+#docker network create --driver=bridge $name
+echo
+
+echo Creating docker volume
+#docker volume create --driver=local --name=$name
+echo
+
+echo Docker is running....
+#docker run -d --name=$name -v $name:/opt --network=$name $imgname
+docker run -d --name=$name -t $imgname
+docker exec -it $name bash
+
+#docker container stop vpntest
+#docker container rm vpntest
+#docker image rm vpnimg
