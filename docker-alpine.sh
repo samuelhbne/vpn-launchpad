@@ -3,12 +3,12 @@
 DIR=`dirname $0`
 DIR=`realpath $DIR`
 
-UID=`id -u`
-GID=`id -g`
+DKUID=`id -u`
+DKGID=`id -g`
 
 echo $DIR
 
-docker build --no-cache --build-arg UID="$UID" --build-arg GID="$GID" -f docker-vpnlaunchpad/Dockerfile.alpine --rm=true -t samuelhbne/vpnlaunchpad:alpine docker-vpnlaunchpad/
+docker build --no-cache --build-arg DKUID="$DKUID" --build-arg DKGID="$DKGID" -f docker-vpnlaunchpad/Dockerfile.alpine --rm=true -t samuelhbne/vpnlaunchpad:alpine docker-vpnlaunchpad/
 
 mkdir -p $DIR/.vpn-launchpad/.aws
 if [ ! -f $DIR/.vpn-launchpad/.aws/config ]; then

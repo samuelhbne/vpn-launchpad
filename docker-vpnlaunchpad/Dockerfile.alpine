@@ -2,19 +2,18 @@ FROM python:alpine
 
 MAINTAINER Samuel Huang "samuelh2006@gmail.com"
 
-ARG UID
-ARG GID
+ARG DKUID
+ARG DKGID
 
-ENV UID "$UID"
-ENV GID "$GID"
+ENV DKUID "$DKUID"
+ENV DKGID "$DKGID"
 
 
-RUN addgroup -g ${GID} ubuntu && adduser -G ubuntu -u ${UID} -s /bin/ash -h /home/ubuntu -D ubuntu
+RUN addgroup -g ${DKGID} ubuntu && adduser -G ubuntu -u ${DKUID} -s /bin/ash -h /home/ubuntu -D ubuntu
 RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make bash
 
 RUN su - ubuntu -c "pip install --user awscli azure-cli && echo 'export PATH=$PATH:~/.local/bin:~/bin/'>>.profile"
 RUN su - ubuntu -c "mkdir .aws && echo -e '[default]\nregion = ap-northeast-1\noutput = json\n'>>.aws/config"
-RUN su - ubuntu -c "git clone -b launch-from-docker https://github.com/samuelhbne/vpn-launchpad"
 
 
 ADD run.sh /run.sh
