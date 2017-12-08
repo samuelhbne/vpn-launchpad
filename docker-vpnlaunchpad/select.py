@@ -1,4 +1,4 @@
-from subprocess import call
+import subprocess
 
 while True:
     print("0 Init AWS configuration")
@@ -15,22 +15,22 @@ while True:
         print("Please visit http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration")
         print("to initialize your credential")
         print("")
-        call(["aws", "configure"])
+        subprocess.call(["aws", "configure"])
     elif choice == 1:
         print("Create VPN node on AWS")
         print("")
-        call(["../vlp-build"])
+        subprocess.call(["../vlp-build"])
     elif choice == 2:
         print("Check the status of VPN server on AWS")
         print("")
-        call(["../vlp-query"])
+        subprocess.call(["../vlp-query"])
     elif choice == 3:
         print("Remove the existing VPN server from AWS")
         print("")
-        call(["../vlp-purge"])
+        subprocess.call(["../vlp-purge"])
     elif choice == 4:
         print("Exit vpn-launchpad")
         print("")
         break;
     else:
-        NULL
+        pass
