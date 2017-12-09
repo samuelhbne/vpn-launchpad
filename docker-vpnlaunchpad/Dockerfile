@@ -1,19 +1,21 @@
-FROM ubuntu:16.04
+FROM python:alpine
 
 MAINTAINER Samuel Huang "samuelh2006@gmail.com"
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DKUID
+ARG DKGID
 
-RUN groupadd -g 1000 ubuntu && adduser --disabled-password --uid 1000 --gid 1000 ubuntu --home /home/ubuntu
-RUN apt-get update && apt-get install -y git python-pip ssh netcat
+ENV DKUID "$DKUID"
+ENV DKGID "$DKGID"
 
-RUN su - ubuntu -c "pip install --user awscli azure-cli && echo 'export PATH=$PATH:~/.local/bin:~/bin/'>>.bashrc"
+
+RUN addgroup -g ${DKGID} ubuntu && adduser -G ubuntu -u ${DKUID} -s /bin/ash -h /home/ubuntu -D ubuntu
+RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make bash
+
+RUN su - ubuntu -c "pip install --user awscli azure-cli && echo 'export PATH=$PATH:~/.local/bin:~/bin/'>>.profile"
 RUN su - ubuntu -c "mkdir .aws && echo -e '[default]\nregion = ap-northeast-1\noutput = json\n'>>.aws/config"
-RUN su - ubuntu -c "git clone -b launch-from-docker https://github.com/samuelhbne/vpn-launchpad"
 
 
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 CMD ["/run.sh"]
-
-
