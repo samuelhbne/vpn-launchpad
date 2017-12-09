@@ -1,3 +1,3 @@
 #!/bin/bash
 
-su - ubuntu -c "cd vpn-launchpad/docker-vpnlaunchpad && python select.py"
+su - ubuntu -c "vpn-launchpad/docker-vpnlaunchpad/select.sh"
