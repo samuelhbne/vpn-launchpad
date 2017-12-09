@@ -71,6 +71,7 @@ while true; do
 done
 
 echo "Instance provisioning..."
+mkdir ~/.ssh
 ssh-keyscan -H $IPPUB >> ~/.ssh/known_hosts
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io docker-compose python-pip git"
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
