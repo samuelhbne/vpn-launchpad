@@ -4,7 +4,7 @@ DIR=`readlink -f $0`
 DIR=`dirname $DIR`
 
 while true; do
-	echo "0     Init AWS configuration"
+	echo "0     Init AWS credentials"
 	echo "1     Create VPN node on AWS"
 	echo "2     Check existing VPN server status..."
 	echo "3     Remove the existing VPN server from AWS"
