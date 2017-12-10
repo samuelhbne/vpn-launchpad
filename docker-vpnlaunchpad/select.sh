@@ -13,16 +13,16 @@ while true; do
 
 	read -p 'Please select:	' choice
 
-	if [ $choice -eq '0' ]; then
+	if [ "$choice" = "0" ]; then
 		echo "Init AWS configuration..."
 		aws configure
-	elif [ $choice -eq '1' ]; then
+	elif [ "$choice" = "1" ]; then
 		echo "Create VPN node on AWS..."
 		$DIR/../vlp-build
-	elif [ $choice -eq '2' ]; then
+	elif [ "$choice" = "2" ]; then
 		echo "Check existing VPN server status..."
 		$DIR/../vlp-query
-	elif [ $choice -eq '3' ]; then
+	elif [ "$choice" = "3" ]; then
 		echo "Destory existing VPN server..."
 		$DIR/../vlp-purge
 	else
