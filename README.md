@@ -25,7 +25,7 @@ Other Exit vpn-launchpad
 Please select:	
 ```
 ###### Container Runner:
-For Linux, Mac and Windows 10 user. Needs Docker as dependency. It could be an easier way in most circumstances. Please run the following command to start Container Running
+For Linux, Mac and Windows 10 user. Needs Docker as dependency. It could be an easier way in most circumstances. Please run the following command to start Container Running. Raspberry Pi users please run "docker-vlp.rspi" instead of "docker-vlp.x64"
 
 ```
 $ git clone https://github.com/samuelhbne/vpn-launchpad.git
@@ -34,11 +34,11 @@ $ ./docker-vlp.x64
 Sending build context to Docker daemon 5.632 kB
 ...
 ...
-0     Init AWS credentials
-1     Create VPN node on AWS
-2     Check existing VPN server status...
-3     Remove the existing VPN server from AWS
-Other Exit vpn-launchpad
+0  Init AWS credentials
+1  Create VPN node on AWS
+2  Check existing VPN server status...
+3  Remove the existing VPN server from AWS
+4  Exit vpn-launchpad
 
 Please select:	
 ```
