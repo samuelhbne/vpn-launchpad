@@ -6,8 +6,6 @@ DIR=`realpath $DIR`
 DKUID=`id -u`
 DKGID=`id -g`
 
-echo $DIR
-
 docker build --rm=true -f docker-vpnlaunchpad/Dockerfile.rspi -t samuelhbne/vpnlaunchpad:rspi docker-vpnlaunchpad/
 
 mkdir -p $DIR/.vpn-launchpad/.aws

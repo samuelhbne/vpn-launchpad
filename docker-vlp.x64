@@ -6,8 +6,6 @@ DIR=`realpath $DIR`
 DKUID=`id -u`
 DKGID=`id -g`
 
-echo $DIR
-
 docker build --build-arg DKUID="$DKUID" --build-arg DKGID="$DKGID" -f docker-vpnlaunchpad/Dockerfile.x64 --rm=true -t samuelhbne/vpnlaunchpad:alpine docker-vpnlaunchpad/
 
 mkdir -p $DIR/.vpn-launchpad/.aws
