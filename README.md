@@ -7,14 +7,49 @@ With vpn-launchpad, you can:
  - Create VPN server on demand with the rate as low as $0.0058 per hour (t2.nano instance locate in Ohio) ATM.
  - Destory the server after using to avoid trail leaking as well as unnecessary cost.
 
+## Script Runner and Container Runner
+vpn-launchpad provided two different ways for running.
+###### Script Runner:
+For Linux and Mac user only. Needs Amazon awscli, ssh, netcat first as dependencies. Please run the following command to start Script Runner
 
-## Prerequisites
-A Linux system (Ubuntu, Debian RHEL/CentOS etc.) or MacOSX system with ssh, nc and awsclii (Amazon Command line Interface) installed  is necessary for running vpn-launchpad
+```
+$ git clone https://github.com/samuelhbne/vpn-launchpad.git
+$ cd vpn-launchpad
+$ ./vlp
+0     Init AWS credentials
+1     Create VPN node on AWS
+2     Check existing VPN server status...
+3     Remove the existing VPN server from AWS
+Other Exit vpn-launchpad
 
-###### Simple instructions for awscli installation on Ubuntu/Debian Linux
+Please select:	
+```
+###### Container Runner:
+For Linux, Mac and Windows 10 user. Needs Docker as dependency. It could be an easier way in most circumstances. Please run the following command to start Container Running
+
+```
+$ git clone https://github.com/samuelhbne/vpn-launchpad.git
+$ cd vpn-launchpad
+$ ./docker-vlp.x64 
+Sending build context to Docker daemon 5.632 kB
+...
+...
+0     Init AWS credentials
+1     Create VPN node on AWS
+2     Check existing VPN server status...
+3     Remove the existing VPN server from AWS
+Other Exit vpn-launchpad
+
+Please select:	
+```
+
+## Prerequisites for Script Running
+A Linux system (Ubuntu, Debian RHEL/CentOS or Raspberry Pi etc.) or MacOSX system with ssh, nc and awsclii (Amazon Command line Interface) installed  is necessary for Script Running
+
+###### Instructions for dependency installation on Ubuntu/Debian/RaspberryPi Linux
 ```
 $ sudo apt-get update
-$ sudo apt-get install python-pip
+$ sudo apt-get install python-pip ssh netcat bash
 $ pip install awscli --upgrade --user
 $ echo 'export PATH=$PATH:~/.local/bin' >>.bashrc 
 $ export PATH=$PATH:~/.local/bin
@@ -22,7 +57,7 @@ $ aws --version
 aws-cli/1.11.161 Python/2.7.13 Linux/4.12.1-kirkwood-tld-1 botocore/1.7.19
 ```
 
-###### Simple instructions for awscli installation on MacOSX10
+###### Instructions for awscli installation on MacOSX10
 ```
 $ curl -O https://www.python.org/ftp/python/3.6.3/python-3.6.3-macosx10.6.pkg
 $ sudo installer -pkg python-3.6.3-macosx10.6.pkg -target /
@@ -34,6 +69,24 @@ $ pip3 install --user awscli
 <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
 
 
+## Prerequisites for Container Running
+Linux (Ubuntu, Debian RHEL/CentOS or Raspberry Pi etc.), MacOSX or Windows 10 system with Docker installed is necessary for Container Runner
+###### Instructions for dependency installation on Ubuntu/Debian/RaspberryPi Linux
+```
+$ sudo apt-get update
+$ sudo apt-get install docker.io
+$ sudo usermod -aG docker `whoami`
+$ exit
+```
+
+## Init AWS credentials
+###### What is "AWS Access Key ID" and "AWS Secret Access Key":
+Please following this link to initialize credential for AWS
+<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
+###### What is "Default region name" and "Default output format"
+No worries, just leave them as it was if have no idea.
+
+
 ## AWS free-tier user
 If you are AWS free-tier user (First 12 month after your AWS account registeraion). You can run the scripts out off the box after filling ~/.aws/credential with your credential. Follow this guider please for more details:
 <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
@@ -41,18 +94,6 @@ If you are AWS free-tier user (First 12 month after your AWS account registeraio
 
 ## Non-free tier AWS user
 Please modify the "INSTYPE" field in vlp-build from "t2.micro" into "t2.nano" to half your hourly rate.
-
-
-## How to create VPN server:
-`$ ./vlp-build [OPTIONAL-STACK-NAME]`
-
-
-## How to query existing server status:
-`$ ./vlp-query [OPTIONAL-STACK-NAME]`
-
-
-## How to remove the existing VPN server instance and the resources associated:
-`$ ./vlp-purge [OPTIONAL-STACK-NAME]`
 
 
 ## How to connect to the newly created VPN server from MacOSX/Windows/Android/iOS via L2TP:
