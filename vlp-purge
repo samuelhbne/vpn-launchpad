@@ -3,9 +3,8 @@
 DIR=`dirname $0`
 VLPHOME="$HOME/.vpn-launchpad"
 
-AMIID="ami-fb58869d"
 PROFILE="default"
-REGION="ap-northeast-1"
+REGION=`aws configure get region`
 STACKID="zesty64docker"
 
 if [ ! -z $1 ]; then

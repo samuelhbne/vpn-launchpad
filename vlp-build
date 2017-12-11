@@ -3,9 +3,9 @@
 DIR=`dirname $0`
 VLPHOME="$HOME/.vpn-launchpad"
 
-AMIID="ami-fb58869d"
+AMIID=`aws ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep zesty|head -n1|awk '{print $1}'`
 PROFILE="default"
-REGION="ap-northeast-1"
+REGION=`aws configure get region`
 INSTYPE="t2.micro"
 SSTCPPORT=`grep "SSTCPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2|sed 's/\"//g'`
 SSUDPPORT=`grep "SSUDPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2|sed 's/\"//g'`
