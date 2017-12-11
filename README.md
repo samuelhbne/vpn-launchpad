@@ -7,14 +7,14 @@ With vpn-launchpad, you can:
  - Create VPN server on demand with the rate as low as $0.0058 per hour (t2.nano instance locate in Ohio) ATM.
  - Destory the server after using to avoid trail leaking as well as unnecessary cost.
 
-## Running launchpad with or without Docker
+## Running launchpad with/without Docker
 ###### What is Docker? In one line.
-Docker is an application that helps setting up and isolating the environment for vpn-launchpad running.
+Docker is an application that helps setting up and isolating the environment for launchpad running.
 
-###### Running launchpad script with Docker:
-vpn-launchpad provided a script that helps you building a Docker container first with all dependencies installed, then running launchpad from the container. Hence made it easy for user to run it without concerning about the dependencies installation like Python, pip, awscli, ssh etc. In this circumstance, Docker is the only dependency.
+###### Running launchpad with Docker:
+vpn-launchpad provided a script that helps you building a container with all dependencies installed, then running launchpad from the container. Hence made it easy for user to run it without concerning about the dependencies installation like Python, pip, awscli, ssh etc. In this circumstance, Docker is the only dependency.
 
-Instructions for running launchpad with Docker. NOTE: Raspberry Pi user please run "docker-vlp.rspi" instead of "docker-vlp.x64"
+Instructions for running launchpad with Docker.
 
 ```
 $ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
@@ -32,8 +32,9 @@ Sending build context to Docker daemon 5.632 kB
 
 Please select:	 0
 ```
+NOTE: Raspberry Pi user please run "docker-vlp.rspi" instead of "docker-vlp.x64"
 
-###### Running launchpad without Docker:
+###### Running launchpad directly:
 If you are running Linux or Mac OSX and already got awscli, ssh, netcat and bash installed, you can also run launchpad directly without Docker. Launchpad will touch the AWS config from $HOME/.aws in this circumstance. So watch out if you have other applications that share the same configuration.
 
 Instructions for running launchpad without Docker.
@@ -62,6 +63,12 @@ $ sudo apt-get update
 $ sudo apt-get install docker.io
 $ sudo usermod -aG docker `whoami`
 $ exit
+```
+NOTE: You may need the following instructions to work around the "QoS" setting against <https://hub.docker.com> in China
+
+```
+$ sudo echo "DOCKER_OPTS=\"--registry-mirror=http://hub-mirror.c.163.com\"" >> /etc/default/docker
+$ service docker restart
 ```
 ###### Docker installation for Mac OSX
 <https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
