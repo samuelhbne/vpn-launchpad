@@ -7,29 +7,19 @@ With vpn-launchpad, you can:
  - Create VPN server on demand with the rate as low as $0.0058 per hour (t2.nano instance locate in Ohio) ATM.
  - Destory the server after using to avoid trail leaking as well as unnecessary cost.
 
-## Script Runner and Container Runner
-vpn-launchpad provided two different ways for running.
-###### Script Runner:
-For Linux and Mac user only. Needs Amazon awscli, ssh, netcat first as dependencies. Please run the following command to start Script Runner
+## Running launchpad with or without Docker
+###### What is Docker? In one line.
+Docker is an application that helps setting up and isolating the environment for vpn-launchpad running.
+
+###### Running launchpad script with Docker:
+vpn-launchpad provided a script that helps you building a Docker container first with all dependencies installed, then running launchpad from the container. Hence made it easy for user to run it without concerning about the dependencies installation like Python, pip, awscli, ssh etc. In this circumstance, Docker is the only dependency.
+
+Instructions for running launchpad with Docker. NOTE: Raspberry Pi user please run "docker-vlp.rspi" instead of "docker-vlp.x64"
 
 ```
-$ git clone https://github.com/samuelhbne/vpn-launchpad.git
-$ cd vpn-launchpad
-$ ./vlp
-0     Init AWS credentials
-1     Create VPN node on AWS
-2     Check existing VPN server status...
-3     Remove the existing VPN server from AWS
-Other Exit vpn-launchpad
-
-Please select:	
-```
-###### Container Runner:
-For Linux, Mac and Windows 10 user. Needs Docker as dependency. It could be an easier way in most circumstances. Please run the following command to start Container Running. Raspberry Pi users please run "docker-vlp.rspi" instead of "docker-vlp.x64"
-
-```
-$ git clone https://github.com/samuelhbne/vpn-launchpad.git
-$ cd vpn-launchpad
+$ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
+$ unzip master.zip
+$ cd vpn-launchpad-master
 $ ./docker-vlp.x64 
 Sending build context to Docker daemon 5.632 kB
 ...
@@ -40,11 +30,47 @@ Sending build context to Docker daemon 5.632 kB
 3  Remove the existing VPN server from AWS
 4  Exit vpn-launchpad
 
-Please select:	
+Please select:	 0
 ```
 
-## Prerequisites for Script Running
-A Linux system (Ubuntu, Debian RHEL/CentOS or Raspberry Pi etc.) or MacOSX system with ssh, nc and awsclii (Amazon Command line Interface) installed  is necessary for Script Running
+###### Running launchpad without Docker:
+If you are running Linux or Mac OSX and already got awscli, ssh, netcat and bash installed, you can also run launchpad directly without Docker. Launchpad will touch the AWS config from $HOME/.aws in this circumstance. So watch out if you have other applications that share the same configuration.
+
+Instructions for running launchpad without Docker.
+
+```
+$ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
+$ unzip master.zip
+$ cd vpn-launchpad-master
+$ ./vlp
+
+0  Init AWS credentials
+1  Create VPN node on AWS
+2  Check existing VPN server status...
+3  Remove the existing VPN server from AWS
+4  Exit vpn-launchpad
+
+Please select:	 0
+```
+
+
+## Docker installation
+Linux (Ubuntu, Debian RHEL/CentOS or Raspberry Pi etc.), MacOSX or Windows 10 system with Docker installed is necessary for running launchpad with Docker
+###### Docker installation for Ubuntu/Debian/Raspbian (for Raspberry Pi)
+```
+$ sudo apt-get update
+$ sudo apt-get install docker.io
+$ sudo usermod -aG docker `whoami`
+$ exit
+```
+###### Docker installation for Mac OSX
+<https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
+###### Docker installation for Windows
+<https://docs.docker.com/docker-for-windows/install/>
+
+
+## Dependency installation for running launchpad without Docker
+Linux (Ubuntu, Debian RHEL/CentOS or Raspberry Pi etc.) or MacOSX system with ssh, nc and awsclii (Amazon Command line Interface) installed is necessary for running launchpad directly without Docker
 
 ###### Instructions for dependency installation on Ubuntu/Debian/RaspberryPi Linux
 ```
@@ -65,21 +91,9 @@ $ curl -O https://bootstrap.pypa.io/get-pip.py
 $ python3 get-pip.py
 $ pip3 install --user awscli
 ```
-###### Following this link to config credential for awscli
-<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
 
 
-## Prerequisites for Container Running
-Linux (Ubuntu, Debian RHEL/CentOS or Raspberry Pi etc.), MacOSX or Windows 10 system with Docker installed is necessary for Container Runner
-###### Instructions for dependency installation on Ubuntu/Debian/RaspberryPi Linux
-```
-$ sudo apt-get update
-$ sudo apt-get install docker.io
-$ sudo usermod -aG docker `whoami`
-$ exit
-```
-
-## Init AWS credentials
+## Initialize AWS credentials
 ###### What is "AWS Access Key ID" and "AWS Secret Access Key":
 Please following this link to initialize credential for AWS
 <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
