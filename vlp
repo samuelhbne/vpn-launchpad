@@ -5,11 +5,11 @@ DIR=`dirname $DIR`
 
 while true; do
 	echo
-	echo "0  Init AWS credentials"
-	echo "1  Create VPN node on AWS"
-	echo "2  Check existing VPN server status..."
-	echo "3  Remove the existing VPN server from AWS"
-	echo "4  Exit vpn-launchpad"
+	echo "1  Init AWS credentials"
+	echo "2  Create VPN node on AWS"
+	echo "3  Check existing VPN server status..."
+	echo "4  Remove the existing VPN server from AWS"
+	echo "0  Exit vpn-launchpad"
 	echo
 
 	read -p 'Please select:	' choice
