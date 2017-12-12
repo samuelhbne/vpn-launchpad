@@ -24,7 +24,7 @@ while true; do
 	elif [ "$choice" = "3" ]; then
 		echo "Check existing VPN server status..."
 		$DIR/vlp-query
-	elif [ "$choice" = "0" ]; then
+	elif [ "$choice" = "4" ]; then
 		echo "Destory existing VPN server..."
 		$DIR/vlp-purge
 	else
