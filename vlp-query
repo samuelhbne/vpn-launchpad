@@ -5,7 +5,7 @@ VLPHOME="$HOME/.vpn-launchpad"
 
 PROFILE="default"
 REGION=`aws configure get region`
-STACKID="zesty64docker"
+STACKID="artful64docker"
 
 if [ ! -z $1 ]; then
 	STACKID="$1";

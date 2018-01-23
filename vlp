@@ -13,6 +13,7 @@ while true; do
 	echo
 
 	read -p 'Please select:	' choice
+	echo
 
 	if [ "$choice" = "1" ]; then
 		echo "Init AWS configuration..."
