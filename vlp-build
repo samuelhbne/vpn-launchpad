@@ -2,14 +2,15 @@
 
 DIR=`dirname $0`
 VLPHOME="$HOME/.vpn-launchpad"
+UBUNTUVER=xenial
 
-AMIID=`aws ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep artful|head -n1|awk '{print $1}'`
+AMIID=`aws ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
 PROFILE="default"
 REGION=`aws configure get region`
 INSTYPE="t2.micro"
 SSTCPPORT=`grep "SSTCPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2|sed 's/\"//g'`
 SSUDPPORT=`grep "SSUDPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.sh |cut -d'=' -f2|sed 's/\"//g'`
-STACKID="artful64docker"
+STACKID="vlp-$UBUNTUVER"
 
 if [ ! -z $1 ]; then
 	STACKID="$1";

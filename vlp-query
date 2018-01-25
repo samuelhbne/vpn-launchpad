@@ -2,10 +2,11 @@
 
 DIR=`dirname $0`
 VLPHOME="$HOME/.vpn-launchpad"
+UBUNTUVER=xenial
 
 PROFILE="default"
 REGION=`aws configure get region`
-STACKID="artful64docker"
+STACKID="vlp-$UBUNTUVER"
 
 if [ ! -z $1 ]; then
 	STACKID="$1";
