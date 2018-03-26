@@ -21,7 +21,7 @@ aws --profile $PROFILE --region $REGION --output text ec2 terminate-instances --
 
 for i in `seq 5 -1 0`; do
   echo "Waiting Instance shutdown..."
-  sleep 5
+  sleep 30
   echo "Deleteing Security Group of $STACKID..."
   aws --profile $PROFILE --region $REGION --output text ec2 delete-security-group --group-name $STACKID-sg
   if [ "$?" -eq "0" ]; then
