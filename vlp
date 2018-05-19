@@ -33,6 +33,7 @@ while true; do
 		echo "Exit vpn-launchpad..."
 		exit 0
 	fi
+	echo
 	echo "Done"
 	echo
 done

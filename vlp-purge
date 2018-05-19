@@ -2,7 +2,7 @@
 
 DIR=`dirname $0`
 VLPHOME="$HOME/.vpn-launchpad"
-UBUNTUVER=xenial
+UBUNTUVER=bionic
 
 PROFILE="default"
 REGION=`aws configure get region`

@@ -2,7 +2,7 @@
 
 DIR=`dirname $0`
 VLPHOME="$HOME/.vpn-launchpad"
-UBUNTUVER=xenial
+UBUNTUVER=bionic
 
 PROFILE="default"
 REGION=`aws configure get region`
@@ -13,6 +13,7 @@ if [ ! -z $1 ]; then
 fi
 
 echo "Querying Instance of $STACKID..."
+echo
 IPADDR=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].PublicIpAddress'`
 
 if [ ! -z "$IPADDR" ]; then
