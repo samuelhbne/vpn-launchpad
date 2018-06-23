@@ -1,0 +1,225 @@
+Description:
+  This template deploys a personal VPN node with Softether VPN server running on it.
+
+
+Parameters:
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+    AllowedPattern: "[a-zA-Z0-9-]+"
+    ConstraintDescription: "must contain only alpha numeric characters and dashes."
+    Default: VLPBionic
+
+  VpcCIDR:
+    Description: Please enter the IP range (CIDR notation) for this VPC
+    Type: String
+    Default: 10.19.0.0/16
+
+  PublicSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
+    Type: String
+    Default: 10.19.84.0/24
+
+  StackKeyName:
+    Description: Keypair name for the stack
+    Type: "AWS::EC2::KeyPair::KeyName"
+    ConstraintDescription: "must be the name of an existing EC2 KeyPair."
+
+  VPNApp1InstanceType:
+    Description: InstanceType of VPNApp1
+    Type: String
+    Default: t2.micro
+
+  VPNApp1ImageId:
+    Description: ImageId(AMI) of VPNApp1
+    Type: String
+    # 16.04-LTS Xenial image
+    #Default: ami-963cecf4
+    # 18.04-LTS Bionic image
+    Default: ami-5d3aea3f
+
+  L2TPUserName:
+    Description: User name of L2TP user
+    Type: String
+    AllowedPattern: "[a-zA-Z0-9]+"
+    ConstraintDescription: "must contain only alpha numeric characters."
+    Default: user0
+
+  L2TPUserPass:
+    Description: User password of L2TP user
+    Type: String
+    AllowedPattern: "[a-zA-Z0-9-]+"
+    ConstraintDescription: "must contain only alpha numeric characters and dashes."
+    Default: pass0
+
+  L2TPPSK:
+    Description: Pre-shared key for L2TP connection
+    Type: String
+    AllowedPattern: "[a-zA-Z0-9-]+"
+    ConstraintDescription: "must contain only alpha numeric characters and dashes."
+    Default: YOUR-SHARED-SECRET
+
+  L2TPSPW:
+    Description: Server management password for L2TP
+    Type: String
+    AllowedPattern: "[a-zA-Z0-9-]+"
+    ConstraintDescription: "must contain only alpha numeric characters and dashes."
+    Default: SRV-MGT-PASS
+
+  L2TPHPW:
+    Description: HUB management password for L2TP
+    Type: String
+    AllowedPattern: "[a-zA-Z0-9-]+"
+    ConstraintDescription: "must contain only alpha numeric characters and dashes."
+    Default: HUB-MGT-PASS
+
+
+
+
+Resources:
+  VPC1:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} VPC1
+
+  InternetGateway1:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Internet Gateway1
+
+  InternetGatewayAttachment1:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway1
+      VpcId: !Ref VPC1
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC1
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref PublicSubnet1CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Public Subnet
+
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment1
+    Properties:
+      Domain: vpc
+
+  NatGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} NatGateway1
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC1
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Public Routes
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment1
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway1
+
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  VPNAppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub ${EnvironmentName}-app-sg
+      GroupDescription: !Sub ${EnvironmentName} Security group for VPN node
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          FromPort: "0"
+          ToPort: "65535"
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress:
+        - IpProtocol: udp
+          FromPort: 500
+          ToPort: 500
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: udp
+          FromPort: 4500
+          ToPort: 4500
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: udp
+          FromPort: 1194
+          ToPort: 1194
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 1701
+          ToPort: 1701
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5555
+          ToPort: 5555
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VPC1
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} VPN node SecurityGroup
+
+  VPNApp1:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref VPNApp1InstanceType
+      ImageId: !Ref VPNApp1ImageId
+      UserData:
+        'Fn::Base64': !Sub |
+          #!/bin/bash -ex
+          apt-get -y update; apt-get install -y docker.io docker-compose python-pip git
+          echo -e '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf
+          echo -e '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf
+          sysctl -p; usermod -aG docker ubuntu
+          su - ubuntu -c 'git clone https://github.com/samuelhbne/vpn-launchpad'
+          su - ubuntu -c 'echo "PSK=${L2TPPSK}" > vpn-launchpad/docker-sevpn/sevpn.env'
+          su - ubuntu -c 'echo "USERS=${L2TPUserName}:${L2TPUserPass};" >> vpn-launchpad/docker-sevpn/sevpn.env'
+          su - ubuntu -c 'echo "SPW=${L2TPSPW}" >> vpn-launchpad/docker-sevpn/sevpn.env'
+          su - ubuntu -c 'echo "HPW=${L2TPHPW}" >> vpn-launchpad/docker-sevpn/sevpn.env'
+          su - ubuntu -c 'cd vpn-launchpad/docker-sevpn; sh sevpn.sh'
+      KeyName: !Ref StackKeyName
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeleteOnTermination : true
+          SubnetId: !Ref PublicSubnet1
+          DeviceIndex: 0
+          GroupSet:
+            - !Ref VPNAppSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} VPNApp1 (AZ1)
+
+
+Outputs:
+  VPNApp1:
+    Description: VPN Application1
+    Value: !Ref VPNApp1
