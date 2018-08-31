@@ -1,5 +1,8 @@
 Description:
   This template deploys a personal VPN node with Softether VPN server running on it.
+  Please find the AMI ID with the following comand
+  aws ec2 describe-images --region ap-southeast-2 --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep bionic
+
 
 
 Parameters:
@@ -36,7 +39,7 @@ Parameters:
     # 16.04-LTS Xenial image
     #Default: ami-963cecf4
     # 18.04-LTS Bionic image
-    Default: ami-5d3aea3f
+    Default: ami-085ada713082ab050
 
   L2TPUserName:
     Description: User name of L2TP user
