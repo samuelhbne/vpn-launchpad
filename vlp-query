@@ -13,6 +13,9 @@ if [ ! -z $1 ]; then
 fi
 
 echo "Querying Instance of $STACKID..."
+aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].PublicIpAddress'
+aws --profile $PROFILE --region $REGION --output table ec2 describe-security-groups --group-names $STACKID-sg --query "SecurityGroups[*].{Name:GroupName}"
+
 echo
 IPADDR=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].PublicIpAddress'`
 
