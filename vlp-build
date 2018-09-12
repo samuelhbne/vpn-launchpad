@@ -63,12 +63,13 @@ echo $IPPUB
 
 
 echo "Waiting for SSH up..."
+sleep 60
 while true; do
-  sleep 5
   nc -zv $IPPUB 22
   if [ "$?" -eq "0" ]; then
     break;
   fi
+  sleep 5
 done
 
 echo "Instance provisioning..."
