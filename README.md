@@ -10,6 +10,23 @@ With vpn-launchpad, you can:
 ## Running launchpad with Docker:
 ###### Why Docker?
 For running launchpad without messing up the host environment with various applications which are necessary for launchpad running.
+###### Docker installation for Ubuntu/Debian/Raspbian
+```
+$ sudo apt-get update
+$ sudo apt-get install docker.io
+$ sudo usermod -aG docker `whoami`
+$ exit
+```
+NOTE: You might need to follow the instructions below to work around the "QoS" environment in mainland China.
+
+```
+$ sudo echo "DOCKER_OPTS=\"--registry-mirror=http://hub-mirror.c.163.com\"" >> /etc/default/docker
+$ service docker restart
+```
+###### See here for Docker installation on Mac OSX
+<https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
+###### See here for Docker installation on Windows
+<https://docs.docker.com/docker-for-windows/install/>
 ###### Running launchpad with Docker installed already:
 Instructions for running launchpad with Docker installed on Ubuntu or MacOSX x86.
 
@@ -30,24 +47,6 @@ Sending build context to Docker daemon 5.632 kB
 Please select:	 0
 ```
 NOTE: Please run "docker-vlp.rspi" instead of "docker-vlp.x64" on Raspbian (Raspberry Pi 1,2,3)
-
-###### Docker installation for Ubuntu/Debian/Raspbian
-```
-$ sudo apt-get update
-$ sudo apt-get install docker.io
-$ sudo usermod -aG docker `whoami`
-$ exit
-```
-NOTE: You might need to follow the instructions below to work around the "QoS" environment in mainland China.
-
-```
-$ sudo echo "DOCKER_OPTS=\"--registry-mirror=http://hub-mirror.c.163.com\"" >> /etc/default/docker
-$ service docker restart
-```
-###### See here for Docker installation on Mac OSX
-<https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
-###### See here for Docker installation on Windows
-<https://docs.docker.com/docker-for-windows/install/>
 
 
 ## Running launchpad without Docker (deprecated):
