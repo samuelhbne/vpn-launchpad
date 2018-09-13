@@ -14,7 +14,7 @@ Docker is an application that helps setting up and isolating the environment for
 ###### Running launchpad with Docker:
 vpn-launchpad provided a script that helps you building a container with all dependencies installed, then running launchpad from the container. Hence made it easy for user to run it without concerning about the dependencies installation like Python, pip, awscli, ssh etc. In this circumstance, Docker is the only dependency.
 
-Instructions for running launchpad with Docker.
+Instructions for running launchpad with Docker installed (recommanded).
 
 ```
 $ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
@@ -34,7 +34,7 @@ Please select:	 0
 ```
 NOTE: Raspberry Pi user please run "docker-vlp.rspi" instead of "docker-vlp.x64"
 
-###### Running launchpad directly:
+###### Running launchpad directly (deprecated):
 If you are running Linux or Mac OSX and already got awscli, ssh, netcat and bash installed, you can also run launchpad directly without Docker. Launchpad will touch the AWS config from $HOME/.aws in this circumstance. So watch out if you have other applications that share the same configuration.
 
 Instructions for running launchpad without Docker.
@@ -56,23 +56,23 @@ Please select:	 0
 
 
 ## Docker installation
-Linux (Ubuntu, Debian RHEL/CentOS or Raspberry Pi etc.), MacOSX or Windows 10 system with Docker installed is necessary for running launchpad with Docker
-###### Docker installation for Ubuntu/Debian/Raspbian (for Raspberry Pi)
+Docker installation is necessary for running launchpad
+###### Docker installation for Ubuntu/Debian/Raspbian
 ```
 $ sudo apt-get update
 $ sudo apt-get install docker.io
 $ sudo usermod -aG docker `whoami`
 $ exit
 ```
-NOTE: You may need the following instructions to work around the "QoS" setting against <https://hub.docker.com> in China
+NOTE: You might need to follow the instructions below to work around the "QoS" environment in mainland China.
 
 ```
 $ sudo echo "DOCKER_OPTS=\"--registry-mirror=http://hub-mirror.c.163.com\"" >> /etc/default/docker
 $ service docker restart
 ```
-###### Docker installation for Mac OSX
+###### See here for Docker installation on Mac OSX
 <https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
-###### Docker installation for Windows
+###### See here for Docker installation on Windows
 <https://docs.docker.com/docker-for-windows/install/>
 
 
