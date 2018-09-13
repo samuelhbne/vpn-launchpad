@@ -14,7 +14,7 @@ fi
 
 echo "Querying Instance of $STACKID..."
 # aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].PublicIpAddress'
-aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{name: Tags[?Key==`Name`] | [0].Value, IP: PublicIpAddress, LaunchTime: LaunchTime, InstanceType: InstanceType, PublicDnsName: PublicDnsName}'
+aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{name: Tags[?Key==`Name`] | [0].Value, IP: PublicIpAddress, LaunchTime: LaunchTime, InstanceType: InstanceType, AvailabilityZone: Placement.AvailabilityZone}'
 aws --profile $PROFILE --region $REGION --output table ec2 describe-security-groups --group-names $STACKID-sg --query "SecurityGroups[*].{Name:GroupName}"
 
 echo
