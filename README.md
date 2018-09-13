@@ -7,10 +7,10 @@ With vpn-launchpad, you can:
  - Create VPN server on demand with the rate as low as $0.0058 per hour (t2.nano instance locate in Ohio) ATM.
  - Destory the server after using to avoid trail leaking as well as unnecessary cost.
 
-## Running launchpad with Docker (recommanded):
+## Running launchpad with Docker:
 ###### Why Docker?
-For running launchpad without messup the host environment with various applications that is necessary for launchpad running.
-###### Running launchpad with Docker installed already (recommanded):
+For running launchpad without messing up the host environment with various applications which are necessary for launchpad running.
+###### Running launchpad with Docker installed already:
 Instructions for running launchpad with Docker installed on Ubuntu or MacOSX x86.
 
 ```
