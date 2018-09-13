@@ -10,7 +10,6 @@ With vpn-launchpad, you can:
 ## Running launchpad with Docker (recommanded):
 ###### Why Docker?
 For running launchpad without messup the host environment with various applications that is necessary for launchpad running.
-
 ###### Running launchpad with Docker installed already (recommanded):
 Instructions for running launchpad with Docker installed on Ubuntu or MacOSX x86.
 
@@ -31,27 +30,6 @@ Sending build context to Docker daemon 5.632 kB
 Please select:	 0
 ```
 NOTE: Please run "docker-vlp.rspi" instead of "docker-vlp.x64" on Raspbian (Raspberry Pi 1,2,3)
-
-## Running launchpad without Docker (deprecated):
-If you are running Linux or Mac OSX and already got awscli, ssh, netcat and bash installed, you can also run launchpad directly without Docker. Launchpad will touch the AWS config from $HOME/.aws in this circumstance. So watch out if you have other applications that share the same configuration.
-
-Instructions for running launchpad without Docker.
-
-```
-$ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
-$ unzip master.zip
-$ cd vpn-launchpad-master
-$ ./vlp
-
-0  Init AWS credentials
-1  Create VPN node on AWS
-2  Check existing VPN server status...
-3  Remove the existing VPN server from AWS
-4  Exit vpn-launchpad
-
-Please select:	 0
-```
-
 
 ## Docker installation
 Docker installation is necessary for running launchpad
@@ -74,27 +52,24 @@ $ service docker restart
 <https://docs.docker.com/docker-for-windows/install/>
 
 
-## Dependency installation for running launchpad without Docker
-Linux (Ubuntu, Debian RHEL/CentOS or Raspberry Pi etc.) or MacOSX system with ssh, nc and awsclii (Amazon Command line Interface) installed is necessary for running launchpad directly without Docker
+## Running launchpad without Docker (deprecated):
+If you are running Linux or Mac OSX and already got awscli, ssh, netcat and bash installed, you can also run launchpad directly without Docker. Launchpad will touch the AWS config from $HOME/.aws in this circumstance. So watch out if you have other applications that share the same configuration.
 
-###### Instructions for dependency installation on Ubuntu/Debian/RaspberryPi Linux
-```
-$ sudo apt-get update
-$ sudo apt-get install python-pip ssh netcat bash
-$ pip install awscli --upgrade --user
-$ echo 'export PATH=$PATH:~/.local/bin' >>.bashrc 
-$ export PATH=$PATH:~/.local/bin
-$ aws --version
-aws-cli/1.11.161 Python/2.7.13 Linux/4.12.1-kirkwood-tld-1 botocore/1.7.19
-```
+Instructions for running launchpad without Docker.
 
-###### Instructions for awscli installation on MacOSX10
 ```
-$ curl -O https://www.python.org/ftp/python/3.6.3/python-3.6.3-macosx10.6.pkg
-$ sudo installer -pkg python-3.6.3-macosx10.6.pkg -target /
-$ curl -O https://bootstrap.pypa.io/get-pip.py
-$ python3 get-pip.py
-$ pip3 install --user awscli
+$ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
+$ unzip master.zip
+$ cd vpn-launchpad-master
+$ ./vlp
+
+0  Init AWS credentials
+1  Create VPN node on AWS
+2  Check existing VPN server status...
+3  Remove the existing VPN server from AWS
+4  Exit vpn-launchpad
+
+Please select:	 0
 ```
 
 
