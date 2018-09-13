@@ -31,8 +31,6 @@ Please select:	 0
 ```
 NOTE: Please run "docker-vlp.rspi" instead of "docker-vlp.x64" on Raspbian (Raspberry Pi 1,2,3)
 
-## Docker installation
-Docker installation is necessary for running launchpad
 ###### Docker installation for Ubuntu/Debian/Raspbian
 ```
 $ sudo apt-get update
