@@ -132,7 +132,6 @@ Please modify the "INSTYPE" field in vlp-build from "t2.micro" into "t2.nano" to
 
 Here's what docker-sevpn/sevpn.env looks like
 ```
-$ cat docker-sevpn/sevpn.env
 PSK=YOUR-SHARED-SECRET
 USERS=user0:pass0;user1:pass1;
 SPW=SRV-MGT-PASS
@@ -147,10 +146,22 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
  - Run vlp-purge to destroy existing VPN server instance if any.
  - Run vlp-build to create a new VPN server with updated login credential.
 
-Here's the sample configuration in shadowsocks-libev.env
+Here's what shadowsocks-libev.env looks like
 ```
 SSPASS="YOUR-SHADOWSOCKS-PASS"
 SSTCPPORT="8388"
 SSUDPPORT="8388"
 SSMETHOD="aes-256-cfb"
+```
+
+## What's the default port, uuid and encryption method of V2Ray vmess VPN? How can I modify the  settings?
+ - Modify the fields in docker-v2rays/docker-v2rays.env accordingly.
+ - Run vlp-purge to destroy existing VPN server instance if any.
+ - Run vlp-build to create a new VPN server with updated login credential.
+
+Here's what docker-v2rays.env looks like
+```
+VMESSPORT="9000"
+UUID="5bef0493-f531-46fe-9713-c72255b22280"
+ALTERID="32"
 ```
