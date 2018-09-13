@@ -127,8 +127,8 @@ Please modify the "INSTYPE" field in vlp-build from "t2.micro" into "t2.nano" to
 
 ## What's the default username, password and pre-shared secret of L2TP VPN? How can I modify the  settings?
  - Modify USERS and PSK configurations in docker-sevpn/sevpn.env please
- - Run vlp-purge to destroy existing VPN server instance if any
- - Run vlp-build to create a new VPN server with updated login credential.
+ - Remove the existing VPN server if any and rebuild a new one from scratch.
+ - New credentials should already be applied now.
 
 Here's what docker-sevpn/sevpn.env looks like
 ```
@@ -143,8 +143,8 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 
 ## What's the default port, password and encryption method of ShadowSocks VPN? How can I modify the  settings?
  - Modify the fields in docker-shadowsocks-libev/shadowsocks-libev.env accordingly.
- - Run vlp-purge to destroy existing VPN server instance if any.
- - Run vlp-build to create a new VPN server with updated login credential.
+ - Remove the existing VPN server if any and rebuild a new one from scratch.
+ - New credentials should already be applied now.
 
 Here's what shadowsocks-libev.env looks like
 ```
@@ -156,8 +156,8 @@ SSMETHOD="aes-256-cfb"
 
 ## What's the default port, uuid and encryption method of V2Ray vmess VPN? How can I modify the  settings?
  - Modify the fields in docker-v2rays/docker-v2rays.env accordingly.
- - Run vlp-purge to destroy existing VPN server instance if any.
- - Run vlp-build to create a new VPN server with updated login credential.
+ - Remove the existing VPN server if any and rebuild a new one from scratch.
+ - New credentials should already be applied now.
 
 Here's what docker-v2rays.env looks like
 ```
