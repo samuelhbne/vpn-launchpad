@@ -7,14 +7,12 @@ With vpn-launchpad, you can:
  - Create VPN server on demand with the rate as low as $0.0058 per hour (t2.nano instance locate in Ohio) ATM.
  - Destory the server after using to avoid trail leaking as well as unnecessary cost.
 
-## Running launchpad with/without Docker
-###### What is Docker? In one line.
-Docker is an application that helps setting up and isolating the environment for launchpad running.
+## Running launchpad with Docker (recommanded):
+###### Why Docker?
+For running launchpad without messup the host environment with various applications that is necessary for launchpad running.
 
-###### Running launchpad with Docker:
-vpn-launchpad provided a script that helps you building a container with all dependencies installed, then running launchpad from the container. Hence made it easy for user to run it without concerning about the dependencies installation like Python, pip, awscli, ssh etc. In this circumstance, Docker is the only dependency.
-
-Instructions for running launchpad with Docker installed (recommanded).
+###### Running launchpad with Docker installed already (recommanded):
+Instructions for running launchpad with Docker installed on Ubuntu or MacOSX x86.
 
 ```
 $ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
@@ -32,9 +30,9 @@ Sending build context to Docker daemon 5.632 kB
 
 Please select:	 0
 ```
-NOTE: Raspberry Pi user please run "docker-vlp.rspi" instead of "docker-vlp.x64"
+NOTE: Please run "docker-vlp.rspi" instead of "docker-vlp.x64" on Raspbian (Raspberry Pi 1,2,3)
 
-###### Running launchpad directly (deprecated):
+## Running launchpad without Docker (deprecated):
 If you are running Linux or Mac OSX and already got awscli, ssh, netcat and bash installed, you can also run launchpad directly without Docker. Launchpad will touch the AWS config from $HOME/.aws in this circumstance. So watch out if you have other applications that share the same configuration.
 
 Instructions for running launchpad without Docker.
