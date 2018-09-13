@@ -143,13 +143,12 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 
 
 ## What's the default port, password and encryption method of ShadowSocks VPN? How can I modify the  settings?
- - Modify the fields in docker-shadowsocks-libev/shadowsocks-libev.sh accordingly.
+ - Modify the fields in docker-shadowsocks-libev/shadowsocks-libev.env accordingly.
  - Run vlp-purge to destroy existing VPN server instance if any.
  - Run vlp-build to create a new VPN server with updated login credential.
 
-Here's the sample configuration in shadowsocks-libev.sh
+Here's the sample configuration in shadowsocks-libev.env
 ```
-$ head -n7 shadowsocks-libev.sh|grep =
 SSPASS="YOUR-SHADOWSOCKS-PASS"
 SSTCPPORT="8388"
 SSUDPPORT="8388"

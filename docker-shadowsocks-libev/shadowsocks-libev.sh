@@ -1,9 +1,6 @@
 #!/bin/sh
 
-SSPASS="YOUR-SHADOWSOCKS-PASS"
-SSTCPPORT="8388"
-SSUDPPORT="8388"
-SSMETHOD="aes-256-cfb"
+. `pwd`/shadowsocks-libev.env
 
 git clone https://github.com/EasyPi/docker-shadowsocks-libev
 cd docker-shadowsocks-libev
