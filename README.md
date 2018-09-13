@@ -79,12 +79,11 @@ No worries, just leave them as it was if have no idea.
 
 
 ## AWS free-tier user
-If you are AWS free-tier user (First 12 month after your AWS account registeraion). You can run the scripts out off the box after filling ~/.aws/credential with your credential. Follow this guider please for more details:
-<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
+Congrats, You can run the scripts out of the box if you are AWS free-tier user (First 12 month after new AWS account registeraion).
 
 
 ## Non-free tier AWS user
-Please modify the "INSTYPE" field in vlp-build from "t2.micro" into "t2.nano" to half your hourly rate.
+You might consider modifying the "INSTYPE" in vlp-build from "t2.micro" into "t2.nano" to half your AWS bill cost.
 
 
 ## How to connect to the newly created VPN server from MacOSX/Windows/Android/iOS via L2TP:
