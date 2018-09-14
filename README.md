@@ -58,7 +58,7 @@ Instructions for running launchpad without Docker.
 $ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
 $ unzip master.zip
 $ cd vpn-launchpad-master
-$ ./vlp
+$ ./vlp-menu
 
 0  Init AWS credentials
 1  Create VPN node on AWS

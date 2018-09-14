@@ -19,4 +19,4 @@ RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make b
 RUN su - ubuntu -c "pip install --user awscli azure-cli && echo 'export PATH=$PATH:~/.local/bin:~/bin/'>>.profile"
 
 ENTRYPOINT ["su", "-", "ubuntu", "-c"]
-CMD ["'vpn-launchpad/vlp'"]
+CMD ["'vpn-launchpad/vlp-menu'"]
