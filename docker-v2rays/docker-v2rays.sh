@@ -1,6 +1,9 @@
 #!/bin/sh
 
-. `pwd`/docker-v2rays.env
+DIR=`dirname $0`
+DIR="$(cd $DIR; pwd)"
+
+. $DIR/docker-v2rays.env
 
 sed -i "/EXPOSE/,/\n/ s/8000/$VMESSPORT/g" Dockerfile
 sed -i "/inbound/,/vmess/ s/8000/$VMESSPORT/g" server.json
