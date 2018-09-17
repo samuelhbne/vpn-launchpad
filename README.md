@@ -34,7 +34,7 @@ Instructions for running launchpad with Docker installed on Ubuntu or MacOSX x86
 $ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
 $ unzip master.zip
 $ cd vpn-launchpad-master
-$ ./docker-vlp.x64 
+$ ./docker-vlp 
 Sending build context to Docker daemon 5.632 kB
 ...
 ...
@@ -46,7 +46,7 @@ Sending build context to Docker daemon 5.632 kB
 
 Please select:	 0
 ```
-NOTE: Please run "docker-vlp.rspi" instead of "docker-vlp.x64" on Raspbian (Raspberry Pi 1,2,3)
+NOTE: Please run "docker-vlp.rspi" instead of "docker-vlp" on Raspbian (Raspberry Pi 1,2,3)
 
 
 ## Running launchpad without Docker (deprecated):
