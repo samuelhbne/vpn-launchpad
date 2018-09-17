@@ -21,7 +21,7 @@ echo
 IPADDR=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].PublicIpAddress'`
 
 if [ ! -z "$IPADDR" ]; then
-	echo "VPN server is up on $IPADDR"
+	echo "VPN SERVER: $IPADDR"
 else
-	echo "Server not found"
+	echo "VPN SERVER: None"
 fi
