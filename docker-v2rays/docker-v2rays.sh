@@ -7,7 +7,7 @@ DIR="$(cd $DIR; pwd)"
 
 sed -i "s/EXPOSE.*/EXPOSE $VMESSPORT/g" $DIR/Dockerfile
 sed -i "/inbound/,/settings/ s/\"port\":.*/\"port\": $VMESSPORT,/g" $DIR/server.json
-sed -i "/inbound/,/outbound/ s/\"id\":.*/\"id\": $UUID,/g" $DIR/server.json
+sed -i "/inbound/,/outbound/ s/\"id\":.*/\"id\": \"$UUID\",/g" $DIR/server.json
 sed -i "/inbound/,/outbound/ s/\"alterId\":.*/\"alterId\": $ALTERID,/g" $DIR/server.json
 
 docker build --rm=true -t samuelhbne/v2rays $DIR
