@@ -1,6 +1,9 @@
 #!/bin/sh
 
-. `pwd`/shadowsocks-libev.env
+DIR=`dirname $0`
+DIR="$(cd $DIR; pwd)"
+
+. $DIR/shadowsocks-libev.env
 
 git clone https://github.com/EasyPi/docker-shadowsocks-libev
 cd docker-shadowsocks-libev
