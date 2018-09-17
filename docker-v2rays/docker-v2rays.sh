@@ -11,5 +11,5 @@ sed -i "/inbound/,/outbound/ s/\"id\":.*/\"id\": $UUID,/g" $DIR/server.json
 sed -i "/inbound/,/outbound/ s/\"alterId\":.*/\"alterId\": $ALTERID/g" $DIR/server.json
 
 docker build --rm=true -t samuelhbne/v2rays $DIR
-docker run --name v2rays -p $VMESSPORT:8000 -v $DIR/server.json:/etc/v2ray/config.json -d samuelhbne/v2rays
+docker run --name v2rays -p $VMESSPORT:$VMESSPORT -v $DIR/server.json:/etc/v2ray/server.json -d samuelhbne/v2rays
 
