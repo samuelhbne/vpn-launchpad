@@ -11,8 +11,8 @@
       "clients": [
         {
           "id": "138c5e58-cd7a-455f-bef4-03016b15e6d2",
-          "level": 1,
-          "alterId": 64
+          "alterId": 64,
+	  "level": 1
         }
       ]
     }
