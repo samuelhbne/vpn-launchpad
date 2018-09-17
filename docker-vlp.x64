@@ -27,19 +27,19 @@ else
 	while [[ $# > 0 ]]; do
 		act="$1"
 		case $act in
-			-i|--init)
+			--init)
 				$DOCKERCMD "aws configure"
 				shift
 				;;
-			-b|--build)
+			--build)
 				$DOCKERCMD vpn-launchpad/vlp-build
 				shift
 				;;
-			-q|--query)
+			--query)
 				$DOCKERCMD vpn-launchpad/vlp-query
 				shift
 				;;
-			-p|--purge)
+			--purge)
 				$DOCKERCMD vpn-launchpad/vlp-purge
 				shift
 				;;
