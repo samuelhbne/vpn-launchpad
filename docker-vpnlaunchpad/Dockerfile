@@ -16,7 +16,7 @@ RUN if [ "$(getent group ${DKGID}|cut -d":" -f1)" == "" ]; then addgroup -g ${DK
 RUN adduser -G `getent group ${DKGID}|cut -d":" -f1` -u ${DKUID} -s /bin/ash -h /home/ubuntu -D ubuntu
 RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make bash
 
-RUN su - ubuntu -c "pip install --user awscli azure-cli && echo 'export PATH=$PATH:~/.local/bin:~/bin/'>>.profile"
+RUN su - ubuntu -c "pip install --user awscli && echo 'export PATH=$PATH:~/.local/bin:~/bin/'>>.profile"
 
 ENTRYPOINT ["su", "-", "ubuntu", "-c"]
 CMD ["'vpn-launchpad/vlp-menu'"]
