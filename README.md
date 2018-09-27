@@ -7,9 +7,9 @@ With vpn-launchpad, you can:
  - Create VPN server on demand with the rate as low as $0.0058 per hour (t2.nano instance locate in Ohio) ATM.
  - Destory the server after using to avoid trail leaking as well as unnecessary cost.
 
-## Running launchpad with Docker:
+## Running vpn-launchpad with Docker:
 ###### Why Docker?
-For running launchpad without messing up the host environment with various applications which are necessary for launchpad running.
+For running vpn-launchpad without messing up the host environment with various applications which are necessary for vpn-launchpad running.
 ###### Docker installation for Ubuntu/Debian/Raspbian
 ```
 $ sudo apt-get update
@@ -17,18 +17,12 @@ $ sudo apt-get install docker.io
 $ sudo usermod -aG docker `whoami`
 $ exit
 ```
-NOTE: You might need to follow the instructions below to work around the "QoS" environment in mainland China.
-
-```
-$ sudo echo "DOCKER_OPTS=\"--registry-mirror=http://hub-mirror.c.163.com\"" >> /etc/default/docker
-$ service docker restart
-```
-###### See here for Docker installation on Mac OSX
+###### Here for Docker installation on Mac OSX
 <https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
-###### See here for Docker installation on Windows
+###### Here for Docker installation on Windows
 <https://docs.docker.com/docker-for-windows/install/>
-###### Running launchpad with Docker installed already:
-Instructions for running launchpad with Docker installed on Ubuntu or MacOSX x86.
+###### Running vpn-launchpad with Docker installed already:
+Instructions for running vpn-launchpad with Docker installed on Ubuntu or MacOSX x86.
 
 ```
 $ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
@@ -49,10 +43,10 @@ Please select:	 0
 NOTE: Please run "docker-vlp.rspi" instead of "docker-vlp" on Raspbian (Raspberry Pi 1,2,3)
 
 
-## Running launchpad without Docker (deprecated):
-If you are running Linux or Mac OSX and already got awscli, ssh, netcat and bash installed, you can also run launchpad directly without Docker. Launchpad will touch the AWS config from $HOME/.aws in this circumstance. So watch out if you have other applications that share the same configuration.
+## Running vpn-launchpad without Docker (deprecated):
+If you are running Linux or Mac OSX and already got awscli, ssh, netcat and bash installed, you can also run vpn-launchpad directly without Docker. Launchpad will touch the AWS config from $HOME/.aws in this circumstance. So watch out if you have other applications that share the same configuration.
 
-Instructions for running launchpad without Docker.
+Instructions for running vpn-launchpad without Docker.
 
 ```
 $ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
@@ -75,7 +69,7 @@ Please select:	 0
 Please following this link to initialize credential for AWS
 <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
 ###### What is "Default region name" and "Default output format"
-No worries, just leave them as it was if have no idea.
+No worries, just leave them as it is if have no idea.
 
 
 ## AWS free-tier user
@@ -110,27 +104,60 @@ Please refer softethervpn project for more details. All credits to Tomohisa Kusa
 <https://github.com/siomiz/SoftEtherVPN>
 
 
-## What's the default port, password and encryption method of ShadowSocks VPN? How can I modify the  settings?
- - Modify the fields in docker-shadowsocks-libev/shadowsocks-libev.env accordingly.
+## What's the default port, password and encryption method of ShadowSocks? How can I modify the  settings?
+ - Modify the fields in server-ssserver/ssserver.env accordingly.
  - Remove the existing VPN server if any and rebuild a new one from scratch.
  - New credentials should already be applied now.
 
-Here's what shadowsocks-libev.env looks like
+Here's what ssserver.env looks like
 ```
 SSPASS="YOUR-SHADOWSOCKS-PASS"
-SSTCPPORT="8388"
-SSUDPPORT="8388"
 SSMETHOD="aes-256-cfb"
+SSTCPPORT="8388"
 ```
 
-## What's the default port, uuid and encryption method of V2Ray vmess VPN? How can I modify the  settings?
- - Modify the fields in docker-v2rays/docker-v2rays.env accordingly.
- - Remove the existing VPN server if any and rebuild a new one from scratch.
- - New credentials should already be applied now.
-
-Here's what docker-v2rays.env looks like
+## How can I build local SOCKS/HTTP/DNS proxy to route all my traffic through the VPN server I built via vpn-launchpad?
+The following instructions will automatically do all the tedious job for you bundled with an uncontaminated DNS resolver
+then run the test to verify its availability.
 ```
-VMESSPORT="9000"
-UUID="5bef0493-f531-46fe-9713-c72255b22280"
-ALTERID="32"
+$ ./vlp-client-sslocal
+...
+Found VPS: 13.114.130.186
+
+Check local HTTP PROXY on TCP:58123 ...
+
+curl -x http://127.0.0.1:58123 http://ifconfig.co
+13.114.130.186
+
+Check local SOCKS PROXY on TCP:51080 ...
+
+curl -x socks5://127.0.0.1:51080 http://ifconfig.co
+13.114.130.186
+
+Check local DNS PROXY on UDP:55353 ...
+
+dig @127.0.0.1 -p 55353 twitter.com
+...
+twitter.com.		836	IN	A	104.244.42.65
+twitter.com.		836	IN	A	104.244.42.129
+...
+```
+Now setup your browser and other applications to work with the newly built proxy and enjoy.
+###### How can I change the configuration of the local proxy?
+Modify client-sslocal/sslocal.env as your wish. No worries for the VPN host and part. vlp-client-sslocal will take care them.
+```
+# ignore this line, vlp-client-sslocal will take care it
+SSHOST=13.114.130.186
+
+# SOCKS proxy listenning address
+SOCKSADDR=0.0.0.0
+
+# SOCKS proxy listenning port (TCP)
+SOCKSPORT=51080
+
+# HTTP proxy listenning port (TCP)
+HTTPPORT="58123"
+
+# DNS proxy listenning port (UDP)
+DNSPORT="55353"
 ```
