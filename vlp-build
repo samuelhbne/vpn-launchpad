@@ -6,7 +6,7 @@ UBUNTUVER=bionic
 
 aws --output table iam get-user
 if [ "$?" != "0" ]; then
-	echo "Please init first."
+	echo "Please init aws first."
 	exit
 fi
 
