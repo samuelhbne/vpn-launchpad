@@ -21,22 +21,22 @@ else
 	echo
 	. $DIR/docker-client-sslocal/client-sslocal.env
 	echo "VPS: $VPSIP"
-
 	sleep 5
-	echo
-	echo "Testing local HTTP PROXY on TCP:$HTTPPORT"
-	echo
-	echo "curl -v -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
-	curl -v -x http://127.0.0.1:$HTTPPORT ifconfig.co
 
 	echo
-	echo "Testing local SOCKS PROXY on TCP:$SOCKSPORT"
+	echo "Testing local HTTP PROXY on TCP:$HTTPPORT ..."
 	echo
-	echo "curl -v -x socks5://127.0.0.1:$SOCKSPORT ifconfig.co"
-	curl -v -x socks5://127.0.0.1:$SOCKSPORT ifconfig.co
+	echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
+	curl -x http://127.0.0.1:$HTTPPORT ifconfig.co
 
 	echo
-	echo "Testing local DNS proxy on UDP:$DNSPORT"
+	echo "Testing local SOCKS PROXY on TCP:$SOCKSPORT ..."
+	echo
+	echo "curl -x socks5://127.0.0.1:$SOCKSPORT ifconfig.co"
+	curl -x socks5://127.0.0.1:$SOCKSPORT ifconfig.co
+
+	echo
+	echo "Testing local DNS proxy on UDP:$DNSPORT ..."
 	echo
 	echo "dig @127.0.0.1 -p $DNSPORT twitter.com"
 	dig @127.0.0.1 -p $DNSPORT twitter.com
