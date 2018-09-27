@@ -7,6 +7,7 @@ DKUID=`id -u`
 DKGID=`id -g`
 
 docker build --build-arg DKUID="$DKUID" --build-arg DKGID="$DKGID" -f $DIR/docker-vpnlaunchpad/Dockerfile --rm=true -t samuelhbne/vpnlaunchpad:alpine $DIR/docker-vpnlaunchpad/
+echo
 
 mkdir -p $DIR/.vpn-launchpad/.aws
 if [ ! -f $DIR/.vpn-launchpad/.aws/config ]; then
