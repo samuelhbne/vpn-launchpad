@@ -12,7 +12,7 @@ if [ "$VPSIP" = "None" ]; then
 	echo "VPS not found."
 else
 	echo "Found VPS: $VPSIP"
-	echo "Setting up local proxy..."
+	echo "Setting up local proxy daemon..."
 	cp -a $DIR/server-ssserver/ssserver.env $DIR/client-sslocal/
 	sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $DIR/client-sslocal/sslocal.env
 	$DIR/client-sslocal/sslocal.sh
@@ -24,19 +24,19 @@ else
 	sleep 5
 
 	echo
-	echo "Testing local HTTP PROXY on TCP:$HTTPPORT ..."
+	echo "Check local HTTP PROXY on TCP:$HTTPPORT ..."
 	echo
 	echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
 	curl -x http://127.0.0.1:$HTTPPORT ifconfig.co
 
 	echo
-	echo "Testing local SOCKS PROXY on TCP:$SOCKSPORT ..."
+	echo "Check local SOCKS PROXY on TCP:$SOCKSPORT ..."
 	echo
-	echo "curl -x socks5://127.0.0.1:$SOCKSPORT ifconfig.co"
+	echo "curl -x socks5://127.0.0.1:$SOCKSPORT http://ifconfig.co"
 	curl -x socks5://127.0.0.1:$SOCKSPORT ifconfig.co
 
 	echo
-	echo "Testing local DNS proxy on UDP:$DNSPORT ..."
+	echo "Check local DNS PROXY on UDP:$DNSPORT ..."
 	echo
 	echo "dig @127.0.0.1 -p $DNSPORT twitter.com"
 	dig @127.0.0.1 -p $DNSPORT twitter.com
