@@ -16,10 +16,7 @@ REGION=`aws configure get region`
 INSTYPE="t2.micro"
 STACKID="vlp-$UBUNTUVER"
 
-#SSTCPPORT=`grep "SSTCPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.env |cut -d'=' -f2|sed 's/\"//g'`
-#SSUDPPORT=`grep "SSUDPPORT=" $DIR/docker-shadowsocks-libev/shadowsocks-libev.env |cut -d'=' -f2|sed 's/\"//g'`
-#VMESSPORT=`grep "VMESSPORT=" $DIR/docker-v2rays/docker-v2rays.env |cut -d'=' -f2|sed 's/\"//g'`
-SSTCPPORT=`grep "SSTCPPORT=" $DIR/docker-ssserver/ssserver.env |cut -d'=' -f2|sed 's/\"//g'`
+SSTCPPORT=`grep "SSTCPPORT=" $DIR/server-ssserver/ssserver.env |cut -d'=' -f2|sed 's/\"//g'`
 
 if [ ! -z $1 ]; then
 	STACKID="$1";
@@ -38,14 +35,6 @@ aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-gro
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 1701 --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
-
-# Shadowsocks-libev
-# ssserver
-# aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSTCPPORT --cidr 0.0.0.0/0
-# aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSUDPPORT --cidr 0.0.0.0/0
-# V2Ray
-# aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $VMESSPORT --cidr 0.0.0.0/0
-
 # ssserver
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSTCPPORT --cidr 0.0.0.0/0
 
@@ -102,23 +91,13 @@ ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
 
 echo
 echo "L2TP provisioning..."
-scp -i $VLPHOME/$STACKID-key.pem -r $DIR/docker-sevpn ubuntu@$IPPUB:
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd docker-sevpn; sh sevpn.sh"
-
-#echo
-#echo "shadowsocks-libev provisioning..."
-#scp -i $VLPHOME/$STACKID-key.pem -r $DIR/docker-shadowsocks-libev ubuntu@$IPPUB:
-#ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd docker-shadowsocks-libev; sh shadowsocks-libev.sh"
-
-#echo
-#echo "V2ray vmess provisioning..."
-#scp -i $VLPHOME/$STACKID-key.pem -r $DIR/docker-v2rays ubuntu@$IPPUB:
-#ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd docker-v2rays; sh docker-v2rays.sh"
+scp -i $VLPHOME/$STACKID-key.pem -r $DIR/server-sevpn ubuntu@$IPPUB:
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-sevpn; sh sevpn.sh"
 
 echo
 echo "ssserver provisioning..."
-scp -i $VLPHOME/$STACKID-key.pem -r $DIR/docker-ssserver ubuntu@$IPPUB:
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd docker-ssserver; sh ssserver.sh"
+scp -i $VLPHOME/$STACKID-key.pem -r $DIR/server-ssserver ubuntu@$IPPUB:
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-ssserver; sh ssserver.sh"
 
 echo
 echo "New VPN server Instance is up on $IPPUB"

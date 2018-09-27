@@ -13,13 +13,13 @@ if [ "$VPSIP" = "None" ]; then
 else
 	echo "Found VPS: $VPSIP"
 	echo "Setting up local proxy..."
-	cp -a $DIR/docker-ssserver/ssserver.env $DIR/docker-client-sslocal/
-	sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $DIR/docker-client-sslocal/client-sslocal.env
-	$DIR/docker-client-sslocal/client-sslocal.sh
+	cp -a $DIR/server-ssserver/ssserver.env $DIR/client-sslocal/
+	sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $DIR/client-sslocal/sslocal.env
+	$DIR/client-sslocal/client-sslocal.sh
 	echo "Done."
 	echo
 	echo
-	. $DIR/docker-client-sslocal/client-sslocal.env
+	. $DIR/client-sslocal/sslocal.env
 	echo "VPS: $VPSIP"
 	sleep 5
 

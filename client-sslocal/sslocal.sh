@@ -4,7 +4,7 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 . $DIR/ssserver.env
-. $DIR/client-sslocal.env
+. $DIR/sslocal.env
 
 sed -i "s/EXPOSE.*/EXPOSE $SOCKSPORT $DNSPORT $HTTPPORT/g" $DIR/Dockerfile
 sed -i "s/SOCKSPORT=.*/SOCKSPORT=\"$SOCKSPORT\"/g" $DIR/Dockerfile

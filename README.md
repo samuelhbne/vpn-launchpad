@@ -95,11 +95,11 @@ You might consider modifying the "INSTYPE" in vlp-build from "t2.micro" into "t2
 
 
 ## What's the default username, password and pre-shared secret of L2TP VPN? How can I modify the  settings?
- - Modify USERS and PSK configurations in docker-sevpn/sevpn.env please
+ - Modify USERS and PSK configurations in server-sevpn/sevpn.env please
  - Remove the existing VPN server if any and rebuild a new one from scratch.
  - New credentials should already be applied now.
 
-Here's what docker-sevpn/sevpn.env looks like
+Here's what server-sevpn/sevpn.env looks like
 ```
 PSK=YOUR-SHARED-SECRET
 USERS=user0:pass0;user1:pass1;
