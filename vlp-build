@@ -4,7 +4,11 @@ DIR=`dirname $0`
 VLPHOME="$HOME/.vpn-launchpad"
 UBUNTUVER=bionic
 
-[[ -d "$HOME/.aws" ]] || echo "aws account initialisation needed"; exit 1
+aws --output table iam get-user
+if [ "$?" != "0" ]; then
+	echo "Please init first."
+	exit
+fi
 
 AMIID=`aws ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
 PROFILE="default"
