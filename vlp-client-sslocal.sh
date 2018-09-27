@@ -15,12 +15,12 @@ else
 	echo "Setting up local proxy..."
 	cp -a $DIR/server-ssserver/ssserver.env $DIR/client-sslocal/
 	sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $DIR/client-sslocal/sslocal.env
-	$DIR/client-sslocal/client-sslocal.sh
+	$DIR/client-sslocal/sslocal.sh
 	echo "Done."
 	echo
 	echo
 	. $DIR/client-sslocal/sslocal.env
-	echo "VPS: $VPSIP"
+	echo "Found VPS: $VPSIP"
 	sleep 5
 
 	echo
