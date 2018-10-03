@@ -1,4 +1,4 @@
-FROM resin/raspberry-pi-alpine-python:3
+FROM arm32v6/python:3-alpine
 
 MAINTAINER Samuel Huang "samuelh2006@gmail.com"
 

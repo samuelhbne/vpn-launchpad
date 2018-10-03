@@ -6,6 +6,7 @@ DIR="$(cd $DIR; pwd)"
 DKUID=`id -u`
 DKGID=`id -g`
 
+docker pull registry.hub.docker.com/arm32v6/python:3-alpine
 docker build --rm=true -f vpnlaunchpad/Dockerfile.rspi -t samuelhbne/vpnlaunchpad:rspi vpnlaunchpad/
 
 mkdir -p $DIR/.vpn-launchpad/.aws
