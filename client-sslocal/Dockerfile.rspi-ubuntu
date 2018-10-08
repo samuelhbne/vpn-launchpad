@@ -1,0 +1,32 @@
+FROM arm32v7/ubuntu:18.04
+
+ENV DEBIAN_FRONTEND="noninteractive"
+ENV SOCKSADDR="0.0.0.0"
+ENV SOCKSPORT="51080"
+ENV HTTPPORT="58123"
+ENV DNSPORT="55353"
+
+RUN apt-get update && apt-get install -y curl git build-essential polipo python-pip
+RUN cd /opt && git clone https://github.com/JustinHop/dns-socks-proxy && cd dns-socks-proxy && make
+RUN sed -i "s/socks_port = 5000/socks_port = $SOCKSPORT/g" /opt/dns-socks-proxy/dns_proxy.conf
+RUN sed -i "s/listen_addr = 127.0.1.10/listen_addr = $SOCKSADDR/g" /opt/dns-socks-proxy/dns_proxy.conf
+RUN sed -i "s/listen_port = 53/listen_port = $DNSPORT/g" /opt/dns-socks-proxy/dns_proxy.conf
+RUN sed -i "s/set_user = dnsproxy/set_user = nobody/g" /opt/dns-socks-proxy/dns_proxy.conf
+RUN sed -i "s/set_group = dnsproxy/set_group = nogroup/g" /opt/dns-socks-proxy/dns_proxy.conf
+RUN sed -i "s/log_file = \/dev\/stderr/log_file = \/dev\/null/g" /opt/dns-socks-proxy/dns_proxy.conf
+RUN echo "8.8.8.8\n8.8.4.4" > /opt/dns-socks-proxy/resolv.conf
+
+RUN pip install shadowsocks==2.8.2
+RUN sed -i 's/EVP_CIPHER_CTX_cleanup/EVP_CIPHER_CTX_reset/g' /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py
+
+RUN echo "socksParentProxy=localhost:$SOCKSPORT" >>/etc/polipo/config
+RUN echo "proxyAddress=$SOCKSADDR" >>/etc/polipo/config
+RUN echo "proxyPort=$HTTPPORT" >>/etc/polipo/config
+RUN echo "daemonise=true" >>/etc/polipo/config
+RUN echo "diskCacheRoot=" >>/etc/polipo/config
+
+ADD run.sh /run.sh
+RUN chmod 755 /*.sh
+
+EXPOSE 51080 55353 58123
+ENTRYPOINT ["/run.sh"]
