@@ -141,7 +141,7 @@ twitter.com.		836	IN	A	104.244.42.129
 ```
 Now setup your browser and other applications to work with the newly built proxy and enjoy.
 ###### How can I change the configuration of the local proxy?
-Modify client-sslocal/sslocal.env as your wish. No worries for the VPN host and part. vlp-client-sslocal will take care them.
+Modify client-sslocal/sslocal.env as your wish. No worries for the VPN host, port, password or encryption method. vlp-client-sslocal will generate them automaticlly from existing server-ssserver configuration.
 ```
 # ignore this line, vlp-client-sslocal will take care it
 SSHOST=13.114.130.186
