@@ -12,6 +12,11 @@ else
 	sed -i 's/^FROM .*/FROM alpine/g' $DIR/vpnlaunchpad/Dockerfile
 fi
 
+DKUID=`id -u`
+DKGID=`id -g`
+sed -i "s/^ENV DKUID .*/ENV DKUID ${DKUID}/" $DIR/vpnlaunchpad/Dockerfile
+sed -i "s/^ENV DKGID .*/ENV DKGID ${DKGID}/" $DIR/vpnlaunchpad/Dockerfile
+
 docker build --rm=true -t samuelhbne/vpnlaunchpad $DIR/vpnlaunchpad/
 echo
 
@@ -24,10 +29,10 @@ if [ $BVLPC -gt 0 ]; then
         docker stop vlp-alpine; docker rm vlp-alpine
 fi
 
-DOCKERCMD="docker run --user `id -u`:`id -g` --rm=true --name vlp-alpine -v $DIR:/vpn-launchpad -it samuelhbne/vpnlaunchpad"
+DOCKERCMD="docker run --user `id -u`:`id -g` --rm=true --name vlp-alpine -v $DIR:/home/vlp -it samuelhbne/vpnlaunchpad"
 
 if [[ $# = 0 ]]; then
-	$DOCKERCMD /vpn-launchpad/vlp-menu
+	$DOCKERCMD /home/vlp/vlp-menu
 else
 	while [[ $# > 0 ]]; do
 		act="$1"
@@ -37,19 +42,19 @@ else
 				shift
 				;;
 			--build)
-				$DOCKERCMD /vpn-launchpad/vlp-build
+				$DOCKERCMD /home/vlp/vlp-build
 				shift
 				;;
 			--query)
-				$DOCKERCMD /vpn-launchpad/vlp-query
+				$DOCKERCMD /home/vlp/vlp-query
 				shift
 				;;
 			--purge)
-				$DOCKERCMD /vpn-launchpad/vlp-purge
+				$DOCKERCMD /home/vlp/vlp-purge
 				shift
 				;;
 			*)
-				$DOCKERCMD /vpn-launchpad/vlp-menu
+				$DOCKERCMD /home/vlp/vlp-menu
 				shift
 				;;
 		esac

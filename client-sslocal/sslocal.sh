@@ -6,12 +6,21 @@ DIR="$(cd $DIR; pwd)"
 . $DIR/ssserver.env
 . $DIR/sslocal.env
 
-sed -i "s/EXPOSE.*/EXPOSE $SOCKSPORT $DNSPORT $HTTPPORT/g" $DIR/Dockerfile.rspi
-sed -i "s/SOCKSPORT=.*/SOCKSPORT=\"$SOCKSPORT\"/g" $DIR/Dockerfile.rspi
-sed -i "s/DNSPORT=.*/DNSPORT=\"$DNSPORT\"/g" $DIR/Dockerfile.rspi
-sed -i "s/HTTPPORT=.*/HTTPPORT=\"$HTTPPORT\"/g" $DIR/Dockerfile.rspi
+ARCH=`arch`
+if [ "$ARCH" = "armv6l" ]; then
+	sed -i 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/Dockerfile
+elif [ "$ARCH" = "armv7l" ]; then
+	sed -i 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/Dockerfile
+else
+	sed -i 's/^FROM .*/FROM alpine/g' $DIR/Dockerfile
+fi
 
-docker build --rm=true -t samuelhbne/sslocal -f $DIR/Dockerfile.rspi $DIR
+sed -i "s/EXPOSE.*/EXPOSE $SOCKSPORT $DNSPORT $HTTPPORT/g" $DIR/Dockerfile
+sed -i "s/SOCKSPORT=.*/SOCKSPORT=\"$SOCKSPORT\"/g" $DIR/Dockerfile
+sed -i "s/DNSPORT=.*/DNSPORT=\"$DNSPORT\"/g" $DIR/Dockerfile
+sed -i "s/HTTPPORT=.*/HTTPPORT=\"$HTTPPORT\"/g" $DIR/Dockerfile
+
+docker build --rm=true -t samuelhbne/sslocal -f $DIR/Dockerfile $DIR
 
 BEXIST=`docker ps -a| grep sslocal|wc -l`
 if [ $BEXIST -gt 0 ]; then
