@@ -2,8 +2,8 @@
 
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
-ARCH=`arch`
 
+ARCH=`arch`
 if [ "$ARCH" = "armv6l" ]; then
 	sed -i 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/vpnlaunchpad/Dockerfile
 elif [ "$ARCH" = "armv7l" ]; then
