@@ -7,5 +7,3 @@ RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make b
 RUN pip install awscli
 
 ENV HOME "/vpn-launchpad"
-
-#ENTRYPOINT ["/bin/bash"]
