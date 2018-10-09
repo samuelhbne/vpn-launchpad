@@ -45,7 +45,7 @@ case $VPSIP in
 		echo
 		echo "Check local DNS PROXY on UDP:$DNSPORT ..."
 		echo
-		echo "dig @127.0.0.1 -p $DNSPORT twitter.com"
-		dig @127.0.0.1 -p $DNSPORT twitter.com
+		echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
+		dig +short @127.0.0.1 -p $DNSPORT twitter.com
 		;;
 esac
