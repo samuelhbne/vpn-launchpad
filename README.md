@@ -22,13 +22,12 @@ $ exit
 ###### Here for Docker installation on Windows
 <https://docs.docker.com/docker-for-windows/install/>
 ###### Running vpn-launchpad with Docker installed already:
-Instructions for running vpn-launchpad with Docker installed on Ubuntu or MacOSX x86.
+Instructions for running vpn-launchpad via Docker on Ubuntu, MacOSX or Raspbian (Raspberry Pi 1,2,3).
 
 ```
-$ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
-$ unzip master.zip
-$ cd vpn-launchpad-master
-$ ./docker-vlp 
+$ git clone https://github.com/samuelhbne/vpn-launchpad
+$ cd vpn-launchpad
+$ ./docker-vlp
 Sending build context to Docker daemon 5.632 kB
 ...
 ...
@@ -40,7 +39,6 @@ Sending build context to Docker daemon 5.632 kB
 
 Please select:	 0
 ```
-NOTE: Please run "docker-vlp.rspi" instead of "docker-vlp" on Raspbian (Raspberry Pi 1,2,3)
 
 
 ## Running vpn-launchpad without Docker (deprecated):
@@ -49,9 +47,8 @@ If you are running Linux or Mac OSX and already got awscli, ssh, netcat and bash
 Instructions for running vpn-launchpad without Docker.
 
 ```
-$ wget https://github.com/samuelhbne/vpn-launchpad/archive/master.zip
-$ unzip master.zip
-$ cd vpn-launchpad-master
+$ git https://github.com/samuelhbne/vpn-launchpad
+$ cd vpn-launchpad
 $ ./vlp-menu
 
 0  Init AWS credentials
