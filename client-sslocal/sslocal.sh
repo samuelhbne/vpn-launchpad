@@ -17,8 +17,9 @@ fi
 
 sed -i "s/EXPOSE.*/EXPOSE $SOCKSPORT $DNSPORT $HTTPPORT/g" $DIR/Dockerfile
 sed -i "s/SOCKSPORT=.*/SOCKSPORT=\"$SOCKSPORT\"/g" $DIR/Dockerfile
-sed -i "s/DNSPORT=.*/DNSPORT=\"$DNSPORT\"/g" $DIR/Dockerfile
 sed -i "s/HTTPPORT=.*/HTTPPORT=\"$HTTPPORT\"/g" $DIR/Dockerfile
+sed -i "s/DNSPORT=.*/DNSPORT=\"$DNSPORT\"/g" $DIR/Dockerfile
+sed -i "s/DNSPORT=.*/DNSPORT=\"$DNSPORT\"/g" $DIR/run.sh
 
 docker build --rm=true -t samuelhbne/sslocal -f $DIR/Dockerfile $DIR
 
