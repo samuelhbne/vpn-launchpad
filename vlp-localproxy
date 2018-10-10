@@ -20,13 +20,13 @@ case $VPSIP in
 	*)
 		echo "Found VPS: $VPSIP"
 		echo "Setting up local proxy daemon..."
-		cp -a $DIR/server-ssserver/ssserver.env $DIR/client-sslocal/
-		sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $DIR/client-sslocal/sslocal.env
-		$DIR/client-sslocal/sslocal.sh
+		cp -a $DIR/server-ssserver/ssserver.env $DIR/localproxy-sslocal/
+		sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $DIR/localproxy-sslocal/sslocal.env
+		$DIR/localproxy-sslocal/sslocal.sh
 		echo "Done."
 		echo
 		echo
-		. $DIR/client-sslocal/sslocal.env
+		. $DIR/localproxy-sslocal/sslocal.env
 		echo "Found VPS: $VPSIP"
 		sleep 5
 

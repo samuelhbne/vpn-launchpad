@@ -117,7 +117,7 @@ SSTCPPORT="8388"
 The following instructions will automatically do all the tedious job for you bundled with an uncontaminated DNS resolver
 then run the test to verify its availability.
 ```
-$ ./vlp-client-sslocal
+$ ./vlp-localproxy
 ...
 Found VPS: 13.114.130.186
 
@@ -141,9 +141,9 @@ twitter.com.		836	IN	A	104.244.42.129
 ```
 Now setup your browser and other applications to work with the newly built proxy and enjoy.
 ###### How can I change the configuration of the local proxy?
-Modify client-sslocal/sslocal.env as your wish. No worries for the VPN host, port, password or encryption method. vlp-client-sslocal will generate them automaticlly from existing server-ssserver configuration.
+Modify localproxy-sslocal/sslocal.env as your wish. No worries for the VPN host, port, password or encryption method. vlp-localproxy will generate them automaticlly from existing server-ssserver configuration.
 ```
-# ignore this line, vlp-client-sslocal will take care it
+# ignore this line, vlp-localproxy will take care it
 SSHOST=13.114.130.186
 
 # SOCKS proxy listenning address
