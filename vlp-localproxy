@@ -32,19 +32,16 @@ case $VPSIP in
 
 		echo
 		echo "Check local HTTP PROXY on TCP:$HTTPPORT ..."
-		echo
 		echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
 		curl -x http://127.0.0.1:$HTTPPORT ifconfig.co
 
 		echo
 		echo "Check local SOCKS PROXY on TCP:$SOCKSPORT ..."
-		echo
 		echo "curl -x socks5://127.0.0.1:$SOCKSPORT http://ifconfig.co"
 		curl -x socks5://127.0.0.1:$SOCKSPORT ifconfig.co
 
 		echo
 		echo "Check local DNS PROXY on UDP:$DNSPORT ..."
-		echo
 		echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
 		dig +short @127.0.0.1 -p $DNSPORT twitter.com
 		;;
