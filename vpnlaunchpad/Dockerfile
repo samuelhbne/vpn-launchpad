@@ -1,4 +1,4 @@
-FROM alpine
+FROM arm32v6/alpine
 
 MAINTAINER Samuel Huang "samuelh2006@gmail.com"
 
