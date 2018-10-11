@@ -114,27 +114,57 @@ SSTCPPORT="8388"
 ```
 
 ## How can I build local proxy to route all my traffic through the VPN server I built via vpn-launchpad?
-proxy-build can do all the tedious works for you. It creates a local SOCKS/HTTP proxy as well as a local DNS server to free you fromDNS conatmination. Proxy configuration will be taken from the same configuration that built the remote VPS.
-
-You can run proxy-purge to remove the running proxy from local. proxy-status can get the proxy status and the proxy configuration if it's running.
+proxy-build can do all the tedious works for you. It creates a local SOCKS/HTTP proxy as well as a local DNS server to free you fromDNS conatmination. Proxy configuration will be taken from the same configuration that built the remote VPS. Now setup your browser proxy setting and enjoy.
 ```
 $ ./proxy-build
 ...
 Found VPS: 13.114.130.186
 
-Check local HTTP PROXY on TCP:58123 ...
+Checking local HTTP PROXY on TCP:58123 ...
 curl -x http://127.0.0.1:58123 http://ifconfig.co
 13.114.130.186
 
-Check local SOCKS PROXY on TCP:51080 ...
+Checking local SOCKS PROXY on TCP:51080 ...
 curl -x socks5://127.0.0.1:51080 http://ifconfig.co
 13.114.130.186
 
-Check local DNS PROXY on UDP:55353 ...
+Checking local DNS PROXY on UDP:55353 ...
 dig +short @127.0.0.1 -p 55353 twitter.com
 104.244.42.65
+
+Done.
 ```
-Now setup your browser and other applications to work with the newly built proxy and enjoy.
+
+proxy-status prints the proxy status and the configuration details if it's running.
+```
+$ ./proxy-status
+Local proxy found.
+
+Checking local HTTP PROXY on TCP:58123 ...
+curl -x http://127.0.0.1:58123 http://ifconfig.co
+13.114.130.186
+
+Checking local SOCKS PROXY on TCP:51080 ...
+curl -x socks5://127.0.0.1:51080 http://ifconfig.co
+13.114.130.186
+
+Checking local DNS PROXY on UDP:55353 ...
+dig +short @127.0.0.1 -p 55353 twitter.com
+104.244.42.65
+
+Done.
+```
+
+proxy-purge stops and removes the running proxy from local.
+```
+$ ./proxy-purge
+Local proxy found. Purging...
+sslocal
+sslocal
+
+Done.
+```
+
 ###### How can I change the configuration of the local proxy?
 Modify proxy-sslocal/sslocal.env as your wish. No worries for the VPN host, port, password or encryption method. proxy-build will generate them automaticlly from existing server-ssserver configuration.
 ```

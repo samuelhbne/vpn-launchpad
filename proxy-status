@@ -27,3 +27,5 @@ echo "Checking local DNS proxy on UDP:$DNSPORT ..."
 echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
 dig +short @127.0.0.1 -p $DNSPORT twitter.com
 echo
+
+echo "Done."
