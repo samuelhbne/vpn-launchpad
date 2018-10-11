@@ -4,6 +4,9 @@ BEXIST=`docker ps -a| grep sslocal|wc -l`
 if [ $BEXIST -eq 0 ]; then
 	echo "Local proxy not found."
 	exit
+else
+	echo "Local proxy found."
+	echo
 fi
 
 HTTPPORT=`docker exec -it sslocal cat /root/polipo/config|grep proxyPort|cut -d= -f2|sed 's/\r//g'`
