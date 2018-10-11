@@ -1,0 +1,26 @@
+#/bin/bash
+
+BEXIST=`docker ps -a| grep sslocal|wc -l`
+if [ $BEXIST -eq 0 ]; then
+	echo "Local proxy not found."
+	exit
+fi
+
+HTTPPORT=`docker exec -it sslocal cat /root/polipo/config|grep proxyPort|cut -d= -f2|sed 's/\r//g'`
+SOCKSPORT=`docker exec -it sslocal cat /root/polipo/config|grep socksParentProxy|cut -d: -f2|sed 's/\r//g'`
+DNSPORT=`docker exec -it sslocal cat /etc/dnscrypt-proxy/dnscrypt-proxy.toml|grep listen_addresses|cut -d"'" -f2|cut -d: -f2|sed 's/\r//g'`
+
+echo "Checking local HTTP proxy on TCP:$HTTPPORT ..."
+echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
+curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co
+echo
+
+echo "Checking local SOCKS5 proxy on TCP:$SOCKSPORT ..."
+echo "curl -x socks5://127.0.0.1:$SOCKSPORT http://ifconfig.co"
+curl -x socks5://127.0.0.1:$SOCKSPORT http://ifconfig.co
+echo
+
+echo "Checking local DNS proxy on UDP:$DNSPORT ..."
+echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
+dig +short @127.0.0.1 -p $DNSPORT twitter.com
+echo
