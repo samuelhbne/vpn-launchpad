@@ -114,7 +114,7 @@ SSTCPPORT="8388"
 ```
 
 ## How can I build local proxy to route all my traffic through the VPN server I built via vpn-launchpad?
-proxy-build can do all the tedious works for you. It creates a local SOCKS/HTTP proxy as well as a local DNS server to free you fromDNS conatmination. Proxy configuration will be taken from the same configuration that built the remote VPS. Now change your browser proxy setting and enjoy.
+proxy-build can do all the tedious works for you (also, Docker installation is necessary for this functionality). It creates a local SOCKS/HTTP proxy as well as a local DNS server to free you fromDNS conatmination. Proxy configuration will be taken from the same configuration that built the remote VPS. Now change your browser proxy setting and enjoy.
 ```
 $ ./proxy-build
 ...
