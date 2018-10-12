@@ -46,7 +46,7 @@ else
 				shift
 				;;
 			--query)
-				$DOCKERCMD /home/vlp/vlp-status
+				$DOCKERCMD /home/vlp/vlp-query
 				shift
 				;;
 			--purge)
