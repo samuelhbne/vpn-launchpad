@@ -3,7 +3,7 @@
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
-VLPCMD=$DIR/docker-vlp
+VLPCMD=$DIR/vlp
 
 echo "Query VPS IP address..."
 VPSIP=`$VLPCMD --query|grep "VPN SERVER:"|cut -d ':' -f2|cut -d' ' -f2|tr -d '\r\n'`
