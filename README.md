@@ -60,8 +60,6 @@ Note: A VPS must be built first before local proxy building.
 $ cat server-sevpn/sevpn.env
 PSK=YOUR-SHARED-SECRET
 USERS=user0:pass0;user1:pass1;
-SPW=SRV-MGT-PASS
-HPW=HUB-MGT-PASS
 ```
 All credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEtherVPN](https://github.com/SoftEtherVPN/SoftEtherVPN)
 
