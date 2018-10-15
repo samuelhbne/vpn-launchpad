@@ -102,6 +102,9 @@ dig +short @127.0.0.1 -p 55353 twitter.com
 Done.
 ```
 
+#### Browser configuration after local proxy building
+Please set connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given by lproxy-status.
+
 
 
 ## Initialize AWS credentials
