@@ -1,26 +1,26 @@
 # VPN Launchpad
 
-Turn your Raspberry Pi box into a VPN tunnel proxy (HTTP/SOCKS) within minutes. All you need is an Amazon AWS account. Also runs on Debian, Ubuntu (16.04 and above) or Mac OSX with Docker installed.
+Turn your Raspberry Pi box into a VPN tunnel proxy (HTTP/SOCKS) within minutes. All you need is an Amazon AWS account. Also works with Debian, Ubuntu (16.04 and above) or Mac OSX.
 
 
 
 ## Before running
 
-Docker is necessary for vpn-launchpad. curl and dig will be used during local proxy testing but can be ignored safely.
+Docker is necessary for vpn-launchpad. curl and dig will be used for local proxy testing but not compulsory.
 
-###### Docker installation for Ubuntu and Raspbian
+#### Docker installation for Ubuntu and Raspbian
 ```
 $ sudo apt-get update; sudo apt-get install docker.io
 $ sudo usermod -aG docker `whoami`; exit
 ```
-###### Docker installation for Mac OSX
+#### Docker installation for Mac OSX
 <https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
 
 
 
 ## Usage
 
-VPS tool usage: ./vlp [options]
+VPS management tool usage: ./vlp [options]
 
 * --init        -- Init with aws account credential.
 * --build       -- Build a new VPS with VPN services (Shadowsocks/L2TP) installed out of box.
@@ -43,7 +43,7 @@ Please select:
 ```
 
 
-Local proxy tool usage: 
+Local proxy management tool usage: 
 
 * ./lproxy-build         -- Build a proxy server running localy on Pi box with SOCKS, HTTP and DNS support.
 * ./lproxy-status        -- Check the proxy server running status and the proxy settings.
@@ -63,25 +63,22 @@ USERS=user0:pass0;user1:pass1;
 SPW=SRV-MGT-PASS
 HPW=HUB-MGT-PASS
 ```
-All credits to Tomohisa Kusano:
-<https://github.com/siomiz/SoftEtherVPN>
+All credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEtherVPN](https://github.com/SoftEtherVPN/SoftEtherVPN)
 
 
-#### Port, password and encryption method for ShadowSocks.
+#### Password, encryption method and listening port for ShadowSocks.
 ```
 $ cat server-ssserver/ssserver.env
 SSPASS="YOUR-SHADOWSOCKS-PASS"
 SSMETHOD="aes-256-cfb"
 SSTCPPORT="8388"
 ```
-NOTE: VPS purging and re-creation will be necessary to get the new configuration applied.
+NOTE: VPS purging and re-creation are necessary for getting new configuration applied.
 
-#### HTTP/SOCKS/DNS port for local proxy
+#### SOCKS/HTTP/DNS port for local proxy
 ```
 $ cat proxy-sslocal/sslocal.env 
-SSHOST=52.194.214.86
-SOCKSADDR=0.0.0.0
-SOCKSPORT=51080
+SOCKSPORT="51080"
 HTTPPORT="58123"
 DNSPORT="55353"
 ```
