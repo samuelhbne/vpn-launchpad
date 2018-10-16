@@ -4,13 +4,18 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 ARCH=`arch`
-if [ "$ARCH" = "armv6l" ]; then
-	sed -i 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/vpnlaunchpad/Dockerfile
-elif [ "$ARCH" = "armv7l" ]; then
-	sed -i 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/vpnlaunchpad/Dockerfile
-else
-	sed -i 's/^FROM .*/FROM alpine/g' $DIR/vpnlaunchpad/Dockerfile
-fi
+case $ARCH in
+	armv6l|armv7l)
+		sed -i 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/vpnlaunchpad/Dockerfile
+		;;
+	x86_64|i686)
+		sed -i 's/^FROM .*/FROM alpine/g' $DIR/vpnlaunchpad/Dockerfile
+		;;
+	*)
+		echo "Unsupported arch"
+		exit
+		;;
+esac
 
 DKUID=`id -u`
 DKGID=`id -g`
