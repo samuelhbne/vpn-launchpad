@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR=`dirname $0`
-DIR="$DIR/../"
+VLPDIR="$(cd $DIR; cd ..; pwd)"
 VLPHOME="$HOME/.vpn-launchpad"
 UBUNTUVER=bionic
 
@@ -17,7 +17,7 @@ REGION=`aws configure get region`
 INSTYPE="t2.micro"
 STACKID="vlp-$UBUNTUVER"
 
-SSTCPPORT=`grep "SSTCPPORT=" $DIR/server-ssserver/ssserver.env |cut -d'=' -f2|sed 's/\"//g'`
+SSTCPPORT=`grep "SSTCPPORT=" $VLPDIR/server-ssserver/ssserver.env |cut -d'=' -f2|sed 's/\"//g'`
 
 if [ ! -z $1 ]; then
 	STACKID="$1";
@@ -94,12 +94,12 @@ ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
 
 echo
 echo "L2TP provisioning..."
-scp -i $VLPHOME/$STACKID-key.pem -r $DIR/server-sevpn ubuntu@$IPPUB:
+scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-sevpn ubuntu@$IPPUB:
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-sevpn; sh sevpn.sh"
 
 echo
 echo "ssserver provisioning..."
-scp -i $VLPHOME/$STACKID-key.pem -r $DIR/server-ssserver ubuntu@$IPPUB:
+scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-ssserver ubuntu@$IPPUB:
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-ssserver; sh ssserver.sh"
 
 echo

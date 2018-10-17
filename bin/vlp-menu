@@ -1,6 +1,7 @@
 #!/bin/sh
 
 DIR=`dirname $0`
+VLPDIR="$(cd $DIR; cd ..; pwd)"
 VLPHOME="$HOME/.vpn-launchpad"
 
 
