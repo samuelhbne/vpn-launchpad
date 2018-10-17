@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DIR=`dirname $0`
+DIR="$DIR/../"
 VLPHOME="$HOME/.vpn-launchpad"
 UBUNTUVER=bionic
 
@@ -16,7 +17,7 @@ REGION=`aws configure get region`
 INSTYPE="t2.micro"
 STACKID="vlp-$UBUNTUVER"
 
-SSTCPPORT=`grep "SSTCPPORT=" $DIR/../server-ssserver/ssserver.env |cut -d'=' -f2|sed 's/\"//g'`
+SSTCPPORT=`grep "SSTCPPORT=" $DIR/server-ssserver/ssserver.env |cut -d'=' -f2|sed 's/\"//g'`
 
 if [ ! -z $1 ]; then
 	STACKID="$1";
