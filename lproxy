@@ -1,0 +1,30 @@
+#/bin/sh
+
+DIR=`dirname $0`
+DIR="$(cd $DIR; pwd)"
+
+if [[ $# = 0 ]]; then
+	$DIR/bin/lproxy-status
+else
+	while [[ $# > 0 ]]; do
+		act="$1"
+		case $act in
+			--build)
+				$DIR/bin/lproxy-build
+				shift
+				;;
+			--status)
+				$DIR/bin/lproxy-status
+				shift
+				;;
+			--purge)
+				$DIR/bin/lproxy-purge
+				shift
+				;;
+			*)
+				$DIR/bin/lproxy-status
+				shift
+				;;
+		esac
+	done
+fi

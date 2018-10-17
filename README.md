@@ -43,11 +43,11 @@ Please select:
 ```
 
 
-Local proxy management tool usage: 
+Local proxy management tool usage: ./lproxy [options]
 
-* ./lproxy-build         -- Build a proxy server running localy on Pi box with SOCKS, HTTP and DNS support.
-* ./lproxy-status        -- Check the proxy server running status and the proxy settings.
-* ./lproxy-purge         -- Purge the running proxy server from Pi box.
+* --build         -- Build a proxy server running localy on Pi box with SOCKS, HTTP and DNS support.
+* --status        -- Check the proxy server running status and the proxy settings.
+* --purge         -- Purge the running proxy server from Pi box.
 
 Note: A VPS must be built first before local proxy building.
 
@@ -82,9 +82,9 @@ DNSPORT="55353"
 ```
 NOTE: Local proxy purging and re-creation will be necessary to get the new configuration applied.
 
-Also, lproxy-status prints all the details you need for browser configuration.
+Also, "lproxy --status" prints all the details necessary for browser configuration.
 ```
-$ ./lproxy-status
+$ ./lproxy --status
 Local proxy found.
 
 Checking local HTTP PROXY on TCP:58123 ...
@@ -103,7 +103,7 @@ Done.
 ```
 
 #### Browser configuration after local proxy building
-Please set connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given by lproxy-status.
+Please set connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given by "lproxy -status".
 
 
 

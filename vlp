@@ -37,7 +37,7 @@ fi
 DOCKERCMD="docker run --user `id -u`:`id -g` --rm=true --name vlp-alpine -v $DIR:/home/vlp -it samuelhbne/vpnlaunchpad"
 
 if [[ $# = 0 ]]; then
-	$DOCKERCMD /home/vlp/vlp-menu
+	$DOCKERCMD /home/vlp/bin/vlp-menu
 else
 	while [[ $# > 0 ]]; do
 		act="$1"
@@ -47,19 +47,19 @@ else
 				shift
 				;;
 			--build)
-				$DOCKERCMD /home/vlp/vlp-build
+				$DOCKERCMD /home/vlp/bin/vlp-build
 				shift
 				;;
 			--query)
-				$DOCKERCMD /home/vlp/vlp-query
+				$DOCKERCMD /home/vlp/bin/vlp-query
 				shift
 				;;
 			--purge)
-				$DOCKERCMD /home/vlp/vlp-purge
+				$DOCKERCMD /home/vlp/bin/vlp-purge
 				shift
 				;;
 			*)
-				$DOCKERCMD /home/vlp/vlp-menu
+				$DOCKERCMD /home/vlp/bin/vlp-menu
 				shift
 				;;
 		esac
