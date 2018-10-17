@@ -10,6 +10,11 @@ Command vlp creates/purges VPN server with the AWS account provided. Command lpr
 
 
 
+## Get AWS account ID and key
+<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
+
+
+
 ## Usage
 
 ./vlp [options]
@@ -28,12 +33,12 @@ Note: A VPS must be built first before local proxy building.
 
 ## Quick start on Raspbian or Ubuntu
 
-#### Docker installation
+#### Dependencies installation
 ```
-$ sudo apt-get update; sudo apt-get install docker.io
+$ sudo apt-get update; sudo apt-get install docker.io dnsutils curl
 $ sudo usermod -aG docker `whoami`; exit
 ```
-#### AWS account initialisation
+#### AWS account set up
 ```
 $ git clone https://github.com/samuelhbne/vpn-launchpad; cd vpn-launchpad
 $ ./vlp --init
@@ -119,11 +124,6 @@ $ sudo usermod -aG docker `whoami`; exit
 ```
 #### Docker installation for Mac OSX
 <https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
-
-
-
-## Get AWS account ID and key
-<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
 
 
 
