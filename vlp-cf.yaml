@@ -204,11 +204,11 @@ Resources:
           echo -e '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf
           sysctl -p; usermod -aG docker ubuntu
           su - ubuntu -c 'git clone https://github.com/samuelhbne/vpn-launchpad'
-          su - ubuntu -c 'echo "PSK=${L2TPPSK}" > vpn-launchpad/server-sevpn/sevpn.env'
-          su - ubuntu -c 'echo "USERS=${L2TPUserName}:${L2TPUserPass};" >> vpn-launchpad/server-sevpn/sevpn.env'
-          su - ubuntu -c 'echo "SPW=${L2TPSPW}" >> vpn-launchpad/server-sevpn/sevpn.env'
-          su - ubuntu -c 'echo "HPW=${L2TPHPW}" >> vpn-launchpad/server-sevpn/sevpn.env'
-          su - ubuntu -c 'cd vpn-launchpad/server-sevpn; sh sevpn.sh'
+          su - ubuntu -c 'echo "PSK=${L2TPPSK}" > vpn-launchpad/server-softether/softether.env'
+          su - ubuntu -c 'echo "USERS=${L2TPUserName}:${L2TPUserPass};" >> vpn-launchpad/server-softether/softether.env'
+          su - ubuntu -c 'echo "SPW=${L2TPSPW}" >> vpn-launchpad/server-softether/softether.env'
+          su - ubuntu -c 'echo "HPW=${L2TPHPW}" >> vpn-launchpad/server-softether/softether.env'
+          su - ubuntu -c 'cd vpn-launchpad/server-softether; sh softether.sh'
       KeyName: !Ref StackKeyName
       NetworkInterfaces:
         - AssociatePublicIpAddress: true

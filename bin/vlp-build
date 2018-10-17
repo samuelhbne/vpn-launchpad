@@ -94,8 +94,8 @@ ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
 
 echo
 echo "L2TP provisioning..."
-scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-sevpn ubuntu@$IPPUB:
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-sevpn; sh sevpn.sh"
+scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-softether ubuntu@$IPPUB:
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-softether; sh softether.sh"
 
 echo
 echo "ssserver provisioning..."

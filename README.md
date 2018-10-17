@@ -81,7 +81,7 @@ Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/
 
 #### Username, password and pre-shared secret for L2TP VPN.
 ```
-$ cat server-sevpn/sevpn.env
+$ cat server-softether/softether.env
 PSK=YOUR-SHARED-SECRET
 USERS=user0:pass0;user1:pass1;
 ```
