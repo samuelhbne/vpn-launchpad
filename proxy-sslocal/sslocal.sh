@@ -27,5 +27,5 @@ if [ $BEXIST -gt 0 ]; then
         docker stop sslocal; docker rm sslocal
 fi
 
-echo "docker run --name sslocal -p $SOCKSPORT:$SOCKSPORT -p $DNSPORT:$DNSPORT/udp -p $HTTPPORT:$HTTPPORT -d samuelhbne/sslocal -s ${SSHOST} -p ${SSTCPPORT} -b ${SOCKSADDR} -l ${SOCKSPORT} -k \"${SSPASS}\" -m \"${SSMETHOD}\""
-docker run --name sslocal -p $SOCKSPORT:$SOCKSPORT -p $DNSPORT:$DNSPORT/udp -p $HTTPPORT:$HTTPPORT -d samuelhbne/sslocal -s ${SSHOST} -p ${SSTCPPORT} -b ${SOCKSADDR} -l ${SOCKSPORT} -k "${SSPASS}" -m "${SSMETHOD}"
+echo "docker run --name sslocal -p $SOCKSPORT:$SOCKSPORT -p $DNSPORT:$DNSPORT/udp -p $HTTPPORT:$HTTPPORT -d samuelhbne/sslocal -s ${SSHOST} -p ${SSTCPPORT} -b ${LISTENADDR} -l ${SOCKSPORT} -k \"${SSPASS}\" -m \"${SSMETHOD}\""
+docker run --name sslocal -p $SOCKSPORT:$SOCKSPORT -p $DNSPORT:$DNSPORT/udp -p $HTTPPORT:$HTTPPORT -d samuelhbne/sslocal -s ${SSHOST} -p ${SSTCPPORT} -b ${LISTENADDR} -l ${SOCKSPORT} -k "${SSPASS}" -m "${SSMETHOD}"

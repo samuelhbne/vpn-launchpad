@@ -1,6 +1,6 @@
 FROM arm32v6/alpine
 
-ENV SOCKSADDR="0.0.0.0"
+ENV LISTENADDR="0.0.0.0"
 ENV SOCKSPORT="51080"
 ENV HTTPPORT="58123"
 ENV DNSPORT="55353"
@@ -15,7 +15,7 @@ RUN pip3 install shadowsocks==2.8.2
 
 RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
 RUN echo "socksParentProxy=localhost:$SOCKSPORT" >>/root/polipo/config
-RUN echo "proxyAddress=$SOCKSADDR" >>/root/polipo/config
+RUN echo "proxyAddress=$LISTENADDR" >>/root/polipo/config
 RUN echo "proxyPort=$HTTPPORT" >>/root/polipo/config
 RUN echo "daemonise=true" >>/root/polipo/config
 RUN echo "diskCacheRoot=" >>/root/polipo/config
