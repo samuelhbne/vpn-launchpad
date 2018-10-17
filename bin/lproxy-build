@@ -23,8 +23,8 @@ case $VPSIP in
 		cp -a $VLPDIR/server-ssserver/ssserver.env $VLPDIR/proxy-sslocal/
 		sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $VLPDIR/proxy-sslocal/sslocal.env
 		$VLPDIR/proxy-sslocal/sslocal.sh
-		echo "Wait 10s for local proxy initialisation..."
-		sleep 10
+		echo "Wait 15s for local proxy initialisation..."
+		sleep 15
 		echo "Done."
 		echo
 		echo
