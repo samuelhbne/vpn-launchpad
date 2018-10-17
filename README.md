@@ -4,52 +4,76 @@ Turn your Raspberry Pi box into a VPN tunnel proxy (HTTP/SOCKS) within minutes. 
 
 
 
-## Before running
+## How it works
 
-Docker is necessary for vpn-launchpad. curl and dig will be used for local proxy testing but not compulsory.
-
-#### Docker installation for Ubuntu and Raspbian
-```
-$ sudo apt-get update; sudo apt-get install docker.io
-$ sudo usermod -aG docker `whoami`; exit
-```
-#### Docker installation for Mac OSX
-<https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
+Command vlp creates/purges VPN server with the AWS account provided. Command lproxy creates/purges a proxy running locally with SOCKS/HTTP/DNS support, which tunneling all traffic through the VPN server previously created by command vlp.
 
 
 
 ## Usage
 
-VPS management tool usage: ./vlp [options]
-
+./vlp [options]
 * --init        -- Init with aws account credential.
 * --build       -- Build a new VPS with VPN services (Shadowsocks/L2TP) installed out of box.
 * --query       -- Query the current VPS status.
 * --purge       -- Purge the VPS built previously.
 
-A selection menu will be displayed in case running without parameters
-```
-$ ./vlp
-Sending build context to Docker daemon 5.632 kB
-...
-...
-0  Init AWS credentials
-1  Create VPN node on AWS
-2  Check existing VPN server status...
-3  Remove the existing VPN server from AWS
-4  Exit vpn-launchpad
-
-Please select:
-```
-
-
-Local proxy management tool usage: ./lproxy [options]
-
+./lproxy [options]
 * --build         -- Build a proxy server running localy on Pi box with SOCKS, HTTP and DNS support.
 * --status        -- Check the proxy server running status and the proxy settings.
 * --purge         -- Purge the running proxy server from Pi box.
-
 Note: A VPS must be built first before local proxy building.
+
+
+
+## Quick start on Raspbian or Ubuntu
+
+#### Docker installation
+```
+$ sudo apt-get update; sudo apt-get install docker.io
+$ sudo usermod -aG docker `whoami`; exit
+```
+#### AWS account initialisation
+```
+$ git clone https://github.com/samuelhbne/vpn-launchpad; cd vpn-launchpad
+$ ./vlp --init
+AWS Access Key ID [None]: INPUT-YOUR-AWS-ID-HERE
+AWS Secret Access Key [None]: INPUT-YOUR-AWS-KEY-HERE
+Default region name [ap-northeast-1]: 
+Default output format [json]: 
+```
+
+#### VPN server build up
+```
+$ ./vlp --build
+...
+New VPN server Instance is up on 13.231.224.253
+Enjoy.
+```
+
+#### Local proxy build up
+```
+$ ./lproxy --build
+...
+Found VPS: 13.231.224.253
+Checking local HTTP PROXY on TCP:58123 ...
+curl -x http://127.0.0.1:58123 http://ifconfig.co
+13.231.224.253
+
+Checking local SOCKS PROXY on TCP:51080 ...
+curl -x socks5://127.0.0.1:51080 http://ifconfig.co
+13.231.224.253
+
+Checking local DNS PROXY on UDP:55353 ...
+dig +short @127.0.0.1 -p 55353 twitter.com
+104.244.42.65
+104.244.42.193
+
+Done.
+```
+
+#### Browser configuration
+Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
 
 
 
@@ -82,32 +106,23 @@ DNSPORT="55353"
 ```
 NOTE: Local proxy purging and re-creation will be necessary to get the new configuration applied.
 
-Also, "lproxy --status" prints all the details necessary for browser configuration.
+
+
+## Before running
+
+Docker is necessary for vpn-launchpad. curl and dig will be used for local proxy testing but not compulsory.
+
+#### Docker installation for Raspbian or Ubuntu
 ```
-$ ./lproxy --status
-Local proxy found.
-
-Checking local HTTP PROXY on TCP:58123 ...
-curl -x http://127.0.0.1:58123 http://ifconfig.co
-13.114.130.186
-
-Checking local SOCKS PROXY on TCP:51080 ...
-curl -x socks5://127.0.0.1:51080 http://ifconfig.co
-13.114.130.186
-
-Checking local DNS PROXY on UDP:55353 ...
-dig +short @127.0.0.1 -p 55353 twitter.com
-104.244.42.65
-
-Done.
+$ sudo apt-get update; sudo apt-get install docker.io
+$ sudo usermod -aG docker `whoami`; exit
 ```
-
-#### Browser configuration after local proxy building
-Please set connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given by "lproxy -status".
-
+#### Docker installation for Mac OSX
+<https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
 
 
-## Initialize AWS credentials
+
+## Get AWS account ID and key
 <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
 
 
