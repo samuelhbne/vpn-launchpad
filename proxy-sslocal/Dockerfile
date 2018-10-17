@@ -5,7 +5,7 @@ ENV SOCKSPORT="51080"
 ENV HTTPPORT="58123"
 ENV DNSPORT="55353"
 
-RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make bash texinfo curl bind-tools py3-pip dnscrypt-proxy
+RUN apk update && apk add git build-base bash curl bind-tools py3-pip dnscrypt-proxy
 
 RUN sed -i "s/^listen_addresses = .*/listen_addresses = \[\'0.0.0.0:$DNSPORT\'\]/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^dnscrypt_servers = .*/dnscrypt_servers = false/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
