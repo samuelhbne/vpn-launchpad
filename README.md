@@ -1,6 +1,6 @@
 # VPN Launchpad
 
-Turn your Raspberry Pi (1/2/3/zero) into a VPN proxy (HTTP/SOCKS/DNS) that tunnels all traffic through AWS EC2. All you need is an Amazon AWS account (to create EC2 instance for tunneling traffic).
+Turn your Raspberry Pi (1/2/3/zero) into a VPN proxy (HTTP/SOCKS/DNS) that tunnels all traffic through AWS EC2. All you need is an Amazon AWS account for EC2 VPN server creation.
 
 Also works on Ubuntu (16.04 and above), Mac OSX or Debian.
 
