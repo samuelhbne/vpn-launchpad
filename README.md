@@ -1,12 +1,14 @@
 # VPN Launchpad
 
-Turn your Raspberry Pi box into a VPN tunnel proxy (HTTP/SOCKS) within minutes. All you need is an Amazon AWS account. Also works with Debian, Ubuntu (16.04 and above) or Mac OSX.
+Turn your Raspberry Pi (1/2/3/zero) into a VPN proxy (HTTP/SOCKS/DNS) that tunnels all traffic through AWS EC2. All you need is an Amazon AWS account (to create EC2 instance for tunneling traffic).
+
+Also works on Ubuntu (16.04 and above), Mac OSX or Debian.
 
 
 
 ## How it works
 
-Command vlp creates/purges VPN server with the AWS account provided. Command lproxy creates/purges a proxy running locally with SOCKS/HTTP/DNS support, which tunneling all traffic through the VPN server previously created by command vlp.
+Command vlp creates/purges VPN server via AWS EC2 service. Command lproxy creates/purges a proxy (SOCKS/HTTP/DNS) running locally, which tunneling all traffic through the VPN server previously created by command vlp.
 
 
 
@@ -18,27 +20,28 @@ Command vlp creates/purges VPN server with the AWS account provided. Command lpr
 ## Usage
 
 ./vlp [options]
-* --init        -- Init with aws account credential.
-* --build       -- Build a new VPS with VPN services (Shadowsocks/L2TP) installed out of box.
-* --query       -- Query the current VPS status.
-* --purge       -- Purge the VPS built previously.
+* --init        -- Init aws account credential.
+* --build       -- Build new VPN server.
+* --query       -- Query VPN server status.
+* --purge       -- Purge existing VPN server.
 
 ./lproxy [options]
-* --build         -- Build a proxy server running localy on Pi box with SOCKS, HTTP and DNS support.
-* --status        -- Check the proxy server running status and the proxy settings.
-* --purge         -- Purge the running proxy server from Pi box.
-Note: A VPS must be built first before local proxy building.
+* --build         -- Build local proxy server.
+* --status        -- Check local proxy server status.
+* --purge         -- Purge existing local proxy.
+
+Note: A VPN server should have been built before local proxy building.
 
 
 
 ## Quick start on Raspbian or Ubuntu
 
-#### Dependencies installation
+#### 1. Dependencies installation
 ```
 $ sudo apt-get update; sudo apt-get install docker.io dnsutils curl
 $ sudo usermod -aG docker `whoami`; exit
 ```
-#### AWS account set up
+#### 2. AWS account set up
 ```
 $ git clone https://github.com/samuelhbne/vpn-launchpad; cd vpn-launchpad
 $ ./vlp --init
@@ -48,7 +51,7 @@ Default region name [ap-northeast-1]:
 Default output format [json]: 
 ```
 
-#### VPN server build up
+#### 3. VPN server build up
 ```
 $ ./vlp --build
 ...
@@ -56,11 +59,11 @@ New VPN server Instance is up on 13.231.224.253
 Enjoy.
 ```
 
-#### Local proxy build up
+#### 4. Local proxy build up
 ```
 $ ./lproxy --build
 ...
-Found VPS: 13.231.224.253
+Tunnel VPS: 13.231.224.253
 Checking local HTTP PROXY on TCP:58123 ...
 curl -x http://127.0.0.1:58123 http://ifconfig.co
 13.231.224.253
@@ -77,7 +80,7 @@ dig +short @127.0.0.1 -p 55353 twitter.com
 Done.
 ```
 
-#### Browser configuration
+#### 5. Browser configuration
 Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
 
 
