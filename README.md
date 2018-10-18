@@ -44,6 +44,7 @@ $ sudo usermod -aG docker `whoami`; exit
 #### 2. AWS account set up
 ```
 $ git clone https://github.com/samuelhbne/vpn-launchpad; cd vpn-launchpad
+
 $ ./vlp --init
 AWS Access Key ID [None]: INPUT-YOUR-AWS-ID-HERE
 AWS Secret Access Key [None]: INPUT-YOUR-AWS-KEY-HERE
