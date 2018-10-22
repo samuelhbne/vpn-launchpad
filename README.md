@@ -23,8 +23,7 @@ Command vlp creates/purges VPN server via AWS EC2 service. Command lproxy create
 8. Click "Show" link
 9. Now you get the "Access key ID" and the "Secret access key" that are necessary for vpn-launchpad running
 
-Follow the official doc page for more details
-<http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
+Follow the [official doc page](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) for more details
 
 
 
