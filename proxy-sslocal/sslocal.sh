@@ -6,6 +6,7 @@ DIR="$(cd $DIR; pwd)"
 . $DIR/ssserver.env
 . $DIR/sslocal.env
 
+cp -a $DIR/Dockerfile.in $DIR/Dockerfile
 ARCH=`arch`
 if [ "$ARCH" = "armv6l" ]; then
 	sed -i 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/Dockerfile

@@ -3,6 +3,8 @@
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
+cp -a $DIR/vpnlaunchpad/Dockerfile.in $DIR/vpnlaunchpad/Dockerfile
+
 ARCH=`arch`
 case $ARCH in
 	armv6l|armv7l)

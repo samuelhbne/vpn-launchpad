@@ -21,6 +21,7 @@ case $VPSIP in
 		echo "Found VPS: $VPSIP"
 		echo "Setting up local proxy daemon..."
 		cp -a $VLPDIR/server-ssserver/ssserver.env $VLPDIR/proxy-sslocal/
+		cp -a $VLPDIR/proxy-sslocal/sslocal.env.in $VLPDIR/proxy-sslocal/sslocal.env
 		sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $VLPDIR/proxy-sslocal/sslocal.env
 		$VLPDIR/proxy-sslocal/sslocal.sh
 		echo "Wait 15s for local proxy initialisation..."
