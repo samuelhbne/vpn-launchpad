@@ -12,7 +12,18 @@ Command vlp creates/purges VPN server via AWS EC2 service. Command lproxy create
 
 
 
-## Get AWS account ID and key
+## Quick tour for getting AWS account ID and key
+1. Create an new AWS free account [here](https://aws.amazon.com/) if you don't have. I'm not affiliate.
+2. Login into [AWS IAM console](https://console.aws.amazon.com/iam/) with your account.
+3. Click "User" on the left side then click "Add user" button on the top
+4. Choose the "User name" and tick "Programmatic access" box below
+5. Click "Next: Permissions" button
+6. Tick the "admin" box in "Add user to group" page
+7. Click "Next: Review" then click "Create user" button
+8. Click "Show" link
+9. Now you get the "Access key ID" and the "Secret access key" that are necessary for vpn-launchpad running
+
+Follow the official doc page for more details
 <http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html>
 
 
@@ -41,6 +52,8 @@ Note: A VPN server should have been built before local proxy building.
 $ sudo apt-get update; sudo apt-get install docker.io dnsutils curl
 $ sudo usermod -aG docker `whoami`; exit
 ```
+Note: It is necessary to log out current session and back to get the new user group setting take effect.
+
 #### 2. AWS account set up
 ```
 $ git clone https://github.com/samuelhbne/vpn-launchpad; cd vpn-launchpad
