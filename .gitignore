@@ -1,4 +1,4 @@
-proxy-sslocal/sslocal.env
+proxy-sslocal/sslocal.env.out
 proxy-sslocal/Dockerfile
 vpnlaunchpad/Dockerfile
 .vpn-launchpad

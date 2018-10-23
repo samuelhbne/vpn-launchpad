@@ -4,7 +4,7 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 . $DIR/ssserver.env
-. $DIR/sslocal.env
+. $DIR/sslocal.env.out
 
 cp -a $DIR/Dockerfile.in $DIR/Dockerfile
 ARCH=`arch`

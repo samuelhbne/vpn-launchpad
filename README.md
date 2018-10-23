@@ -120,7 +120,7 @@ NOTE: VPS purging and re-creation are necessary for getting new configuration ap
 
 #### SOCKS/HTTP/DNS port for local proxy
 ```
-$ cat proxy-sslocal/sslocal.env.in
+$ cat proxy-sslocal/sslocal.env
 SOCKSPORT="51080"
 HTTPPORT="58123"
 DNSPORT="55353"
