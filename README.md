@@ -51,7 +51,7 @@ Note: A VPN server should have been built before local proxy building.
 $ sudo apt-get update; sudo apt-get install docker.io dnsutils curl
 $ sudo usermod -aG docker `whoami`; exit
 ```
-Note: It is necessary to log out current session and back to get the new user group setting take effect.
+Note: It is necessary to log out current session and back to get docker group setting take effect.
 
 #### 2. AWS account set up
 ```
