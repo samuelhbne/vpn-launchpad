@@ -96,6 +96,17 @@ Done.
 #### 5. Browser configuration
 Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
 
+#### 6. Purge local proxy after the end of surfing
+```
+$ ./lproxy --purge
+```
+
+#### 7. Purge VPN server from AWS
+```
+$ ./vlp --purge
+```
+
+Note: Purging the local proxy and the VPN server from cloud after the end of surfing is always recommended. Not only it reduces the cost of AWS service hiring in case you are not a free tier user, but also it purges the surfing trail from cloud hence protects your privacy.
 
 
 ## Configuration
@@ -131,7 +142,7 @@ NOTE: Local proxy purging and re-creation will be necessary to get the new confi
 
 ## Before running
 
-Docker is necessary for vpn-launchpad. curl and dig will be used for local proxy testing but not compulsory.
+Docker is necessary for running vlp and lproxy. curl and dig will be used for lproxy verification after local proxy building but not compulsory.
 
 #### Docker installation for Raspbian or Ubuntu
 ```
