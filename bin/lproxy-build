@@ -8,8 +8,8 @@ VLPQUERY="$VLPDIR/vlp --query"
 echo "Query VPS IP address..."
 RESULT="/tmp/RESULT"
 $VLPQUERY|sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g">$RESULT
-VPSIP=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $3}'|tr -d '\r\n'`
-INSTID=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $2}'|tr -d '\r\n'`
+VPSIP=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $2}'|tr -d '\r\n'`
+INSTID=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $3}'|tr -d '\r\n'`
 case $VPSIP in
 	"None")
 		echo "VPS not found."

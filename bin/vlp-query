@@ -23,19 +23,18 @@ echo "Querying Instance of $STACKID..."
 # aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].PublicIpAddress'
 aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, LaunchTime: LaunchTime, InstanceType: InstanceType, InstanceId: InstanceId, AvailabilityZone: Placement.AvailabilityZone}'
 
-aws --profile $PROFILE --region $REGION --output table ec2 describe-security-groups --group-names $STACKID-sg --query "SecurityGroups[*].{Name:GroupName}"
-
 RESULT=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, InstanceId: InstanceId}'|grep -v None|head -n1`
- 
 
 echo
 IPADDR=`echo $RESULT|awk '{print $1}'`
 INSTID=`echo $RESULT|awk '{print $2}'`
 
+aws --profile $PROFILE --region $REGION --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId: ResourceId, Key: Key, Value: Value}'
+
+aws --profile $PROFILE --region $REGION --output table ec2 describe-security-groups --group-names $STACKID-sg --query "SecurityGroups[*].{Name:GroupName}"
+
 if [ ! -z "$IPADDR" ]; then
-	echo "VPN-SERVER: $INSTID $IPADDR"
+	echo "VPN-SERVER: $IPADDR $INSTID"
 else
 	echo "VPN-SERVER: None"
 fi
-
-aws --profile $PROFILE --region $REGION --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId: ResourceId, Key: Key, Value: Value}'

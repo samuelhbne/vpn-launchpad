@@ -97,22 +97,26 @@ echo
 echo "L2TP provisioning..."
 scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-softether ubuntu@$IPPUB:
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-softether; sh softether.sh"
+echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
   VAL=`echo "$p"|cut -d'=' -f2`
   aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=softether.$KEY,Value=$VAL"
 done <$VLPDIR/server-softether/softether.env
+echo "Done."
 
 echo
 echo "ssserver provisioning..."
 scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-ssserver ubuntu@$IPPUB:
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-ssserver; sh ssserver.sh"
+echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
   VAL=`echo "$p"|cut -d'=' -f2`
   aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=ssserver.$KEY,Value=$VAL"
 done <$VLPDIR/server-ssserver/ssserver.env
+echo "Done."
 
 echo
-echo "New VPN server Instance is up on $IPPUB"
+echo "New VPN-SERVER is up on $IPPUB"
 echo "Enjoy."
