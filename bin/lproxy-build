@@ -3,11 +3,13 @@
 DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
 
-VLPCMD=$VLPDIR/vlp
+VLPQUERY="$VLPDIR/vlp --query"
 
 echo "Query VPS IP address..."
-VPSIP=`$VLPCMD --query|grep "VPN SERVER:"|cut -d ':' -f2|cut -d' ' -f2|tr -d '\r\n'`
-
+RESULT="/tmp/RESULT"
+$VLPQUERY|sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g">$RESULT
+VPSIP=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $3}'|tr -d '\r\n'`
+INSTID=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $2}'|tr -d '\r\n'`
 case $VPSIP in
 	"None")
 		echo "VPS not found."
@@ -20,7 +22,7 @@ case $VPSIP in
 	*)
 		echo "Found VPS: $VPSIP"
 		echo "Setting up local proxy daemon..."
-		cp -a $VLPDIR/server-ssserver/ssserver.env $VLPDIR/proxy-sslocal/
+		cat $RESULT| grep $INSTID|grep "ssserver\."|sed 's/ssserver.//g'|sed 's/|//g'|awk '{print $1"="$3}'>$VLPDIR/proxy-sslocal/ssserver.env
 		cp -a $VLPDIR/proxy-sslocal/sslocal.env $VLPDIR/proxy-sslocal/sslocal.env.out
 		sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $VLPDIR/proxy-sslocal/sslocal.env.out
 		$VLPDIR/proxy-sslocal/sslocal.sh
