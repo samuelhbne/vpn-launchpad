@@ -64,7 +64,7 @@ Default region name [ap-northeast-1]:
 Default output format [json]: 
 ```
 
-#### 3. VPN server build up
+#### 3. Build a VPN server on AWS
 ```
 $ ./vlp --build
 ...
@@ -72,7 +72,7 @@ New VPN server Instance is up on 13.231.224.253
 Enjoy.
 ```
 
-#### 4. Local proxy build up
+#### 4. Build a local proxy on Pi box
 ```
 $ ./lproxy --build
 ...
@@ -96,12 +96,12 @@ Done.
 #### 5. Browser configuration
 Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
 
-#### 6. Purge local proxy after the end of surfing
+#### 6. Purge local proxy from Pi box after surfing
 ```
 $ ./lproxy --purge
 ```
 
-#### 7. Purge VPN server from AWS
+#### 7. Purge VPN server from AWS after surfing
 ```
 $ ./vlp --purge
 ```
