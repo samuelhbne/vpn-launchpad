@@ -14,7 +14,7 @@ fi
 VPSIP=`$VLPDIR/bin/vlp-query |grep VPN-SERVER|awk '{print $2}'`
 if [ "$VPSIP" != "None" ]; then
 	echo "Found VPN-SERVER: $VPSIP"
-	echo "Purge it please before creation"
+	echo "Please purge it before building"
 	echo "Abort."
 	exit
 fi
