@@ -11,6 +11,14 @@ if [ "$?" != "0" ]; then
 	exit
 fi
 
+VPSIP=`$VLPDIR/bin/vlp-query |grep VPN-SERVER|awk '{print $2}'`
+if [ "$VPSIP" != "None" ]; then
+	echo "Found VPN-SERVER: $VPSIP"
+	echo "Purge it please before creation"
+	echo "Abort."
+	exit
+fi
+
 AMIID=`aws ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
 PROFILE="default"
 REGION=`aws configure get region`
