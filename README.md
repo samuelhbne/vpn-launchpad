@@ -164,4 +164,5 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 
-## [FAQ](FAQ.md)
+## FAQ
+[Frequently Asked Questions](FAQ.md)
