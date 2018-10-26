@@ -19,11 +19,11 @@ if [ "$VPSIP" != "None" ]; then
 	exit
 fi
 
-AMIID=`aws ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
 PROFILE="default"
-REGION=`aws configure get region`
 INSTYPE="t2.micro"
 STACKID="vlp-$UBUNTUVER"
+REGION=`aws configure get region`
+AMIID=`aws ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
 
 SSTCPPORT=`grep "SSTCPPORT=" $VLPDIR/server-ssserver/ssserver.env |cut -d'=' -f2|sed 's/\"//g'`
 
