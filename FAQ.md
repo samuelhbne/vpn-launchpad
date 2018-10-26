@@ -8,10 +8,10 @@
 
 Yes you can. `vlp --build` also saves shadowsocks connection parameters in VPN serever instance matadata. Hence all vpn-launchpad boxes configured with same AWS account and same region automaticly share the same VPN server instance.
 - Initialise the 1st box via `vlp --init` with your Access Key ID and Secret Access Key
-- Build a VPN server form 1st box with `vlp --build`
-- Build a local proxy form 1st box with `lproxy --build`
+- Build a VPN server with 1st box with `vlp --build`
+- Build a local proxy with 1st box with `lproxy --build`
 - Initialise the 2nd box via `vlp --init` with the same Access Key ID and Secret Access Key used by the 1st box
-- Build a local proxy form 2nd box with `lproxy --build`
+- Build a local proxy with 2nd box with `lproxy --build`
 - Done.
 
 
