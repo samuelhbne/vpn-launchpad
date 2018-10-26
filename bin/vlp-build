@@ -11,7 +11,7 @@ if [ "$?" != "0" ]; then
 	exit
 fi
 
-VPSIP=`$VLPDIR/bin/vlp-query |grep VPN-SERVER|awk '{print $2}'`
+VPSIP=`$VLPDIR/bin/vlp-query 2>/dev/null|grep VPN-SERVER|awk '{print $2}'`
 if [ "$VPSIP" != "None" ]; then
 	echo "Found VPN-SERVER: $VPSIP"
 	echo "Please purge it before building"
@@ -30,7 +30,7 @@ SSTCPPORT=`grep "SSTCPPORT=" $VLPDIR/server-ssserver/ssserver.env |cut -d'=' -f2
 if [ ! -z $1 ]; then
 	STACKID="$1";
 fi
-		
+
 echo "Creating Security Group of $STACKID..."
 SGID=`aws --profile $PROFILE --region $REGION --output text ec2 create-security-group --group-name $STACKID-sg --description "Security group for $STACKID. Created by vpn-launchpad."`
 
