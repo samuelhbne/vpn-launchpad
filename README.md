@@ -8,7 +8,7 @@ Also works on Ubuntu (16.04 and above), Mac OSX or Debian.
 
 ## How it works
 
-Command vlp creates/purges VPN server via AWS EC2 service. Command lproxy creates/purges a proxy (SOCKS/HTTP/DNS) running locally, which tunneling all traffic through the VPN server previously created by command vlp.
+Command vlp creates VPN server via AWS EC2 service. Then command lproxy creates proxy (SOCKS/HTTP/DNS) running locally on the Raspberry Pi box, which tunneling all traffic through the VPN server previously created by command vlp.
 
 
 
