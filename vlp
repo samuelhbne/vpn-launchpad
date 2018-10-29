@@ -60,6 +60,11 @@ else
 				$DOCKERCMD /home/vlp/bin/vlp-purge
 				shift
 				;;
+			--random)
+				echo "$DOCKERCMD /home/vlp/bin/vlp-random"
+				$DOCKERCMD /home/vlp/bin/vlp-random
+				shift
+				;;
 			*)
 				$DOCKERCMD /home/vlp/bin/vlp-menu
 				shift

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DIR=`dirname $0`
+VLPDIR="$(cd $DIR; cd ..; pwd)"
+VLPHOME="$HOME/.vpn-launchpad"
+UBUNTUVER=bionic
+
+sed -i "s/PSK=.*/PSK=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
+sed -i "s/USERS=.*/USERS=user0:`pwgen -cB1`;user1:`pwgen -cB1`;/g" $VLPDIR/server-softether/softether.env
+sed -i "s/SPW=.*/SPW=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
+sed -i "s/HPW=.*/HPW=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
+cat $VLPDIR/server-softether/softether.env
+
+sed -i "s/SSTCPPORT=.*/SSTCPPORT=`echo \"50000+$RANDOM%10000\"|bc`/g" $VLPDIR/server-ssserver/ssserver.env
+sed -i "s/SSPASS=.*/SSPASS=`pwgen -cB1`/g" $VLPDIR/server-ssserver/ssserver.env
+cat $VLPDIR/server-ssserver/ssserver.env
