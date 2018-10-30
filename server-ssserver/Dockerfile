@@ -1,7 +1,6 @@
-FROM ubuntu:18.04
+FROM alpine
 
-RUN apt-get update && apt-get install -y python-pip
-RUN pip install shadowsocks==2.8.2 && rm -rf /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.pyc
-RUN sed -i 's/EVP_CIPHER_CTX_cleanup/EVP_CIPHER_CTX_reset/g' /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py
+RUN apk update && apk add py3-pip
+RUN pip3 install shadowsocks==2.8.2
 
-ENTRYPOINT ["/usr/local/bin/ssserver"]
+ENTRYPOINT ["/usr/bin/ssserver"]
