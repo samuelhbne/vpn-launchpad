@@ -34,6 +34,7 @@ Follow the [official doc page](http://docs.aws.amazon.com/cli/latest/userguide/c
 * --build       -- Build new VPN server.
 * --query       -- Query VPN server status.
 * --purge       -- Purge existing VPN server.
+* --random      -- Randomise VPN passwords.
 
 ./lproxy [options]
 * --build         -- Build local proxy server.
