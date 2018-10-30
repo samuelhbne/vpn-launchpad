@@ -5,7 +5,7 @@ VLPDIR="$(cd $DIR; cd ..; pwd)"
 
 VLPQUERY="$VLPDIR/vlp --query"
 
-echo "Query VPS IP address..."
+echo "Checking VPS IP address..."
 RESULT="/tmp/RESULT"
 $VLPQUERY|sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g">$RESULT
 VPSIP=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $2}'|tr -d '\r\n'`

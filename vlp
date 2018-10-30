@@ -24,6 +24,7 @@ DKGID=`id -g`
 sed -i "s/^ENV DKUID .*/ENV DKUID ${DKUID}/" $DIR/vpnlaunchpad/Dockerfile
 sed -i "s/^ENV DKGID .*/ENV DKGID ${DKGID}/" $DIR/vpnlaunchpad/Dockerfile
 
+echo "Building vpnlaunchpad image..."
 docker build --rm=true -t samuelhbne/vpnlaunchpad $DIR/vpnlaunchpad/
 echo
 
