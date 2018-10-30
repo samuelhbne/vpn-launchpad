@@ -19,13 +19,13 @@ while [[ $# > 0 ]]; do
 done
 
 if [[ "$OVW" != 1 ]]; then
-	read -p 'Randomise VPN password?(Y/n) ' choice
+	read -p 'Randomise VPN passwords?(Y/n) ' choice
 	if [ "${choice:0:1}" = "n" ] || [ "${choice:0:1}" = "N" ]; then
 		exit
 	fi
 fi
 
-echo "Randomising VPN password..."
+echo "Randomising VPN passwords..."
 echo
 
 sed -i "s/PSK=.*/PSK=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
