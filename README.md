@@ -62,6 +62,10 @@ AWS Access Key ID [None]: INPUT-YOUR-AWS-ID-HERE
 AWS Secret Access Key [None]: INPUT-YOUR-AWS-KEY-HERE
 Default region name [ap-northeast-1]: 
 Default output format [json]: 
+Randomise VPN passwords?(Y/n) 
+Randomising VPN passwords...
+...
+Done.
 ```
 
 #### 3. Build a VPN server on AWS
