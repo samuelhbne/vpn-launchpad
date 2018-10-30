@@ -46,6 +46,7 @@ else
 		case $act in
 			--init)
 				$DOCKERCMD /usr/bin/aws configure
+				$DOCKERCMD /home/vlp/bin/vlp-random
 				shift
 				;;
 			--build)
@@ -61,7 +62,6 @@ else
 				shift
 				;;
 			--random)
-				echo "$DOCKERCMD /home/vlp/bin/vlp-random"
 				$DOCKERCMD /home/vlp/bin/vlp-random
 				shift
 				;;
