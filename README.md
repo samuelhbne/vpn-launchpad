@@ -87,7 +87,7 @@ curl -x http://127.0.0.1:58123 http://ifconfig.co
 13.231.224.253
 
 Checking local SOCKS PROXY on TCP:51080 ...
-curl -x socks5://127.0.0.1:51080 http://ifconfig.co
+curl -x socks5h://127.0.0.1:51080 http://ifconfig.co
 13.231.224.253
 
 Checking local DNS PROXY on UDP:55353 ...
@@ -95,6 +95,7 @@ dig +short @127.0.0.1 -p 55353 twitter.com
 104.244.42.65
 104.244.42.193
 
+Please setup the browser accordingly and enjoy.
 Done.
 ```
 
