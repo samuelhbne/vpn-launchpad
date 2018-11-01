@@ -127,16 +127,16 @@ All credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [So
 
 #### Password, encryption method and listening port for ShadowSocks.
 ```
-$ cat server-ssserver/ssserver.env
-SSPASS="YOUR-SHADOWSOCKS-PASS"
-SSMETHOD="aes-256-cfb"
-SSTCPPORT="8388"
+$ cat server-ssslibev/ssslibev.env
+SSPORT="8388"
+SSPASS="YOUR-PASS"
+SSMETHOD="aes-256-gcm"
 ```
 NOTE: VPS purging and re-creation are necessary for getting new configuration applied.
 
 #### SOCKS/HTTP/DNS port for local proxy
 ```
-$ cat proxy-sslocal/sslocal.env
+$ cat proxy-ssllibev/sslilibev.env
 SOCKSPORT="51080"
 HTTPPORT="58123"
 DNSPORT="55353"

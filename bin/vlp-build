@@ -25,7 +25,7 @@ STACKID="vlp-$UBUNTUVER"
 REGION=`aws configure get region`
 AMIID=`aws ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
 
-SSTCPPORT=`grep "SSTCPPORT=" $VLPDIR/server-ssserver/ssserver.env |cut -d'=' -f2|sed 's/\"//g'`
+SSPORT=`grep "SSPORT=" $VLPDIR/server-ssslibev/ssslibev.env |cut -d'=' -f2|sed 's/\"//g'`
 
 if [ ! -z $1 ]; then
 	STACKID="$1";
@@ -44,8 +44,9 @@ aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-gro
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 1701 --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
-# ssserver
-aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSTCPPORT --cidr 0.0.0.0/0
+# ssslibev
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSPORT --cidr 0.0.0.0/0
+aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSPORT --cidr 0.0.0.0/0
 
 
 echo "Creating Key-Pair of $STACKID..."
@@ -73,7 +74,7 @@ done
 
 echo "Taging instance of $STACKID..."
 aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=Name,Value=$STACKID"
-aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=Services,Value=softether\,ssserver"
+aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=Services,Value=softether\,ssslibev"
 
 
 IPPUB=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --instance-ids $INSTID --query 'Reservations[0].Instances[0].PublicIpAddress'`
@@ -114,15 +115,15 @@ done <$VLPDIR/server-softether/softether.env
 echo "Done."
 
 echo
-echo "ssserver provisioning..."
-scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-ssserver ubuntu@$IPPUB:
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-ssserver; sh ssserver.sh"
+echo "ssslibev provisioning..."
+scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-ssslibev ubuntu@$IPPUB:
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-ssslibev; sh ssslibev.sh"
 echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
   VAL=`echo "$p"|cut -d'=' -f2`
-  aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=ssserver.$KEY,Value=$VAL"
-done <$VLPDIR/server-ssserver/ssserver.env
+  aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=ssslibev.$KEY,Value=$VAL"
+done <$VLPDIR/server-ssslibev/ssslibev.env
 echo "Done."
 
 echo

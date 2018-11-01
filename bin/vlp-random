@@ -35,9 +35,9 @@ sed -i "s/HPW=.*/HPW=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
 cat $VLPDIR/server-softether/softether.env
 echo
 
-sed -i "s/SSTCPPORT=.*/SSTCPPORT=`echo \"50000+$RANDOM%10000\"|bc`/g" $VLPDIR/server-ssserver/ssserver.env
-sed -i "s/SSPASS=.*/SSPASS=`pwgen -cB1`/g" $VLPDIR/server-ssserver/ssserver.env
-cat $VLPDIR/server-ssserver/ssserver.env
+sed -i "s/SSPORT=.*/SSPORT=`echo \"50000+$RANDOM%10000\"|bc`/g" $VLPDIR/server-ssslibev/ssslibev.env
+sed -i "s/SSPASS=.*/SSPASS=`pwgen -cB1`/g" $VLPDIR/server-ssslibev/ssslibev.env
+cat $VLPDIR/server-ssslibev/ssslibev.env
 echo
 
 echo "Done."

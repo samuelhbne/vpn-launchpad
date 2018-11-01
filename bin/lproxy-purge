@@ -1,9 +1,9 @@
 #/bin/sh
 
-BEXIST=`docker ps -a| grep sslocal|wc -l`
+BEXIST=`docker ps -a| grep ssllibev|wc -l`
 if [ $BEXIST -gt 0 ]; then
 	echo "Local proxy found. Purging..."
-	docker stop sslocal; docker rm sslocal
+	docker stop ssllibev; docker rm ssllibev
 	echo
 	echo "Done."
 else
