@@ -39,19 +39,20 @@ case $VPSIP in
 		echo
 		echo "Checking local HTTP PROXY on TCP:$HTTPPORT ..."
 		echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
-		curl -x http://127.0.0.1:$HTTPPORT ifconfig.co
+		docker exec -it ssllibev curl -x http://127.0.0.1:$HTTPPORT ifconfig.co
 
 		echo
 		echo "Checking local SOCKS PROXY on TCP:$SOCKSPORT ..."
 		echo "curl -x socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co"
-		curl -x socks5h://127.0.0.1:$SOCKSPORT ifconfig.co
+		docker exec -it ssllibev curl -x socks5h://127.0.0.1:$SOCKSPORT ifconfig.co
 
 		echo
 		echo "Checking local DNS PROXY on UDP:$DNSPORT ..."
 		echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
-		dig +short @127.0.0.1 -p $DNSPORT twitter.com
+		docker exec -it ssllibev dig +short @127.0.0.1 -p $DNSPORT twitter.com
 
 		echo
+		echo "Please setup the browser accordingly and enjoy."
 		echo "Done."
 		;;
 esac
