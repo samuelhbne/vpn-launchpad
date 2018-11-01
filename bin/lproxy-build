@@ -43,8 +43,8 @@ case $VPSIP in
 
 		echo
 		echo "Checking local SOCKS PROXY on TCP:$SOCKSPORT ..."
-		echo "curl -x socks5://127.0.0.1:$SOCKSPORT http://ifconfig.co"
-		curl -x socks5://127.0.0.1:$SOCKSPORT ifconfig.co
+		echo "curl -x socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co"
+		curl -x socks5h://127.0.0.1:$SOCKSPORT ifconfig.co
 
 		echo
 		echo "Checking local DNS PROXY on UDP:$DNSPORT ..."
