@@ -10,7 +10,7 @@ case $ARCH in
 	armv6l|armv7l)
 		sed -i.bak  's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/vpnlaunchpad/Dockerfile && rm $DIR/vpnlaunchpad/Dockerfile.bak
 		;;
-	x86_64|i686)
+	x86_64|i686|i386)
 		sed -i.bak  's/^FROM .*/FROM alpine/g' $DIR/vpnlaunchpad/Dockerfile && rm $DIR/vpnlaunchpad/Dockerfile.bak
 		;;
 	*)
