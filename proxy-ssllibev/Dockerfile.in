@@ -1,10 +1,5 @@
 FROM arm32v6/alpine
 
-ENV LISTENADDR="0.0.0.0"
-ENV SOCKSPORT="41080"
-ENV HTTPPORT="48123"
-ENV DNSPORT="45353"
-
 RUN apk add --no-cache bash curl bind-tools dnscrypt-proxy
 RUN apk add --no-cache --virtual .build-deps \
       autoconf \
@@ -19,6 +14,21 @@ RUN apk add --no-cache --virtual .build-deps \
       pcre-dev \
       git
 
+RUN set -ex \
+ && mkdir /tmp/repo \
+ && cd /tmp/repo \
+ && git clone https://github.com/shadowsocks/shadowsocks-libev.git \
+ && cd shadowsocks-libev \
+ && git submodule update --init --recursive \
+ && ./autogen.sh \
+ && ./configure --prefix=/usr --disable-documentation \
+ && make install
+
+ENV LISTENADDR="0.0.0.0"
+ENV SOCKSPORT="41080"
+ENV HTTPPORT="48123"
+ENV DNSPORT="45353"
+
 RUN sed -i "s/^listen_addresses = .*/listen_addresses = \[\'0.0.0.0:$DNSPORT\'\]/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^dnscrypt_servers = .*/dnscrypt_servers = false/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^doh_servers = .*/doh_servers = true/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
@@ -30,23 +40,13 @@ RUN echo "proxyPort=$HTTPPORT" >>/root/polipo/config
 RUN echo "daemonise=true" >>/root/polipo/config
 RUN echo "diskCacheRoot=" >>/root/polipo/config
 
-RUN set -ex \
- && mkdir /tmp/repo \
- && cd /tmp/repo \
- && git clone https://github.com/shadowsocks/shadowsocks-libev.git \
- && cd shadowsocks-libev \
- && git submodule update --init --recursive \
- && ./autogen.sh \
- && ./configure --prefix=/usr --disable-documentation \
- && make install \
- && apk del .build-deps \
+RUN apk del .build-deps \
  && apk add --no-cache \
       rng-tools \
       $(scanelf --needed --nobanner /usr/bin/ss-* \
       | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
       | sort -u) \
  && rm -rf /tmp/repo
-
 
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
