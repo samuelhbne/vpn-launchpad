@@ -22,7 +22,7 @@ RUN set -ex \
  && git submodule update --init --recursive \
  && ./autogen.sh \
  && ./configure --prefix=/usr --disable-documentation \
- && make install
+ && make install \
  && apk add --no-cache \
       rng-tools \
       $(scanelf --needed --nobanner /usr/bin/ss-* \
