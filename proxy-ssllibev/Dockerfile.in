@@ -23,6 +23,12 @@ RUN set -ex \
  && ./autogen.sh \
  && ./configure --prefix=/usr --disable-documentation \
  && make install
+ && apk add --no-cache \
+      rng-tools \
+      $(scanelf --needed --nobanner /usr/bin/ss-* \
+      | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
+      | sort -u) \
+ && rm -rf /tmp/repo
 
 ENV LISTENADDR="0.0.0.0"
 ENV SOCKSPORT="41080"
@@ -40,13 +46,7 @@ RUN echo "proxyPort=$HTTPPORT" >>/root/polipo/config
 RUN echo "daemonise=true" >>/root/polipo/config
 RUN echo "diskCacheRoot=" >>/root/polipo/config
 
-RUN apk del .build-deps \
- && apk add --no-cache \
-      rng-tools \
-      $(scanelf --needed --nobanner /usr/bin/ss-* \
-      | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-      | sort -u) \
- && rm -rf /tmp/repo
+RUN apk del .build-deps
 
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
