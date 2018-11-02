@@ -8,7 +8,7 @@ VLPQUERY="$VLPDIR/vlp --query"
 echo "Checking VPS IP address..."
 RESULT="/tmp/RESULT"
 $VLPQUERY|tee $RESULT
-sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" -i $RESULT
+sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" -i.bak $RESULT
 VPSIP=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $2}'|tr -d '\r\n'`
 INSTID=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $3}'|tr -d '\r\n'`
 case $VPSIP in
@@ -25,7 +25,7 @@ case $VPSIP in
 		echo "Setting up local proxy daemon..."
 		cat $RESULT| grep $INSTID|grep "ssslibev\."|sed 's/ssslibev.//g'|sed 's/|//g'|awk '{print $1"="$3}'>$VLPDIR/proxy-ssllibev/ssslibev.env
 		cp -a $VLPDIR/proxy-ssllibev/ssllibev.env $VLPDIR/proxy-ssllibev/ssllibev.env.out
-		sed -i "s/SSHOST=.*/SSHOST=$VPSIP/g" $VLPDIR/proxy-ssllibev/ssllibev.env.out
+		sed -i.bak "s/SSHOST=.*/SSHOST=$VPSIP/g" $VLPDIR/proxy-ssllibev/ssllibev.env.out
 		$VLPDIR/proxy-ssllibev/ssllibev.sh
 		echo "Wait 15s for local proxy initialisation..."
 		sleep 15
