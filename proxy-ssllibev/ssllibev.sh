@@ -8,18 +8,24 @@ DIR="$(cd $DIR; pwd)"
 
 cp -a $DIR/Dockerfile.in $DIR/Dockerfile
 ARCH=`arch`
-if [ "$ARCH" = "armv6l" ]; then
-	sed -i 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/Dockerfile
-elif [ "$ARCH" = "armv7l" ]; then
-	sed -i 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/Dockerfile
-else
-	sed -i 's/^FROM .*/FROM alpine/g' $DIR/Dockerfile
-fi
+case $ARCH in
+	armv6l|armv7l)
+		sed -i.bak 's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/Dockerfile
+		;;
+	x86_64|i686|i386)
+		sed -i.bak 's/^FROM .*/FROM alpine/g' $DIR/Dockerfile
+		;;
+	*)
+		echo "Unsupported arch"
+		exit
+		;;
+esac
 
-sed -i "s/EXPOSE.*/EXPOSE $SOCKSPORT $DNSPORT $HTTPPORT/g" $DIR/Dockerfile
-sed -i "s/SOCKSPORT=.*/SOCKSPORT=\"$SOCKSPORT\"/g" $DIR/Dockerfile
-sed -i "s/HTTPPORT=.*/HTTPPORT=\"$HTTPPORT\"/g" $DIR/Dockerfile
-sed -i "s/DNSPORT=.*/DNSPORT=\"$DNSPORT\"/g" $DIR/Dockerfile
+sed -i.bak "s/EXPOSE.*/EXPOSE $SOCKSPORT $DNSPORT $HTTPPORT/g" $DIR/Dockerfile
+sed -i.bak "s/SOCKSPORT=.*/SOCKSPORT=\"$SOCKSPORT\"/g" $DIR/Dockerfile
+sed -i.bak "s/HTTPPORT=.*/HTTPPORT=\"$HTTPPORT\"/g" $DIR/Dockerfile
+sed -i.bak "s/DNSPORT=.*/DNSPORT=\"$DNSPORT\"/g" $DIR/Dockerfile
+rm $DIR/Dockerfile.bak
 
 docker build --rm=true -t samuelhbne/ssllibev -f $DIR/Dockerfile $DIR
 
