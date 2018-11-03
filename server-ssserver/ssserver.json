@@ -1,9 +1,0 @@
-{
-	"server":"0.0.0.0",
-	"server_port":"18388",
-	"password":"SSSERVER-PASS",
-	"timeout":300,
-	"method":"aes-256-cfb",
-	"fast_open": false,
-	"workers": 8
-}
