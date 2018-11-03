@@ -26,6 +26,7 @@ case $VPSIP in
 		cat $RESULT| grep $INSTID|grep "ssslibev\."|sed 's/ssslibev.//g'|sed 's/|//g'|awk '{print $1"="$3}'>$VLPDIR/proxy-ssllibev/ssslibev.env
 		cp -a $VLPDIR/proxy-ssllibev/ssllibev.env $VLPDIR/proxy-ssllibev/ssllibev.env.out
 		sed -i.bak "s/SSHOST=.*/SSHOST=$VPSIP/g" $VLPDIR/proxy-ssllibev/ssllibev.env.out
+		rm -rf $VLPDIR/proxy-ssllibev/ssllibev.env.out
 		$VLPDIR/proxy-ssllibev/ssllibev.sh
 		echo "Wait 15s for local proxy initialisation..."
 		sleep 15

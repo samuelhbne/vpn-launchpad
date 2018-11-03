@@ -25,7 +25,7 @@ sed -i.bak "s/EXPOSE.*/EXPOSE $SOCKSPORT $DNSPORT $HTTPPORT/g" $DIR/Dockerfile
 sed -i.bak "s/SOCKSPORT=.*/SOCKSPORT=\"$SOCKSPORT\"/g" $DIR/Dockerfile
 sed -i.bak "s/HTTPPORT=.*/HTTPPORT=\"$HTTPPORT\"/g" $DIR/Dockerfile
 sed -i.bak "s/DNSPORT=.*/DNSPORT=\"$DNSPORT\"/g" $DIR/Dockerfile
-rm $DIR/Dockerfile.bak
+rm -rf $DIR/Dockerfile.bak
 
 docker build --rm=true -t samuelhbne/ssllibev -f $DIR/Dockerfile $DIR
 

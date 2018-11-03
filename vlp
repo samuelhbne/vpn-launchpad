@@ -8,10 +8,12 @@ cp -a $DIR/vpnlaunchpad/Dockerfile.in $DIR/vpnlaunchpad/Dockerfile
 ARCH=`arch`
 case $ARCH in
 	armv6l|armv7l)
-		sed -i.bak  's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/vpnlaunchpad/Dockerfile && rm $DIR/vpnlaunchpad/Dockerfile.bak
+		sed -i.bak  's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/vpnlaunchpad/Dockerfile
+		rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
 		;;
 	x86_64|i686|i386)
-		sed -i.bak  's/^FROM .*/FROM alpine/g' $DIR/vpnlaunchpad/Dockerfile && rm $DIR/vpnlaunchpad/Dockerfile.bak
+		sed -i.bak  's/^FROM .*/FROM alpine/g' $DIR/vpnlaunchpad/Dockerfile
+		rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
 		;;
 	*)
 		echo "Unsupported arch"
@@ -21,8 +23,8 @@ esac
 
 DKUID=`id -u`
 DKGID=`id -g`
-sed -i.bak "s/^ENV DKUID .*/ENV DKUID ${DKUID}/" $DIR/vpnlaunchpad/Dockerfile && rm $DIR/vpnlaunchpad/Dockerfile.bak
-sed -i.bak "s/^ENV DKGID .*/ENV DKGID ${DKGID}/" $DIR/vpnlaunchpad/Dockerfile && rm $DIR/vpnlaunchpad/Dockerfile.bak
+sed -i.bak "s/^ENV DKUID .*/ENV DKUID ${DKUID}/" $DIR/vpnlaunchpad/Dockerfile && rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
+sed -i.bak "s/^ENV DKGID .*/ENV DKGID ${DKGID}/" $DIR/vpnlaunchpad/Dockerfile && rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
 
 echo "Building vpnlaunchpad image..."
 docker build --rm=true -t samuelhbne/vpnlaunchpad $DIR/vpnlaunchpad/
