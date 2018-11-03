@@ -11,7 +11,7 @@ if [ "$?" != "0" ]; then
 	exit
 fi
 
-VPSIP=`$VLPDIR/bin/vlp-query 2>/dev/null|grep VPN-SERVER|awk '{print $2}'`
+VPSIP=`$VLPDIR/bin/vlp-status 2>/dev/null|grep VPN-SERVER|awk '{print $2}'`
 if [ "$VPSIP" != "None" ]; then
 	echo "Found VPN-SERVER: $VPSIP"
 	echo "Please purge it before building"

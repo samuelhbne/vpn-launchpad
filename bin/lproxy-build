@@ -3,7 +3,7 @@
 DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
 
-VLPQUERY="$VLPDIR/vlp --query"
+VLPQUERY="$VLPDIR/vlp --status"
 
 echo "Checking VPS IP address..."
 RESULT="/tmp/RESULT"
