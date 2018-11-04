@@ -156,7 +156,7 @@ $ sudo apt-get update; sudo apt-get install docker.io
 $ sudo usermod -aG docker `whoami`; exit
 ```
 #### Docker installation for Mac OSX
-<https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install>
+<https://store.docker.com/editions/community/docker-ce-desktop-mac>
 
 
 
