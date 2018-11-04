@@ -1,9 +1,6 @@
 proxy-ssllibev/ssllibev.env.out
 proxy-ssllibev/ssslibev.env
 proxy-ssllibev/Dockerfile
-proxy-sslocal/sslocal.env.out
-proxy-sslocal/ssserver.env
-proxy-sslocal/Dockerfile
 vpnlaunchpad/Dockerfile
 .vpn-launchpad
 .aws
