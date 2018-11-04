@@ -39,4 +39,16 @@ if [ ! -z "$IPADDR" ]; then
 	echo "VPN-SERVER: $IPADDR $INSTID"
 else
 	echo "VPN-SERVER: None"
+	exit
 fi
+
+echo
+echo "Scan QR code from Shadowsocks compatible mobile app to connect your mobile phone/tablet:"
+SSENV=`aws --profile $PROFILE --region $REGION --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key: Key, Value: Value}'|grep ssslibev.|sed 's/ssslibev.//g'`
+SSMETHOD=`echo "$SSENV"|grep SSMETHOD|awk '{print $2}'`
+SSPASS=`echo "$SSENV"|grep SSPASS|awk '{print $2}'`
+SSPORT=`echo "$SSENV"|grep SSPORT|awk '{print $2}'`
+
+SSUINFO=`echo "$SSMETHOD:$SSPASS"|tr -d '\n'|base64`
+qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
+echo "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
