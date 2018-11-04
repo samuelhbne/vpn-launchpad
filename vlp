@@ -53,7 +53,9 @@ else
 				shift
 				;;
 			--build)
+				$DOCKERCMD /home/vlp/bin/vlp-random
 				$DOCKERCMD /home/vlp/bin/vlp-build
+				$DOCKERCMD /home/vlp/bin/vlp-status
 				shift
 				;;
 			--status)
