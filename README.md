@@ -166,7 +166,8 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 ## Connect to the VPS server via ShadowSocks:
-<https://shadowsocks.org/en/download/clients.html>
+"vlp --build" will print a QR code after successful building. Simply scan this QR code from Shadowsocks compatible mobile app (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-SS. Connect it and Enjoy please.
+![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 
 
