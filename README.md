@@ -1,8 +1,7 @@
 # VPN Launchpad
-
 Turn your Raspberry Pi (1/2/3/zero) into a VPN proxy (HTTP/SOCKS/DNS) that tunnels all traffic through AWS EC2. All you need is an Amazon AWS account for EC2 VPN server creation.
 
-Also works on Ubuntu (16.04 and above), Mac OSX or Debian.
+Also works on Ubuntu (Xenial and above), Mac OSX(Yosemite and above) or Debian(Jessie and above).
 
 
 
@@ -28,18 +27,17 @@ Follow the [official doc page](http://docs.aws.amazon.com/cli/latest/userguide/c
 
 
 ## Usage
-
 ./vlp [options]
 * --init        -- Init aws account credential.
 * --build       -- Build new VPN server.
 * --status      -- Check VPN server status.
-* --purge       -- Purge existing VPN server.
+* --purge       -- Destory existing VPN server instance.
 * --random      -- Randomise VPN passwords.
 
 ./lproxy [options]
 * --build         -- Build local proxy server.
 * --status        -- Check local proxy server status.
-* --purge         -- Purge existing local proxy.
+* --purge         -- Destory existing local proxy process.
 
 Note: A VPN server should have been built before local proxy building.
 
@@ -147,7 +145,6 @@ NOTE: Local proxy purging and re-creation will be necessary to get the new confi
 
 
 ## Before running
-
 Docker is necessary for running vlp and lproxy. curl and dig will be used for lproxy verification after local proxy building but not compulsory.
 
 #### Docker installation for Raspbian or Ubuntu
@@ -160,14 +157,14 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 
+## Connect to the VPS server via ShadowSocks:
+"vlp --build" and "vlp --status" both print a QR code after building VPN server successfully. Simply scan this QR code from Shadowsocks compatible mobile apps (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-SS. Connect it and Enjoy please.
+![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
+
+
+
 ## Connect to the VPS server via L2TP:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
-
-
-
-## Connect to the VPS server via ShadowSocks:
-"vlp --build" will print a QR code after successful building. Simply scan this QR code from Shadowsocks compatible mobile app (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-SS. Connect it and Enjoy please.
-![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 
 
