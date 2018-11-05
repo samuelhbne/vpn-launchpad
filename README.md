@@ -135,9 +135,9 @@ NOTE: VPS purging and re-creation are necessary for getting new configuration ap
 #### SOCKS/HTTP/DNS port for local proxy
 ```
 $ cat proxy-ssllibev/sslilibev.env
-SOCKSPORT="51080"
-HTTPPORT="58123"
-DNSPORT="55353"
+SOCKSPORT="1080"
+HTTPPORT="8123"
+DNSPORT="65353"
 ```
 NOTE: Local proxy purging and re-creation will be necessary to get the new configuration applied.
 
