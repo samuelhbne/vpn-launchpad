@@ -30,16 +30,17 @@ RUN set -ex \
       | sort -u) \
  && rm -rf /tmp/repo
 
+RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
+
 ENV LISTENADDR="0.0.0.0"
-ENV SOCKSPORT="41080"
-ENV HTTPPORT="48123"
-ENV DNSPORT="45353"
+ENV SOCKSPORT="1080"
+ENV HTTPPORT="8123"
+ENV DNSPORT="65353"
 
 RUN sed -i "s/^listen_addresses = .*/listen_addresses = \[\'0.0.0.0:$DNSPORT\'\]/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^dnscrypt_servers = .*/dnscrypt_servers = false/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^doh_servers = .*/doh_servers = true/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 
-RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
 RUN echo "socksParentProxy=localhost:$SOCKSPORT" >>/root/polipo/config
 RUN echo "proxyAddress=$LISTENADDR" >>/root/polipo/config
 RUN echo "proxyPort=$HTTPPORT" >>/root/polipo/config
@@ -51,5 +52,5 @@ RUN apk del .build-deps
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 
-EXPOSE 21080 25353 28123
+EXPOSE 1080 8123 65353
 ENTRYPOINT ["/run.sh"]
