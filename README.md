@@ -1,13 +1,12 @@
 # VPN Launchpad
-Turn your Raspberry Pi (1/2/3/zero) into a VPN proxy (HTTP/SOCKS/DNS) that tunnels all traffic through AWS EC2. All you need is an Amazon AWS account for EC2 VPN server creation.
+Turn your Raspberry Pi (1/2/3/zero) into an AWS based VPN server control centre. Building VPN server on EC2 with Shadowsocks and L2TP support.
 
 Also works on Ubuntu (Xenial and above), Mac OSX(Yosemite and above) or Debian(Jessie and above).
 
 
 
 ## How it works
-
-Command vlp creates VPN server via AWS EC2 service. Then command lproxy creates proxy (SOCKS/HTTP/DNS) running locally on the Raspberry Pi box, which tunneling all traffic through the VPN server previously created by command vlp.
+Command vlp creates EC2 instance with Shadowsocks and L2TP support installed out of box. Command lproxy creates proxy (SOCKS/HTTP/DNS) container running locally on the Raspberry Pi box, which tunneling all traffic through the VPN server on EC2. AWS account ID/key is a necessary.
 
 
 
@@ -157,13 +156,13 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 
-## Connect to the VPS server via ShadowSocks:
+## Connect to the VPN server directly via Shadowsocks from Android or iOS devices:
 "vlp --build" and "vlp --status" both print a QR code after building VPN server successfully. Simply scan this QR code from Shadowsocks compatible mobile apps (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-SS. Connect it and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 
 
-## Connect to the VPS server via L2TP:
+## Connect to the VPN server directly via L2TP from Android, iOS, Linux, Mac OSX and Windows:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
 
 
