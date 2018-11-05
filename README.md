@@ -79,16 +79,16 @@ Enjoy.
 $ ./lproxy --build
 ...
 Tunnel VPS: 13.231.224.253
-Checking local HTTP PROXY on TCP:58123 ...
-curl -x http://127.0.0.1:58123 http://ifconfig.co
+Checking local HTTP PROXY on TCP:8123 ...
+curl -x http://127.0.0.1:8123 http://ifconfig.co
 13.231.224.253
 
-Checking local SOCKS PROXY on TCP:51080 ...
-curl -x socks5h://127.0.0.1:51080 http://ifconfig.co
+Checking local SOCKS PROXY on TCP:1080 ...
+curl -x socks5h://127.0.0.1:1080 http://ifconfig.co
 13.231.224.253
 
-Checking local DNS PROXY on UDP:55353 ...
-dig +short @127.0.0.1 -p 55353 twitter.com
+Checking local DNS PROXY on UDP:65353 ...
+dig +short @127.0.0.1 -p 65353 twitter.com
 104.244.42.65
 104.244.42.193
 
@@ -126,7 +126,7 @@ All credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [So
 #### Password, encryption method and listening port for ShadowSocks.
 ```
 $ cat server-ssslibev/ssslibev.env
-SSPORT="8388"
+SSPORT=" 8388"
 SSPASS="YOUR-PASS"
 SSMETHOD="aes-256-gcm"
 ```
