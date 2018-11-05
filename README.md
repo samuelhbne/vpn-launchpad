@@ -156,13 +156,13 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 
-## Connect to the VPN server directly via Shadowsocks from Android or iOS devices:
+## Connect to the VPN server via Shadowsocks from Android or iOS devices:
 "vlp --build" and "vlp --status" both print a QR code after building VPN server successfully. Simply scan this QR code from Shadowsocks compatible mobile apps (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-SS. Connect it and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 
 
-## Connect to the VPN server directly via L2TP from Android, iOS, Linux, Mac OSX and Windows:
+## Connect to the VPN server via L2TP from Android, iOS, Linux, Mac OSX and Windows:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
 
 
