@@ -34,9 +34,9 @@ Follow the [official doc page](http://docs.aws.amazon.com/cli/latest/userguide/c
 * --random      -- Randomise VPN passwords.
 
 ./lproxy [options]
-* --build         -- Build local proxy server.
-* --status        -- Check local proxy server status.
-* --purge         -- Destory existing local proxy process.
+* --build       -- Build local proxy server.
+* --status      -- Check local proxy server status.
+* --purge       -- Destory existing local proxy process.
 
 Note: A VPN server should have been built before local proxy building.
 
