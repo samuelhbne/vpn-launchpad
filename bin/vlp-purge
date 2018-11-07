@@ -16,7 +16,7 @@ fi
 aws --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
-	exit
+	exit 255
 fi
 
 echo "Querying Instance of $STACKID..."
@@ -41,4 +41,5 @@ done
 echo "Deleting SSH Key-Pair of $STACKID..."
 aws --profile $PROFILE --region $REGION --output text ec2 delete-key-pair --key-name $STACKID-key
 rm -rf $VLPHOME/$STACKID-key.pem
-
+echo "Done."
+exit 0

@@ -16,7 +16,7 @@ fi
 aws --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
-	exit
+	exit 255
 fi
 
 echo "Querying Instance of $STACKID..."
@@ -39,7 +39,7 @@ if [ ! -z "$IPADDR" ]; then
 	echo "VPN-SERVER: $IPADDR $INSTID"
 else
 	echo "VPN-SERVER: None"
-	exit
+	exit 1
 fi
 
 echo
@@ -52,3 +52,4 @@ SSPORT=`echo "$SSENV"|grep SSPORT|awk '{print $2}'`
 SSUINFO=`echo "$SSMETHOD:$SSPASS"|tr -d '\n'|base64`
 qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
 echo "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
+exit 0

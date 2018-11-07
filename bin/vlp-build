@@ -8,7 +8,7 @@ UBUNTUVER=bionic
 aws --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
-	exit
+	exit 255
 fi
 
 VPSIP=`$VLPDIR/bin/vlp-status 2>/dev/null|grep VPN-SERVER|awk '{print $2}'`
@@ -16,7 +16,7 @@ if [ "$VPSIP" != "None" ]; then
 	echo "Found VPN-SERVER: $VPSIP"
 	echo "Please purge it before building"
 	echo "Abort."
-	exit
+	exit 254
 fi
 
 PROFILE="default"
@@ -125,7 +125,8 @@ while read p; do
   aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=ssslibev.$KEY,Value=$VAL"
 done <$VLPDIR/server-ssslibev/ssslibev.env
 echo "Done."
+exit 0
 
-echo
-echo "New VPN-SERVER is up on $IPPUB"
-echo "Enjoy."
+#echo
+#echo "New VPN-SERVER is up on $IPPUB"
+#echo "Enjoy."
