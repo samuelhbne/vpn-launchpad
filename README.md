@@ -53,8 +53,8 @@ Note: It is necessary to log out current session and back to get docker group se
 
 #### 2. AWS account set up
 ```
-$ git clone https://github.com/samuelhbne/vpn-launchpad; cd vpn-launchpad
-
+$ git clone https://github.com/samuelhbne/vpn-launchpad
+$ cd vpn-launchpad
 $ ./vlp --init
 AWS Access Key ID [None]: INPUT-YOUR-AWS-ID-HERE
 AWS Secret Access Key [None]: INPUT-YOUR-AWS-KEY-HERE
