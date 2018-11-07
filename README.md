@@ -99,17 +99,17 @@ Done.
 #### 5. Browser configuration
 Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
 
-#### 6. Remove local proxy from Pi box after surfing
+#### 6. Stop and remove local proxy from Pi box after surfing
 ```
 $ ./lproxy --purge
 ```
 
-#### 7. Remove VPN server from AWS after surfing
+#### 7. Stop and remove VPN server from AWS after surfing
 ```
 $ ./vlp --purge
 ```
 
-Note: Removing the local proxy and the VPN server from cloud after surfing is always recommended. Not only it reduces the cost for AWS service hiring, also it removes the potential trails from cloud to protect your privacy.
+Note: Removing VPN server from AWS after surfing is always recommended. Not only it reduces the cost for AWS service hiring, also it removes the potential trails from cloud to protect your privacy.
 
 
 ## Configuration
