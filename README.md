@@ -109,7 +109,7 @@ $ ./lproxy --purge
 $ ./vlp --purge
 ```
 
-Note: Purging the local proxy and the VPN server from cloud after the end of surfing is always recommended. Not only it reduces the cost of AWS service hiring in case you are not a free tier user, but also it purges the surfing trail from cloud hence protects your privacy.
+Note: Removing the local proxy and the VPN server from cloud after surfing is always recommended. Not only it reduces the cost for AWS service hiring, also it removes the potential trails from cloud to protect your privacy.
 
 
 ## Configuration
