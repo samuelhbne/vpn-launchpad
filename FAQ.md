@@ -6,18 +6,18 @@
 
 ## Can I share VPN server with multiple Pi boxes located in different networks?
 
-Yes you can. `vlp --build` also saves shadowsocks connection parameters in VPN serever instance matadata. Hence all vpn-launchpad boxes configured with same AWS account and same region automaticly share the same VPN server instance.
-- Initialise the 1st box via `vlp --init` with your Access Key ID and Secret Access Key
-- Build a VPN server with 1st box with `vlp --build`
-- Build a local proxy with 1st box with `lproxy --build`
-- Initialise the 2nd box via `vlp --init` with the same Access Key ID and Secret Access Key used by the 1st box
-- Build a local proxy with 2nd box with `lproxy --build`
+Yes you can. `vlp --build` saves Shadowsocks connection parameters in VPN serever instance matadata. Hence all vpn-launchpad boxes configured with same AWS account and same region automaticly share the same VPN server instance.
+- Initialise box1 via `vlp --init` with your Access Key ID and Secret Access Key
+- Build VPN server on box1 with `vlp --build`
+- Build local proxy on box1 with `lproxy --build`
+- Initialise box2 via `vlp --init` with the same Access Key ID and Secret Access Key used by box1
+- Build local proxy on box2 with `lproxy --build`
 - Done.
 
 
 ## Can I build multiple VPN servers with the same AWS account?
 
-Yes you can. But they must be located in different AWS region. Say: one in ap-northeast-1 and one in ap-northeast-2
+Yes you can. But they must be located in different regions. For example: one in ap-northeast-1 and one in ap-northeast-2
 
 
 ## What if vlp build command stalled with no response?
