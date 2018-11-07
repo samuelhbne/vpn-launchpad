@@ -5,9 +5,9 @@ VLPDIR="$(cd $DIR; cd ..; pwd)"
 VLPHOME="$HOME/.vpn-launchpad"
 UBUNTUVER=bionic
 
-aws --output table iam get-user
+aws --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
-	echo "Please init aws first."
+	echo "Please run 'vlp --init' first."
 	exit
 fi
 
