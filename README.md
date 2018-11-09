@@ -10,35 +10,44 @@ Command vlp creates EC2 instance with Shadowsocks and L2TP support installed out
 
 
 
+## vpn-launchpad Usage
+
+#### VPN server management
+```
+./vlp [options]
+  --init        -- Init aws account credential.
+  --build       -- Build VPN server.
+  --status      -- Check VPN server status.
+  --purge       -- Destory VPN server instance.
+  --random      -- Randomise VPN passwords.
+```
+
+#### Local proxy management
+```
+./lproxy [options]
+  --build       -- Build local proxy server.
+  --status      -- Check local proxy server status.
+  --purge       -- Destory local proxy process.
+```
+Note: Please build VPN server before local proxy building.
+
+
+
 ## Quick tour for getting AWS account ID and key
 1. Create an new AWS free account [here](https://aws.amazon.com/) if you don't have. I'm not affiliate.
 2. Login into [AWS IAM console](https://console.aws.amazon.com/iam/) with your account.
-3. Click "User" on the left side then click "Add user" button on the top
+3. Click "User" from left side then click "Add user" button on the top
 4. Choose the "User name" and tick "Programmatic access" box below
 5. Click "Next: Permissions" button
-6. Tick the "admin" box in "Add user to group" page
-7. Click "Next: Review" then click "Create user" button
-8. Click "Show" link
-9. Now you get the "Access key ID" and the "Secret access key" that are necessary for vpn-launchpad running
+6. Click "Create group" button
+7. Fill "Group name" with "vlpadmin" and tick "AdministratorAccess" selection box which on the top of the policy list
+8. Click "Create group" blue button at the bottom right of the page.
+9. Tick the "vlpadmin" selection box in "Add user to group" page
+10. Click "Next: Review" then click "Create user" button
+11. Click "Show" link
+12. Now you get the "Access key ID" and the "Secret access key" necessary for vpn-launchpad running
 
-Follow the [official doc page](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) for more details
-
-
-
-## Usage
-./vlp [options]
-* --init        -- Init aws account credential.
-* --build       -- Build new VPN server.
-* --status      -- Check VPN server status.
-* --purge       -- Destory existing VPN server instance.
-* --random      -- Randomise VPN passwords.
-
-./lproxy [options]
-* --build       -- Build local proxy server.
-* --status      -- Check local proxy server status.
-* --purge       -- Destory existing local proxy process.
-
-Note: A VPN server should have been built before local proxy building.
+Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) for more details
 
 
 
