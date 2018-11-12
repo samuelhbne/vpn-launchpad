@@ -31,9 +31,9 @@ PROFILE="default"
 INSTYPE="t2.micro"
 STACKID="vlp-$UBUNTUVER"
 REGION=`aws configure get region`
-echo "Querying latest $UBUNTUVER images AMIID in $REGION ..."
+echo "Querying $UBUNTUVER image AMIID in $REGION ..."
 AMIID=`aws ec2 describe-images --region $REGION --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
-echo "Latest $UBUNTUVER images AMIID: $AMIID"
+echo "Latest $UBUNTUVER image AMIID in $REGION: $AMIID"
 echo "Done."
 echo
 
@@ -83,8 +83,7 @@ fi
 echo "Done."
 echo
 
-
-echo "Waiting for the instance creation of $STACKID..."
+echo "Waiting for the instance up of $STACKID..."
 while true; do
   sleep 10
   IPPUB=`aws --profile $PROFILE --region $REGION ec2 describe-instances --instance-ids $INSTID --query 'Reservations[0].Instances[0].PublicIpAddress'`
@@ -92,7 +91,8 @@ while true; do
     break;
   fi
 done
-
+echo "Done."
+echo
 
 echo "Taging instance of $STACKID..."
 aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=Name,Value=$STACKID"
@@ -100,9 +100,10 @@ aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --ta
 echo "Done."
 echo
 
-
+echo "Querying instance IP address..."
 IPPUB=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --instance-ids $INSTID --query 'Reservations[0].Instances[0].PublicIpAddress'`
-
+echo "Done."
+echo
 
 echo "Waiting for SSH up on $IPPUB ..."
 sleep 60
@@ -113,13 +114,14 @@ while true; do
   fi
   sleep 5
 done
+echo "Done."
+echo
 
 echo "Instance provisioning..."
-mkdir ~/.ssh
+mkdir -p ~/.ssh
 ssh-keyscan -H $IPPUB >> ~/.ssh/known_hosts
-echo "ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB 'sudo apt-get -y update; sudo apt-get install -y docker.io git'"
-ls -l $VLPHOME
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB 'sudo apt-get -y update; sudo apt-get install -y docker.io git'
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections"
+ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io git"
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sysctl -p"
@@ -134,6 +136,9 @@ echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
   VAL=`echo "$p"|cut -d'=' -f2`
+  if [ "$KEY" = "" ]; then
+          continue
+  fi
   aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=softether.$KEY,Value=$VAL"
 done <$VLPDIR/server-softether/softether.env
 echo "Done."
@@ -146,6 +151,9 @@ echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
   VAL=`echo "$p"|cut -d'=' -f2`
+  if [ "$KEY" = "" ]; then
+          continue
+  fi
   aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=ssslibev.$KEY,Value=$VAL"
 done <$VLPDIR/server-ssslibev/ssslibev.env
 echo "Done."
