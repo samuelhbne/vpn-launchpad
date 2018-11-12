@@ -5,25 +5,37 @@ VLPDIR="$(cd $DIR; cd ..; pwd)"
 VLPHOME="$HOME/.vpn-launchpad"
 UBUNTUVER=bionic
 
+echo "Verifying AWS account configuration..."
 aws --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
 	exit 255
 fi
+echo "Done."
+echo
 
+echo "Checking existing VPN server instance..."
 VPSIP=`$VLPDIR/bin/vlp-status 2>/dev/null|grep VPN-SERVER|awk '{print $2}'`
 if [ "$VPSIP" != "None" ]; then
 	echo "Found VPN-SERVER: $VPSIP"
 	echo "Please purge it before building"
 	echo "Abort."
+	echo
 	exit 254
 fi
+echo "VPN-SERVER: None"
+echo "Done."
+echo
 
 PROFILE="default"
 INSTYPE="t2.micro"
 STACKID="vlp-$UBUNTUVER"
 REGION=`aws configure get region`
-AMIID=`aws ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
+echo "Querying latest $UBUNTUVER images AMIID in $REGION ..."
+AMIID=`aws ec2 describe-images --region $REGION --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
+echo "Latest $UBUNTUVER images AMIID: $AMIID"
+echo "Done."
+echo
 
 SSPORT=`grep "SSPORT=" $VLPDIR/server-ssslibev/ssslibev.env |cut -d'=' -f2|sed 's/\"//g'`
 
@@ -33,7 +45,8 @@ fi
 
 echo "Creating Security Group of $STACKID..."
 SGID=`aws --profile $PROFILE --region $REGION --output text ec2 create-security-group --group-name $STACKID-sg --description "Security group for $STACKID. Created by vpn-launchpad."`
-
+echo "Done."
+echo
 
 echo "Creating Firewall rules of $STACKID..."
 # SSH
@@ -47,7 +60,8 @@ aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-gro
 # ssslibev
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSPORT --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSPORT --cidr 0.0.0.0/0
-
+echo "Done."
+echo
 
 echo "Creating Key-Pair of $STACKID..."
 if [ ! -d "$VLPHOME" ]; then
@@ -55,11 +69,19 @@ if [ ! -d "$VLPHOME" ]; then
 fi
 aws --profile $PROFILE --region $REGION ec2 create-key-pair --key-name $STACKID-key --query 'KeyMaterial' --output text > $VLPHOME/$STACKID-key.pem
 chmod 600 $VLPHOME/$STACKID-key.pem
-
+echo "Done."
+echo
 
 echo "Creating instance of $STACKID..."
 INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 run-instances --image-id $AMIID --security-group-ids $SGID --count 1 --instance-type $INSTYPE --key-name $STACKID-key --query 'Instances[0].InstanceId'`
-echo $INSTID
+if [ "$INSTID" = "" ]; then
+        echo "Instance building failed. Please purge the incomplete building first before redo building."
+	echo "Abort."
+	echo
+        exit 253
+fi
+echo "Done."
+echo
 
 
 echo "Waiting for the instance creation of $STACKID..."
@@ -75,13 +97,14 @@ done
 echo "Taging instance of $STACKID..."
 aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=Name,Value=$STACKID"
 aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=Services,Value=softether\,ssslibev"
+echo "Done."
+echo
 
 
 IPPUB=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --instance-ids $INSTID --query 'Reservations[0].Instances[0].PublicIpAddress'`
-echo $IPPUB
 
 
-echo "Waiting for SSH up..."
+echo "Waiting for SSH up on $IPPUB ..."
 sleep 60
 while true; do
   nc -zv $IPPUB 22
@@ -101,8 +124,9 @@ ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sysctl -p"
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
-
+echo "Done."
 echo
+
 echo "L2TP provisioning..."
 scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-softether ubuntu@$IPPUB:
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-softether; sh softether.sh"
@@ -113,8 +137,8 @@ while read p; do
   aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=softether.$KEY,Value=$VAL"
 done <$VLPDIR/server-softether/softether.env
 echo "Done."
-
 echo
+
 echo "ssslibev provisioning..."
 scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-ssslibev ubuntu@$IPPUB:
 ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-ssslibev; sh ssslibev.sh"
@@ -125,6 +149,7 @@ while read p; do
   aws --profile $PROFILE --region $REGION ec2 create-tags --resources $INSTID --tags "Key=ssslibev.$KEY,Value=$VAL"
 done <$VLPDIR/server-ssslibev/ssslibev.env
 echo "Done."
+echo
 exit 0
 
 #echo
