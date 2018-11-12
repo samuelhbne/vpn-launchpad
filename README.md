@@ -150,6 +150,8 @@ DNSPORT="65353"
 ```
 NOTE: Local proxy purging and re-creation will be necessary to get the new configuration applied.
 
+All credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
+
 
 
 ## Before running
@@ -169,6 +171,7 @@ $ sudo usermod -aG docker `whoami`; exit
 "vlp --build" and "vlp --status" both print a QR code after building VPN server successfully. Simply scan this QR code from Shadowsocks compatible mobile apps (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-SS. Connect and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
+All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
 
 
 ## Connect to the VPN server via L2TP:
