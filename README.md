@@ -141,6 +141,9 @@ SSMETHOD="aes-256-gcm"
 ```
 NOTE: VPS purging and re-creation are necessary for getting new configuration applied.
 
+All credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
+
+
 #### SOCKS/HTTP/DNS port for local proxy
 ```
 $ cat proxy-ssllibev/sslilibev.env
