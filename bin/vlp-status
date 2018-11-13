@@ -31,8 +31,8 @@ INSTID=`echo $RESULT|awk '{print $2}'`
 
 aws --profile $PROFILE --region $REGION --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId: ResourceId, Key: Key, Value: Value}'
 
-echo "Querying Security Group..."
-aws --profile $PROFILE --region $REGION --output table ec2 describe-security-groups --group-names $STACKID-sg --query "SecurityGroups[*].{Name:GroupName}"
+#echo "Querying Security Group..."
+#aws --profile $PROFILE --region $REGION --output table ec2 describe-security-groups --group-names $STACKID-sg --query "SecurityGroups[*].{Name:GroupName}"
 
 echo
 if [ ! -z "$IPADDR" ]; then
