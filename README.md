@@ -1,5 +1,5 @@
 # VPN Launchpad
-Turn your Raspberry Pi (1/2/3/zero) into an AWS based VPN server control centre. Building VPN server on EC2 with Shadowsocks and L2TP support.
+Turns your Raspberry Pi (1/2/3/zero) into an AWS based VPN server control centre. Builds VPN server on EC2 with Shadowsocks and L2TP support.
 
 Also works on Ubuntu (Xenial and above), Mac OSX(Yosemite and above) or Debian(Jessie and above).
 
