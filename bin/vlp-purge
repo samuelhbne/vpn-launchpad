@@ -13,29 +13,46 @@ if [ ! -z $1 ]; then
 	STACKID="$1";
 fi
 
+
 aws --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
 	exit 255
 fi
 
-echo "Querying Instance of $STACKID..."
-INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].InstanceId'`
-
-echo "Deleting Instance of $STACKID..."
-aws --profile $PROFILE --region $REGION --output text ec2 terminate-instances --instance-id $INSTID
-
 
 for i in `seq 5 -1 0`; do
-  echo "Waiting Instance shutdown..."
-  sleep 45
-  echo "Deleteing Security Group of $STACKID..."
-  aws --profile $PROFILE --region $REGION --output text ec2 delete-security-group --group-name $STACKID-sg
-  if [ "$?" -eq "0" ]; then
-    break;
-  fi
-  echo "Security Group of $STACKID deletion Failed. $i try left."
+	echo "Querying Instance of $STACKID..."
+	INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].InstanceId'`
+	if [ "$INSTID" = "" ]; then
+		echo "VPN-SERVER instance not found. Skip shutting down."
+	else
+		echo "Deleting Instance of $STACKID..."
+		aws --profile $PROFILE --region $REGION --output text ec2 terminate-instances --instance-id $INSTID
+		echo "Done."
+		echo
+		echo "Waiting Instance shutdown..."
+		sleep 30
+		echo "Done."
+		echo
+	fi
+	echo "Removing Security Group of $STACKID..."
+	RESULT=`aws --profile $PROFILE --region $REGION --output text ec2 delete-security-group --group-name $STACKID-sg 2>&1`
+	RET=${PIPESTATUS[0]}
+	if [ "$RET" -eq "0" ] ; then
+		echo "Security Group Removed."
+		break
+	else
+		BNF=`echo "$RESULT"|grep -c "InvalidGroup.NotFound"`
+		if [ "$BNF" != "0" ] ; then
+			echo "Target Security Group not found."
+			break
+		else
+			echo "Removing Security Group of $STACKID Failed. Instance still running? $i try left."
+		fi
+	fi
 done
+echo
 
 
 echo "Deleting SSH Key-Pair of $STACKID..."
