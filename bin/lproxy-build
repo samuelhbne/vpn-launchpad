@@ -5,9 +5,11 @@ VLPDIR="$(cd $DIR; cd ..; pwd)"
 
 VLPQUERY="$VLPDIR/vlp --status"
 
-echo "Checking VPS IP address..."
+echo "Checking VPS status..."
 RESULT="/tmp/RESULT"
 $VLPQUERY|tee $RESULT
+echo
+
 sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" -i.bak $RESULT
 VPSIP=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $2}'|tr -d '\r\n'`
 INSTID=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $3}'|tr -d '\r\n'`
@@ -22,38 +24,38 @@ case $VPSIP in
 		;;
 	*)
 		echo "Found VPS: $VPSIP"
+		echo
+
 		echo "Setting up local proxy daemon..."
 		cat $RESULT| grep $INSTID|grep "ssslibev\."|sed 's/ssslibev.//g'|sed 's/|//g'|awk '{print $1"="$3}'>$VLPDIR/proxy-ssllibev/ssslibev.env
 		cp -a $VLPDIR/proxy-ssllibev/ssllibev.env $VLPDIR/proxy-ssllibev/ssllibev.env.out
 		sed -i.bak "s/SSHOST=.*/SSHOST=$VPSIP/g" $VLPDIR/proxy-ssllibev/ssllibev.env.out
 		rm -rf $VLPDIR/proxy-ssllibev/ssllibev.env.out.bak
+		echo "Done."
+		echo
+
 		$VLPDIR/proxy-ssllibev/ssllibev.sh
 		echo "Wait 15s for local proxy initialisation..."
 		sleep 15
 		echo "Done."
 		echo
-		echo
 
 		. $VLPDIR/proxy-ssllibev/ssllibev.env.out
-		echo "Tunnel VPS: $VPSIP"
-
-		echo
 		echo "Checking local HTTP PROXY on TCP:$HTTPPORT ..."
 		echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
 		docker exec -it ssllibev curl -x http://127.0.0.1:$HTTPPORT ifconfig.co
-
 		echo
+
 		echo "Checking local SOCKS PROXY on TCP:$SOCKSPORT ..."
 		echo "curl -x socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co"
 		docker exec -it ssllibev curl -x socks5h://127.0.0.1:$SOCKSPORT ifconfig.co
-
 		echo
+
 		echo "Checking local DNS PROXY on UDP:$DNSPORT ..."
 		echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
 		docker exec -it ssllibev dig +short @127.0.0.1 -p $DNSPORT twitter.com
-
 		echo
-		echo "Please setup the browser accordingly and enjoy."
+
 		echo "Done."
 		;;
 esac
