@@ -15,8 +15,6 @@ TDKFILE=`date +%Y%m%d%H%M%S -r $DIR/vpnlaunchpad/Dockerfile.in`
 TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG|date +%Y%m%d%H%M%S`
 
 if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ]; then
-	echo "Build..."
-	exit
 	cp -a $DIR/vpnlaunchpad/Dockerfile.in $DIR/vpnlaunchpad/Dockerfile
 	case $ARCH in
 		armv6l|armv7l)
