@@ -13,7 +13,7 @@ IMGTAG="$IMGNAME:$IMGVER"
 BIMG=`docker images |grep $IMGNAME|grep -c $IMGVER`
 TDKFILE=`date +%Y%m%d%H%M%S -r $DIR/vpnlaunchpad/Dockerfile.in`
 TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG`
-TIMG=`date -d "$TIMG" +%Y%m%d%H%M%S`
+TIMG=`date --date "$TIMG" +%Y%m%d%H%M%S`
 
 if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ]; then
 	cp -a $DIR/vpnlaunchpad/Dockerfile.in $DIR/vpnlaunchpad/Dockerfile
