@@ -40,22 +40,6 @@ case $VPSIP in
 		echo "Done."
 		echo
 
-		. $VLPDIR/proxy-ssllibev/ssllibev.env.out
-		echo "Checking local HTTP PROXY on TCP:$HTTPPORT ..."
-		echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
-		docker exec -it ssllibev curl -x http://127.0.0.1:$HTTPPORT ifconfig.co
-		echo
-
-		echo "Checking local SOCKS PROXY on TCP:$SOCKSPORT ..."
-		echo "curl -x socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co"
-		docker exec -it ssllibev curl -x socks5h://127.0.0.1:$SOCKSPORT ifconfig.co
-		echo
-
-		echo "Checking local DNS PROXY on UDP:$DNSPORT ..."
-		echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
-		docker exec -it ssllibev dig +short @127.0.0.1 -p $DNSPORT twitter.com
-		echo
-
-		echo "Done."
+		$VLPDIR/bin/lproxy-status
 		;;
 esac
