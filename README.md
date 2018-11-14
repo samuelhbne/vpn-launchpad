@@ -79,15 +79,16 @@ Done.
 ```
 $ ./vlp --build
 ...
-New VPN server Instance is up on 13.231.224.253
-Enjoy.
+VPN-SERVER: 13.231.224.253 i-03803b568524f801b
+...
 ```
 
 #### 4. Build a local proxy on Pi box
 ```
 $ ./lproxy --build
 ...
-Tunnel VPS: 13.231.224.253
+Local proxy started.
+
 Checking local HTTP PROXY on TCP:8123 ...
 curl -x http://127.0.0.1:8123 http://ifconfig.co
 13.231.224.253
@@ -101,7 +102,6 @@ dig +short @127.0.0.1 -p 65353 twitter.com
 104.244.42.65
 104.244.42.193
 
-Please setup the browser accordingly and enjoy.
 Done.
 ```
 
