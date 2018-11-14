@@ -48,8 +48,7 @@ if [ $BEXIST -gt 0 ]; then
 	docker rm $CTNNAME >/dev/null
 fi
 
-echo "Starting up local proxy..."
-echo "docker run --name $CTNNAME -p $SOCKSPORT:$SOCKSPORT -p $DNSPORT:$DNSPORT/udp -p $HTTPPORT:$HTTPPORT -d $IMGTAG -s ${SSHOST} -p ${SSTCPPORT} -b ${LISTENADDR} -l ${SOCKSPORT} -k \"${SSPASS}\" -m \"${SSMETHOD}\""
-docker run --name $CTNNAME -p $SOCKSPORT:$SOCKSPORT -p $DNSPORT:$DNSPORT/udp -p $HTTPPORT:$HTTPPORT -d $IMGTAG -s ${SSHOST} -p ${SSPORT} -b ${LISTENADDR} -l ${SOCKSPORT} -k "${SSPASS}" -m "${SSMETHOD}"
+echo "Starting up local proxy daemon..."
+docker run --name $CTNNAME -p $SOCKSPORT:$SOCKSPORT -p $DNSPORT:$DNSPORT/udp -p $HTTPPORT:$HTTPPORT -d $IMGTAG -s ${SSHOST} -p ${SSPORT} -b ${LISTENADDR} -l ${SOCKSPORT} -k "${SSPASS}" -m "${SSMETHOD}" >/dev/null
 echo "Done."
 echo
