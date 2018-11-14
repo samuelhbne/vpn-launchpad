@@ -15,7 +15,8 @@ CTNNAME="ssllibev"
 BIMG=`docker images |grep $IMGNAME|grep -c $IMGVER`
 TDKFILE=`date +%Y%m%d%H%M%S -r $DIR/Dockerfile.in`
 TENVSSLL=`date +%Y%m%d%H%M%S -r $DIR/ssllibev.env`
-TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG|date +%Y%m%d%H%M%S`
+TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG`
+TIMG=`date -d "$TIMG" +%Y%m%d%H%M%S`
 
 if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ] || [ "$TENVSSLL" -gt "$TIMG" ]; then
 	cp -a $DIR/Dockerfile.in $DIR/Dockerfile
