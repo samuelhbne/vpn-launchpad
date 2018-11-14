@@ -3,39 +3,48 @@
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
-cp -a $DIR/vpnlaunchpad/Dockerfile.in $DIR/vpnlaunchpad/Dockerfile
-
 ARCH=`arch`
-case $ARCH in
-	armv6l|armv7l)
-		sed -i.bak  's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/vpnlaunchpad/Dockerfile
-		rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
-		;;
-	x86_64|i686|i386)
-		sed -i.bak  's/^FROM .*/FROM alpine/g' $DIR/vpnlaunchpad/Dockerfile
-		rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
-		;;
-	*)
-		echo "Unsupported arch"
-		exit
-		;;
-esac
-
 DKUID=`id -u`
 DKGID=`id -g`
-sed -i.bak "s/^ENV DKUID .*/ENV DKUID ${DKUID}/" $DIR/vpnlaunchpad/Dockerfile && rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
-sed -i.bak "s/^ENV DKGID .*/ENV DKGID ${DKGID}/" $DIR/vpnlaunchpad/Dockerfile && rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
+IMGNAME="samuelhbne/vpnlaunchpad"
+IMGVER="$ARCH.$DKUID.$DKGID"
+IMGTAG="$IMGNAME:$IMGVER"
 
-echo "Building vpnlaunchpad image..."
-docker build --rm=true -t samuelhbne/vpnlaunchpad $DIR/vpnlaunchpad/
-echo
+BIMG=`docker images |grep $IMGNAME|grep -c $IMGVER`
+TDKFILE=`date +%Y%m%d%H%M%S -r $DIR/vpnlaunchpad/Dockerfile.in`
+TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG|date +%Y%m%d%H%M%S`
+
+if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ]; then
+	echo "Build..."
+	exit
+	cp -a $DIR/vpnlaunchpad/Dockerfile.in $DIR/vpnlaunchpad/Dockerfile
+	case $ARCH in
+		armv6l|armv7l)
+			sed -i.bak  's/^FROM .*/FROM arm32v6\/alpine/g' $DIR/vpnlaunchpad/Dockerfile
+			rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
+			;;
+		x86_64|i686|i386)
+			sed -i.bak  's/^FROM .*/FROM alpine/g' $DIR/vpnlaunchpad/Dockerfile
+			rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
+			;;
+		*)
+			echo "Unsupported arch"
+			exit
+			;;
+	esac
+	sed -i.bak "s/^ENV DKUID .*/ENV DKUID ${DKUID}/" $DIR/vpnlaunchpad/Dockerfile && rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
+	sed -i.bak "s/^ENV DKGID .*/ENV DKGID ${DKGID}/" $DIR/vpnlaunchpad/Dockerfile && rm -rf $DIR/vpnlaunchpad/Dockerfile.bak
+	echo "Building vpnlaunchpad image..."
+	docker build --rm=true -t $IMGTAG $DIR/vpnlaunchpad/
+	echo
+fi
 
 mkdir -p $DIR/.vpn-launchpad $DIR/.aws
 if [ ! -f $DIR/.aws/config ]; then
         echo -e '[default]\nregion = ap-northeast-1\noutput = json\n'>$DIR/.aws/config
 fi
 
-DOCKERCMD="docker run --user `id -u`:`id -g` --rm=true -v $DIR:/home/vlp -it samuelhbne/vpnlaunchpad"
+DOCKERCMD="docker run --user $DKUID:$DKGID --rm=true -v $DIR:/home/vlp -it $IMGTAG"
 
 if [[ $# = 0 ]]; then
 	$DOCKERCMD /home/vlp/bin/vlp-menu
