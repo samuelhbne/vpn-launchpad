@@ -20,19 +20,13 @@ if [ "$?" != "0" ]; then
 fi
 
 echo "Querying Instance of $STACKID..."
-# aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].PublicIpAddress'
 aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, LaunchTime: LaunchTime, InstanceType: InstanceType, InstanceId: InstanceId, AvailabilityZone: Placement.AvailabilityZone}'
-
 RESULT=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, InstanceId: InstanceId}'|grep -v None|head -n1`
-
-echo "Querying Instance configuration..."
 IPADDR=`echo $RESULT|awk '{print $1}'`
 INSTID=`echo $RESULT|awk '{print $2}'`
 
+echo "Querying Instance configuration..."
 aws --profile $PROFILE --region $REGION --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId: ResourceId, Key: Key, Value: Value}'
-
-#echo "Querying Security Group..."
-#aws --profile $PROFILE --region $REGION --output table ec2 describe-security-groups --group-names $STACKID-sg --query "SecurityGroups[*].{Name:GroupName}"
 
 echo
 if [ ! -z "$IPADDR" ]; then
@@ -41,14 +35,19 @@ else
 	echo "VPN-SERVER: None"
 	exit 1
 fi
-
 echo
-echo "Scan QR code from Shadowsocks compatible mobile app to connect your mobile phone/tablet:"
+
 SSENV=`aws --profile $PROFILE --region $REGION --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key: Key, Value: Value}'|grep ssslibev.|sed 's/ssslibev.//g'`
 SSMETHOD=`echo "$SSENV"|grep SSMETHOD|awk '{print $2}'`
 SSPASS=`echo "$SSENV"|grep SSPASS|awk '{print $2}'`
 SSPORT=`echo "$SSENV"|grep SSPORT|awk '{print $2}'`
 
+if [ "$SSMETHOD" = "" ] || [ "SSPASS" = "" ] || [ "SSPORT" = "" ]; then
+	echo "Shadowsocks configuration not found. Incomplete VPN server installation?"
+	exit 2
+fi
+
+echo "Scan QR code from Shadowsocks compatible mobile app to connect your mobile phone/tablet:"
 SSUINFO=`echo "$SSMETHOD:$SSPASS"|tr -d '\n'|base64`
 qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
 echo "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
