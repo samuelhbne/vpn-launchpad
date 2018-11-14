@@ -3,4 +3,6 @@ proxy-ssllibev/ssslibev.env
 proxy-ssllibev/Dockerfile
 vpnlaunchpad/Dockerfile
 .vpn-launchpad
+.bash_history
+.ssh
 .aws
