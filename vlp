@@ -32,14 +32,10 @@ echo
 
 mkdir -p $DIR/.vpn-launchpad $DIR/.aws
 if [ ! -f $DIR/.aws/config ]; then
-        echo -e '[default]\nregion = ap-northeast-1\noutput = json\n'>>$DIR/.aws/config
-fi
-BVLPC=`docker ps -a| grep vlp-alpine|wc -l`
-if [ $BVLPC -gt 0 ]; then
-        docker stop vlp-alpine; docker rm vlp-alpine
+        echo -e '[default]\nregion = ap-northeast-1\noutput = json\n'>$DIR/.aws/config
 fi
 
-DOCKERCMD="docker run --user `id -u`:`id -g` --rm=true --name vlp-alpine -v $DIR:/home/vlp -it samuelhbne/vpnlaunchpad"
+DOCKERCMD="docker run --user `id -u`:`id -g` --rm=true -v $DIR:/home/vlp -it samuelhbne/vpnlaunchpad"
 
 if [[ $# = 0 ]]; then
 	$DOCKERCMD /home/vlp/bin/vlp-menu
