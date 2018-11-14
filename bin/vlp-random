@@ -29,7 +29,7 @@ echo "Randomising VPN passwords..."
 echo
 
 sed -i "s/PSK=.*/PSK=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
-sed -i "s/USERS=.*/USERS=user0:`pwgen -cB1`;user1:`pwgen -cB1`;/g" $VLPDIR/server-softether/softether.env
+#sed -i "s/USERS=.*/USERS=user0:`pwgen -cB1`;user1:`pwgen -cB1`;/g" $VLPDIR/server-softether/softether.env
 sed -i "s/SPW=.*/SPW=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
 sed -i "s/HPW=.*/HPW=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
 cat $VLPDIR/server-softether/softether.env
