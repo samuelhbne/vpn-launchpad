@@ -2,25 +2,18 @@
 
 DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
+. $VLPDIR/vlp.env
 VLPHOME="$HOME/.vpn-launchpad"
-UBUNTUVER=bionic
-STACKID="vlp-$UBUNTUVER"
-if [ ! -z $1 ]; then
-	STACKID="$1";
-fi
 VLPKEY="$VLPHOME/$STACKID-key.pem"
-
-aws --output table iam get-user >/dev/null
+REGION=`aws --profile $PROFILE configure get region`
+aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
 	exit 255
 fi
 
-PROFILE="default"
-REGION=`aws configure get region`
-
 echo "Querying Instance of $STACKID..."
-RESULT=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, InstanceId: InstanceId}'|grep -v None|head -n1`
+RESULT=`aws --profile $PROFILE --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, InstanceId: InstanceId}'|grep -v None|head -n1`
 IPADDR=`echo $RESULT|awk '{print $1}'`
 INSTID=`echo $RESULT|awk '{print $2}'`
 
@@ -36,7 +29,7 @@ echo
 if [ -f $VLPKEY ]; then
 	echo "SSH private key found. ssh to $IPADDR..."
 	echo
-	ssh -i $VLPKEY ubuntu@$IPADDR
+	ssh -i $VLPKEY ubuntu@$IPADDR "$@"
 else
 	echo "SSH private key not found. Not created from this box?"
 fi

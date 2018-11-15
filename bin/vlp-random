@@ -2,8 +2,8 @@
 
 DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
+. $VLPDIR/vlp.env
 VLPHOME="$HOME/.vpn-launchpad"
-UBUNTUVER=bionic
 
 while [[ $# > 0 ]]; do
 	case $1 in

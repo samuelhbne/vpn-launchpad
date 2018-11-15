@@ -2,8 +2,8 @@
 
 DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
+. $VLPDIR/vlp.env
 VLPHOME="$HOME/.vpn-launchpad"
-
 
 while true; do
 	echo
@@ -23,13 +23,13 @@ while true; do
 		aws configure
 	elif [ "$choice" = "2" ]; then
 		echo "Create VPN node on AWS..."
-		$DIR/vlp-build
+		$DIR/vlp-build "$@"
 	elif [ "$choice" = "3" ]; then
 		echo "Check existing VPN server status..."
-		$DIR/vlp-status
+		$DIR/vlp-status "$@"
 	elif [ "$choice" = "4" ]; then
 		echo "Destory existing VPN server..."
-		$DIR/vlp-purge
+		$DIR/vlp-purge "$@"
 	else
 		echo "Exit vpn-launchpad..."
 		exit 0

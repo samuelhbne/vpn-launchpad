@@ -2,19 +2,10 @@
 
 DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
+. $VLPDIR/vlp.env
 VLPHOME="$HOME/.vpn-launchpad"
-UBUNTUVER=bionic
-
-PROFILE="default"
-REGION=`aws configure get region`
-STACKID="vlp-$UBUNTUVER"
-
-if [ ! -z $1 ]; then
-	STACKID="$1";
-fi
-
-
-aws --output table iam get-user >/dev/null
+REGION=`aws --profile $PROFILE configure get region`
+aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
 	exit 255
@@ -23,12 +14,12 @@ fi
 
 for i in `seq 5 -1 0`; do
 	echo "Querying Instance of $STACKID..."
-	INSTID=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].InstanceId'`
+	INSTID=`aws --profile $PROFILE --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[].Instances[0].InstanceId'`
 	if [ "$INSTID" = "" ]; then
 		echo "VPN-SERVER instance not found. Skip shutting down."
 	else
 		echo "Deleting Instance of $STACKID..."
-		aws --profile $PROFILE --region $REGION --output text ec2 terminate-instances --instance-id $INSTID
+		aws --profile $PROFILE --output text ec2 terminate-instances --instance-id $INSTID
 		echo "Done."
 		echo
 		echo "Waiting Instance shutdown..."
@@ -37,7 +28,7 @@ for i in `seq 5 -1 0`; do
 		echo
 	fi
 	echo "Removing Security Group of $STACKID..."
-	RESULT=`aws --profile $PROFILE --region $REGION --output text ec2 delete-security-group --group-name $STACKID-sg 2>&1`
+	RESULT=`aws --profile $PROFILE --output text ec2 delete-security-group --group-name $STACKID-sg 2>&1`
 	RET=${PIPESTATUS[0]}
 	if [ "$RET" -eq "0" ] ; then
 		echo "Security Group Removed."
@@ -56,7 +47,7 @@ echo
 
 
 echo "Deleting SSH Key-Pair of $STACKID..."
-aws --profile $PROFILE --region $REGION --output text ec2 delete-key-pair --key-name $STACKID-key
+aws --profile $PROFILE --output text ec2 delete-key-pair --key-name $STACKID-key
 rm -rf $VLPHOME/$STACKID-key.pem
 echo "Done."
 exit 0

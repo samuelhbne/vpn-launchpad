@@ -2,31 +2,24 @@
 
 DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
+. $VLPDIR/vlp.env
 VLPHOME="$HOME/.vpn-launchpad"
-UBUNTUVER=bionic
-STACKID="vlp-$UBUNTUVER"
-if [ ! -z $1 ]; then
-	STACKID="$1";
-fi
 VLPKEY="$VLPHOME/$STACKID-key.pem"
-
-aws --output table iam get-user >/dev/null
+REGION=`aws --profile $PROFILE configure get region`
+aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
 	exit 255
 fi
 
-PROFILE="default"
-REGION=`aws configure get region`
-
 echo "Querying Instance of $STACKID..."
-aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, LaunchTime: LaunchTime, InstanceType: InstanceType, InstanceId: InstanceId, AvailabilityZone: Placement.AvailabilityZone}'
-RESULT=`aws --profile $PROFILE --region $REGION --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, InstanceId: InstanceId}'|grep -v None|head -n1`
+aws --profile $PROFILE --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, LaunchTime: LaunchTime, InstanceType: InstanceType, InstanceId: InstanceId, AvailabilityZone: Placement.AvailabilityZone}'
+RESULT=`aws --profile $PROFILE --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, InstanceId: InstanceId}'|grep -v None|head -n1`
 IPADDR=`echo $RESULT|awk '{print $1}'`
 INSTID=`echo $RESULT|awk '{print $2}'`
 
 echo "Querying Instance configuration..."
-aws --profile $PROFILE --region $REGION --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId: ResourceId, Key: Key, Value: Value}'
+aws --profile $PROFILE --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId: ResourceId, Key: Key, Value: Value}'
 
 echo
 if [ ! -z "$IPADDR" ]; then
@@ -37,7 +30,7 @@ else
 fi
 echo
 
-SSENV=`aws --profile $PROFILE --region $REGION --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key: Key, Value: Value}'|grep ssslibev.|sed 's/ssslibev.//g'`
+SSENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key: Key, Value: Value}'|grep ssslibev.|sed 's/ssslibev.//g'`
 SSMETHOD=`echo "$SSENV"|grep SSMETHOD|awk '{print $2}'`
 SSPASS=`echo "$SSENV"|grep SSPASS|awk '{print $2}'`
 SSPORT=`echo "$SSENV"|grep SSPORT|awk '{print $2}'`
