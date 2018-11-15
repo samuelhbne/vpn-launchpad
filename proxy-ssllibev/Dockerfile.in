@@ -31,6 +31,10 @@ RUN set -ex \
  && rm -rf /tmp/repo
 
 RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
+RUN apk del .build-deps
+
+ADD run.sh /run.sh
+RUN chmod 755 /*.sh
 
 ENV LISTENADDR="0.0.0.0"
 ENV SOCKSPORT="1080"
@@ -46,11 +50,6 @@ RUN echo "proxyAddress=$LISTENADDR" >>/root/polipo/config
 RUN echo "proxyPort=$HTTPPORT" >>/root/polipo/config
 RUN echo "daemonise=true" >>/root/polipo/config
 RUN echo "diskCacheRoot=" >>/root/polipo/config
-
-RUN apk del .build-deps
-
-ADD run.sh /run.sh
-RUN chmod 755 /*.sh
 
 EXPOSE 1080 8123 65353
 ENTRYPOINT ["/run.sh"]
