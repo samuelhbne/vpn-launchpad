@@ -74,6 +74,10 @@ else
 				$DOCKERCMD /home/vlp/bin/vlp-random
 				shift
 				;;
+			--ssh)
+				$DOCKERCMD /home/vlp/bin/vlp-ssh
+				shift
+				;;
 			*)
 				$DOCKERCMD /home/vlp/bin/vlp-menu
 				shift
