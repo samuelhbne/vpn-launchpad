@@ -2,6 +2,10 @@
 
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
+VLPHOME="$DIR/.vpn-launchpad"
+UBUNTUVER=bionic
+STACKID="vlp-$UBUNTUVER"
+VLPKEY="$VLPHOME/$STACKID-key.pem"
 
 ARCH=`arch`
 DKUID=`id -u`
@@ -75,7 +79,13 @@ else
 				shift
 				;;
 			--ssh)
-				$DOCKERCMD /home/vlp/bin/vlp-ssh
+				if [ -f $VLPKEY ]; then
+					$DOCKERCMD /home/vlp/bin/vlp-ssh
+				else
+					echo "$VLPKEY not found. Not created from this box?"
+					echo "Abort."
+					exit
+				fi
 				shift
 				;;
 			*)
