@@ -4,6 +4,11 @@ DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
 VLPHOME="$HOME/.vpn-launchpad"
 UBUNTUVER=bionic
+STACKID="vlp-$UBUNTUVER"
+if [ ! -z $1 ]; then
+        STACKID="$1";
+fi
+VLPKEY="$VLPHOME/$STACKID-key.pem"
 
 echo "Verifying AWS account configuration..."
 aws --output table iam get-user >/dev/null
@@ -29,19 +34,12 @@ echo
 
 PROFILE="default"
 INSTYPE="t2.micro"
-STACKID="vlp-$UBUNTUVER"
 REGION=`aws configure get region`
 echo "Querying $UBUNTUVER image AMIID in $REGION ..."
 AMIID=`aws ec2 describe-images --region $REGION --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]' --output text|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
 echo "Latest $UBUNTUVER image AMIID in $REGION: $AMIID"
 echo "Done."
 echo
-
-SSPORT=`grep "SSPORT=" $VLPDIR/server-ssslibev/ssslibev.env |cut -d'=' -f2|sed 's/\"//g'`
-
-if [ ! -z $1 ]; then
-	STACKID="$1";
-fi
 
 echo "Creating Security Group of $STACKID..."
 SGID=`aws --profile $PROFILE --region $REGION --output text ec2 create-security-group --group-name $STACKID-sg --description "Security group for $STACKID. Created by vpn-launchpad."`
@@ -58,6 +56,7 @@ aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-gro
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
 # ssslibev
+SSPORT=`grep "SSPORT=" $VLPDIR/server-ssslibev/ssslibev.env |cut -d'=' -f2|sed 's/\"//g'`
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSPORT --cidr 0.0.0.0/0
 aws --profile $PROFILE --region $REGION --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSPORT --cidr 0.0.0.0/0
 echo "Done."
@@ -67,8 +66,8 @@ echo "Creating Key-Pair of $STACKID..."
 if [ ! -d "$VLPHOME" ]; then
 	mkdir $VLPHOME
 fi
-aws --profile $PROFILE --region $REGION ec2 create-key-pair --key-name $STACKID-key --query 'KeyMaterial' --output text > $VLPHOME/$STACKID-key.pem
-chmod 600 $VLPHOME/$STACKID-key.pem
+aws --profile $PROFILE --region $REGION ec2 create-key-pair --key-name $STACKID-key --query 'KeyMaterial' --output text > $VLPKEY
+chmod 600 $VLPKEY
 echo "Done."
 echo
 
@@ -120,18 +119,18 @@ echo
 echo "Instance provisioning..."
 mkdir -p ~/.ssh
 ssh-keyscan -H $IPPUB >> ~/.ssh/known_hosts
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections"
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io git"
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo sysctl -p"
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
+ssh -i $VLPKEY ubuntu@$IPPUB "echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections"
+ssh -i $VLPKEY ubuntu@$IPPUB "sudo apt-get -y update; sudo apt-get install -y docker.io git"
+ssh -i $VLPKEY ubuntu@$IPPUB "sudo sh -c \"echo '\n\nnet.core.default_qdisc=fq'>>/etc/sysctl.conf\""
+ssh -i $VLPKEY ubuntu@$IPPUB "sudo sh -c \"echo '\nnet.ipv4.tcp_congestion_control=bbr'>>/etc/sysctl.conf\""
+ssh -i $VLPKEY ubuntu@$IPPUB "sudo sysctl -p"
+ssh -i $VLPKEY ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
 echo "Done."
 echo
 
 echo "L2TP provisioning..."
-scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-softether ubuntu@$IPPUB:
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-softether; sh softether.sh"
+scp -i $VLPKEY -r $VLPDIR/server-softether ubuntu@$IPPUB:
+ssh -i $VLPKEY ubuntu@$IPPUB "cd server-softether; sh softether.sh"
 echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
@@ -145,8 +144,8 @@ echo "Done."
 echo
 
 echo "ssslibev provisioning..."
-scp -i $VLPHOME/$STACKID-key.pem -r $VLPDIR/server-ssslibev ubuntu@$IPPUB:
-ssh -i $VLPHOME/$STACKID-key.pem ubuntu@$IPPUB "cd server-ssslibev; sh ssslibev.sh"
+scp -i $VLPKEY -r $VLPDIR/server-ssslibev ubuntu@$IPPUB:
+ssh -i $VLPKEY ubuntu@$IPPUB "cd server-ssslibev; sh ssslibev.sh"
 echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`

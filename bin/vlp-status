@@ -4,20 +4,20 @@ DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
 VLPHOME="$HOME/.vpn-launchpad"
 UBUNTUVER=bionic
-
-PROFILE="default"
-REGION=`aws configure get region`
 STACKID="vlp-$UBUNTUVER"
-
 if [ ! -z $1 ]; then
 	STACKID="$1";
 fi
+VLPKEY="$VLPHOME/$STACKID-key.pem"
 
 aws --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
 	exit 255
 fi
+
+PROFILE="default"
+REGION=`aws configure get region`
 
 echo "Querying Instance of $STACKID..."
 aws --profile $PROFILE --region $REGION --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, LaunchTime: LaunchTime, InstanceType: InstanceType, InstanceId: InstanceId, AvailabilityZone: Placement.AvailabilityZone}'
@@ -51,4 +51,5 @@ echo "Scan QR code from Shadowsocks compatible mobile app to connect your mobile
 SSUINFO=`echo "$SSMETHOD:$SSPASS"|tr -d '\n'|base64`
 qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
 echo "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
+echo
 exit 0
