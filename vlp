@@ -63,7 +63,7 @@ else
 			shift
 			$DOCKERCMD /home/vlp/bin/vlp-random "$@"
 			$DOCKERCMD /home/vlp/bin/vlp-build "$@"
-			$DOCKERCMD /home/vlp/bin/vlp-status "$@"
+			$DOCKERCMD /home/vlp/bin/vlp-status --all
 			;;
 		status)
 			shift

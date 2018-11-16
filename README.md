@@ -171,7 +171,7 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 ## Connect to the VPN server via Shadowsocks from mobile devices:
-"vlp build" and "vlp status" both print a QR code after building VPN server successfully. Simply scan this QR code from Shadowsocks compatible mobile apps (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-SS. Connect and Enjoy please.
+Both "vlp build" and "vlp status --all" print QR code as well as the shadowsocks URI. Scanning this QR code from Shadowsocks compatible mobile apps (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-shadowsocks. Connect and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)

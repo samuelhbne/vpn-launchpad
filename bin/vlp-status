@@ -12,37 +12,53 @@ if [ "$?" != "0" ]; then
 	exit 255
 fi
 
+while [[ $# > 0 ]]; do
+	option="$1"
+	case $option in
+		--all|--qrcode)
+			shift
+			QRCODE=1
+			;;
+		*)
+			shift
+			echo "Unknown option \"$option\""
+			;;
+	esac
+done
+
 echo "Querying Instance of $STACKID..."
-aws --profile $PROFILE --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, LaunchTime: LaunchTime, InstanceType: InstanceType, InstanceId: InstanceId, AvailabilityZone: Placement.AvailabilityZone}'
+aws --profile $PROFILE --output table ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{PublicIP:PublicIpAddress, LaunchTime:LaunchTime, InstanceType:InstanceType, InstanceId:InstanceId, AvailabilityZone:Placement.AvailabilityZone}'|tee /dev/null
 RESULT=`aws --profile $PROFILE --output text ec2 describe-instances --filters "Name=key-name,Values=$STACKID-key" --query 'Reservations[*].Instances[*].{IP: PublicIpAddress, InstanceId: InstanceId}'|grep -v None|head -n1`
-IPADDR=`echo $RESULT|awk '{print $1}'`
-INSTID=`echo $RESULT|awk '{print $2}'`
+IPADDR=`echo "$RESULT"|awk '{print $1}'`
+INSTID=`echo "$RESULT"|awk '{print $2}'`
 
-echo "Querying Instance configuration..."
-aws --profile $PROFILE --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId: ResourceId, Key: Key, Value: Value}'
-
-echo
-if [ ! -z "$IPADDR" ]; then
-	echo "VPN-SERVER: $IPADDR $INSTID"
-else
+if [ "$IPADDR" = "None" ]; then
 	echo "VPN-SERVER: None"
 	exit 1
+else
+	echo "VPN-SERVER: $IPADDR $INSTID"
 fi
 echo
 
-SSENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key: Key, Value: Value}'|grep ssslibev.|sed 's/ssslibev.//g'`
+echo "Querying Instance configuration..."
+aws --profile $PROFILE --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId:ResourceId,Key:Key,Value:Value}'|tee /dev/null
+echo
+
+SSENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key:Key, Value:Value}'|grep ssslibev.|sed 's/ssslibev.//g'`
 SSMETHOD=`echo "$SSENV"|grep SSMETHOD|awk '{print $2}'`
 SSPASS=`echo "$SSENV"|grep SSPASS|awk '{print $2}'`
 SSPORT=`echo "$SSENV"|grep SSPORT|awk '{print $2}'`
-
 if [ "$SSMETHOD" = "" ] || [ "SSPASS" = "" ] || [ "SSPORT" = "" ]; then
 	echo "Shadowsocks configuration not found. Incomplete VPN server installation?"
 	exit 2
 fi
+echo "Shadowsocks-URI: ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
 
-echo "Scan QR code from Shadowsocks compatible mobile app to connect your mobile phone/tablet:"
-SSUINFO=`echo "$SSMETHOD:$SSPASS"|tr -d '\n'|base64`
-qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
-echo "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-SS"
+if [ "$QRCODE" = "1" ]; then
+	echo "Scan QR code from Shadowsocks compatible mobile app to connect your mobile phone/tablet:"
+	SSUINFO=`echo "$SSMETHOD:$SSPASS"|tr -d '\n'|base64`
+	qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
+fi
 echo
+
 exit 0

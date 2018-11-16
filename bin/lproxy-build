@@ -2,44 +2,37 @@
 
 DIR=`dirname $0`
 VLPDIR="$(cd $DIR; cd ..; pwd)"
+SSLLDIR="$VLPDIR/proxy-ssllibev"
 
-VLPQUERY="$VLPDIR/vlp --status"
+VLPQUERY="$VLPDIR/vlp status"
 
 echo "Checking VPS status..."
 RESULT="/tmp/RESULT"
 $VLPQUERY|tee $RESULT
-echo
 
-sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" -i.bak $RESULT
 VPSIP=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $2}'|tr -d '\r\n'`
 INSTID=`cat $RESULT|grep "VPN-SERVER:"|awk '{print $3}'|tr -d '\r\n'`
 case $VPSIP in
-	"None")
-		echo "VPS not found."
-		exit 0
-		;;
-	"")
+	""|"None")
 		echo "VPS not found."
 		exit 0
 		;;
 	*)
-		echo "Found VPS: $VPSIP"
-		echo
-
-		echo "Setting up local proxy daemon..."
-		cat $RESULT| grep $INSTID|grep "ssslibev\."|sed 's/ssslibev.//g'|sed 's/|//g'|awk '{print $1"="$3}'>$VLPDIR/proxy-ssllibev/ssslibev.env
-		cp -a $VLPDIR/proxy-ssllibev/ssllibev.env $VLPDIR/proxy-ssllibev/ssllibev.env.out
-		sed -i.bak "s/SSHOST=.*/SSHOST=$VPSIP/g" $VLPDIR/proxy-ssllibev/ssllibev.env.out
-		rm -rf $VLPDIR/proxy-ssllibev/ssllibev.env.out.bak
-		echo "Done."
-		echo
-
-		$VLPDIR/proxy-ssllibev/ssllibev.sh
-		echo "Wait 15s for local proxy initialisation..."
-		sleep 15
-		echo "Done."
-		echo
-
-		$VLPDIR/bin/lproxy-status
 		;;
 esac
+
+echo "Setting up local proxy daemon..."
+cat $RESULT|grep $INSTID|grep "ssslibev\."|sed 's/ssslibev.//g'|sed 's/|//g'|awk '{print $1"="$3}'>$SSLLDIR/ssslibev.env
+cp -a $SSLLDIR/ssllibev.env $SSLLDIR/ssllibev.env.out
+sed -i.bak "s/SSHOST=.*/SSHOST=$VPSIP/g" $SSLLDIR/ssllibev.env.out
+rm -rf $SSLLDIR/ssllibev.env.out.bak
+echo "Done."
+echo
+
+$SSLLDIR/ssllibev.sh
+echo "Wait 15s for local proxy initialisation..."
+sleep 15
+echo "Done."
+echo
+
+$VLPDIR/bin/lproxy-status
