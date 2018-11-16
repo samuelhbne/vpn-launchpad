@@ -9,15 +9,15 @@ else
 	while [[ $# > 0 ]]; do
 		act="$1"
 		case $act in
-			--build)
+			build)
 				$DIR/bin/lproxy-build
 				shift
 				;;
-			--status)
+			status)
 				$DIR/bin/lproxy-status
 				shift
 				;;
-			--purge)
+			purge)
 				$DIR/bin/lproxy-purge
 				shift
 				;;

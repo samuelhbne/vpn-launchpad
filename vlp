@@ -55,35 +55,35 @@ else
 #	while [[ $# > 0 ]]; do
 		act="$1"
 		case $act in
-			--init)
+			init)
 				shift
 				$DOCKERCMD /usr/bin/aws --profile $PROFILE configure
 				$DOCKERCMD /home/vlp/bin/vlp-random "$@"
 				#shift
 				;;
-			--build)
+			build)
 				shift
 				$DOCKERCMD /home/vlp/bin/vlp-random "$@"
 				$DOCKERCMD /home/vlp/bin/vlp-build "$@"
 				$DOCKERCMD /home/vlp/bin/vlp-status "$@"
 				shift
 				;;
-			--status)
+			status)
 				shift
 				$DOCKERCMD /home/vlp/bin/vlp-status "$@"
 				#shift
 				;;
-			--purge)
+			purge)
 				shift
 				$DOCKERCMD /home/vlp/bin/vlp-purge "$@"
 				#shift
 				;;
-			--random)
+			random)
 				shift
 				$DOCKERCMD /home/vlp/bin/vlp-random "$@"
 				#shift
 				;;
-			--ssh)
+			ssh)
 				shift
 				if [ -f $VLPKEY ]; then
 					$DOCKERCMD /home/vlp/bin/vlp-ssh "$@"

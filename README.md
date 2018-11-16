@@ -14,20 +14,20 @@ Command vlp creates EC2 instance with Shadowsocks and L2TP support installed out
 
 #### VPN server management
 ```
-./vlp [options]
-  --init        -- Init aws account credential.
-  --build       -- Build VPN server.
-  --status      -- Check VPN server status.
-  --purge       -- Destory VPN server instance.
-  --random      -- Randomise VPN passwords.
+./vlp <command>
+  init        -- Init aws account credential.
+  build       -- Build VPN server.
+  status      -- Check VPN server status.
+  purge       -- Destory VPN server instance.
+  random      -- Randomise VPN passwords.
 ```
 
 #### Local proxy management
 ```
-./lproxy [options]
-  --build       -- Build local proxy server.
-  --status      -- Check local proxy server status.
-  --purge       -- Destory local proxy process.
+./lproxy <command>
+  build       -- Build local proxy server.
+  status      -- Check local proxy server status.
+  purge       -- Destory local proxy process.
 ```
 Note: Please build VPN server before local proxy building.
 
@@ -64,7 +64,7 @@ Note: It is necessary to log out current session and back to get docker group se
 ```
 $ git clone https://github.com/samuelhbne/vpn-launchpad
 $ cd vpn-launchpad
-$ ./vlp --init
+$ ./vlp init
 AWS Access Key ID [None]: INPUT-YOUR-AWS-ID-HERE
 AWS Secret Access Key [None]: INPUT-YOUR-AWS-KEY-HERE
 Default region name [ap-northeast-1]: 
@@ -77,7 +77,7 @@ Done.
 
 #### 3. Build a VPN server on AWS
 ```
-$ ./vlp --build
+$ ./vlp build
 ...
 VPN-SERVER: 13.231.224.253 i-03803b568524f801b
 ...
@@ -85,7 +85,7 @@ VPN-SERVER: 13.231.224.253 i-03803b568524f801b
 
 #### 4. Build a local proxy on Pi box
 ```
-$ ./lproxy --build
+$ ./lproxy build
 ...
 Local proxy started.
 
@@ -110,12 +110,12 @@ Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/
 
 #### 6. Stop and remove local proxy from Pi box after surfing
 ```
-$ ./lproxy --purge
+$ ./lproxy purge
 ```
 
 #### 7. Stop and remove VPN server from AWS after surfing
 ```
-$ ./vlp --purge
+$ ./vlp purge
 ```
 
 Note: Removing VPN server from AWS after surfing is always recommended. Not only it reduces the cost for AWS service hiring, also it removes the potential trails from cloud to protect your privacy.
@@ -171,7 +171,7 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 ## Connect to the VPN server via Shadowsocks from mobile devices:
-"vlp --build" and "vlp --status" both print a QR code after building VPN server successfully. Simply scan this QR code from Shadowsocks compatible mobile apps (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-SS. Connect and Enjoy please.
+"vlp build" and "vlp status" both print a QR code after building VPN server successfully. Simply scan this QR code from Shadowsocks compatible mobile apps (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-SS. Connect and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
