@@ -137,7 +137,7 @@ All credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [So
 $ cat server-ssslibev/ssslibev.env
 SSPORT=" 8388"
 SSPASS="YOUR-PASS"
-SSMETHOD="aes-256-gcm"
+SSMTHD="aes-256-gcm"
 ```
 NOTE: VPS purging and re-creation are necessary for getting new configuration applied.
 
