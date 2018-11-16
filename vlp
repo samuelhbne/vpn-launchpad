@@ -52,52 +52,44 @@ DOCKERCMD="docker run --user $DKUID:$DKGID --rm=true -v $VLPDIR:/home/vlp -it $I
 if [[ $# = 0 ]]; then
 	$DOCKERCMD /home/vlp/bin/vlp-menu
 else
-#	while [[ $# > 0 ]]; do
-		act="$1"
-		case $act in
-			init)
-				shift
-				$DOCKERCMD /usr/bin/aws --profile $PROFILE configure
-				$DOCKERCMD /home/vlp/bin/vlp-random "$@"
-				#shift
-				;;
-			build)
-				shift
-				$DOCKERCMD /home/vlp/bin/vlp-random "$@"
-				$DOCKERCMD /home/vlp/bin/vlp-build "$@"
-				$DOCKERCMD /home/vlp/bin/vlp-status "$@"
-				shift
-				;;
-			status)
-				shift
-				$DOCKERCMD /home/vlp/bin/vlp-status "$@"
-				#shift
-				;;
-			purge)
-				shift
-				$DOCKERCMD /home/vlp/bin/vlp-purge "$@"
-				#shift
-				;;
-			random)
-				shift
-				$DOCKERCMD /home/vlp/bin/vlp-random "$@"
-				#shift
-				;;
-			ssh)
-				shift
-				if [ -f $VLPKEY ]; then
-					$DOCKERCMD /home/vlp/bin/vlp-ssh "$@"
-				else
-					echo "$VLPKEY not found. Not created from this box?"
-					echo "Abort."
-					exit
-				fi
-				#shift
-				;;
-			*)
-				$DOCKERCMD /home/vlp/bin/vlp-menu "$@"
-				#shift
-				;;
-		esac
-#	done
+	subcmd="$1"
+	case $subcmd in
+		init)
+			shift
+			$DOCKERCMD /usr/bin/aws --profile $PROFILE configure
+			$DOCKERCMD /home/vlp/bin/vlp-random "$@"
+			;;
+		build)
+			shift
+			$DOCKERCMD /home/vlp/bin/vlp-random "$@"
+			$DOCKERCMD /home/vlp/bin/vlp-build "$@"
+			$DOCKERCMD /home/vlp/bin/vlp-status "$@"
+			;;
+		status)
+			shift
+			$DOCKERCMD /home/vlp/bin/vlp-status "$@"
+			;;
+		purge)
+			shift
+			$DOCKERCMD /home/vlp/bin/vlp-purge "$@"
+			;;
+		random)
+			shift
+			$DOCKERCMD /home/vlp/bin/vlp-random "$@"
+			;;
+		ssh)
+			shift
+			if [ -f $VLPKEY ]; then
+				$DOCKERCMD /home/vlp/bin/vlp-ssh "$@"
+			else
+				echo "$VLPKEY not found. Not created from this box?"
+				echo "Abort."
+				exit
+			fi
+			;;
+		*)
+			shift
+			$DOCKERCMD /home/vlp/bin/vlp-menu "$@"
+			;;
+	esac
 fi
