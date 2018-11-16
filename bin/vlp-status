@@ -32,7 +32,7 @@ RESULT=`aws --profile $PROFILE --output text ec2 describe-instances --filters "N
 IPADDR=`echo "$RESULT"|awk '{print $1}'`
 INSTID=`echo "$RESULT"|awk '{print $2}'`
 
-if [ "$IPADDR" = "None" ]; then
+if [ "$IPADDR" = "None" ] || [ "$IPADDR" = "" ]; then
 	echo "VPN-SERVER: None"
 	exit 1
 else
@@ -61,4 +61,6 @@ if [ "$QRCODE" = "1" ]; then
 fi
 echo
 
+echo "Done."
+echo
 exit 0
