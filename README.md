@@ -14,7 +14,7 @@ Command vlp creates EC2 instance with Shadowsocks and L2TP support installed out
 
 #### VPN server management
 ```
-./vlp <command>
+./vlp <command> [options]
   init        -- Init aws account credential.
   build       -- Build VPN server.
   status      -- Check VPN server status.
@@ -24,7 +24,7 @@ Command vlp creates EC2 instance with Shadowsocks and L2TP support installed out
 
 #### Local proxy management
 ```
-./lproxy <command>
+./lproxy <command> [options]
   build       -- Build local proxy server.
   status      -- Check local proxy server status.
   purge       -- Destory local proxy process.
