@@ -1,10 +1,10 @@
 #!/bin/bash
 
 DIR=`dirname $0`
-VLPDIR="$(cd $DIR; cd ..; pwd)"
-. $VLPDIR/vlp.env
-VLPHOME="$HOME/.vpn-launchpad"
-VLPKEY="$VLPHOME/$STACKID-key.pem"
+VLPHOME="$(cd $DIR; cd ..; pwd)"
+. $VLPHOME/vlp.env
+VLPCFG="$HOME/.vpn-launchpad"
+VLPKEY="$VLPCFG/$STACKID-key.pem"
 REGION=`aws --profile $PROFILE configure get region`
 aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
@@ -13,7 +13,7 @@ if [ "$?" != "0" ]; then
 fi
 
 echo "Checking existing VPN server instance..."
-VPSIP=`$VLPDIR/bin/vlp-status 2>/dev/null|grep VPN-SERVER|awk '{print $2}'`
+VPSIP=`$VLPHOME/bin/vlp-status 2>/dev/null|grep VPN-SERVER|awk '{print $2}'`
 if [ "$VPSIP" != "None" ]; then
 	echo "Found VPN-SERVER: $VPSIP"
 	echo "Please purge it before building"
@@ -46,15 +46,15 @@ aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --grou
 aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
 aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
 # ssslibev
-SSPORT=`grep "SSPORT=" $VLPDIR/server-ssslibev/ssslibev.env |cut -d'=' -f2|sed 's/\"//g'`
+SSPORT=`grep "SSPORT=" $VLPHOME/server-ssslibev/ssslibev.env |cut -d'=' -f2|sed 's/\"//g'`
 aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSPORT --cidr 0.0.0.0/0
 aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSPORT --cidr 0.0.0.0/0
 echo "Done."
 echo
 
 echo "Creating Key-Pair of $STACKID..."
-if [ ! -d "$VLPHOME" ]; then
-	mkdir $VLPHOME
+if [ ! -d "$VLPCFG" ]; then
+	mkdir $VLPCFG
 fi
 aws --profile $PROFILE --output text ec2 create-key-pair --key-name $STACKID-key --query 'KeyMaterial'> $VLPKEY
 chmod 600 $VLPKEY
@@ -119,7 +119,7 @@ echo "Done."
 echo
 
 echo "L2TP provisioning..."
-scp -i $VLPKEY -r $VLPDIR/server-softether ubuntu@$IPPUB:
+scp -i $VLPKEY -r $VLPHOME/server-softether ubuntu@$IPPUB:
 ssh -i $VLPKEY ubuntu@$IPPUB "cd server-softether; sh softether.sh"
 echo "Update Instance Tags..."
 while read p; do
@@ -129,12 +129,12 @@ while read p; do
           continue
   fi
   aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=softether.$KEY,Value=$VAL"
-done <$VLPDIR/server-softether/softether.env
+done <$VLPHOME/server-softether/softether.env
 echo "Done."
 echo
 
 echo "ssslibev provisioning..."
-scp -i $VLPKEY -r $VLPDIR/server-ssslibev ubuntu@$IPPUB:
+scp -i $VLPKEY -r $VLPHOME/server-ssslibev ubuntu@$IPPUB:
 ssh -i $VLPKEY ubuntu@$IPPUB "cd server-ssslibev; sh ssslibev.sh"
 echo "Update Instance Tags..."
 while read p; do
@@ -144,7 +144,7 @@ while read p; do
           continue
   fi
   aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=ssslibev.$KEY,Value=$VAL"
-done <$VLPDIR/server-ssslibev/ssslibev.env
+done <$VLPHOME/server-ssslibev/ssslibev.env
 echo "Done."
 echo
 exit 0

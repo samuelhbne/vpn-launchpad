@@ -1,10 +1,10 @@
 #!/bin/bash
 
 DIR=`dirname $0`
-VLPDIR="$(cd $DIR; cd ..; pwd)"
-SSLLDIR="$VLPDIR/proxy-ssllibev"
+VLPHOME="$(cd $DIR; cd ..; pwd)"
+SSLLDIR="$VLPHOME/proxy-ssllibev"
 
-VLPQUERY="$VLPDIR/vlp status"
+VLPQUERY="$VLPHOME/vlp status"
 
 echo "Checking VPS status..."
 RESULT="/tmp/RESULT"
@@ -35,4 +35,4 @@ sleep 15
 echo "Done."
 echo
 
-$VLPDIR/bin/lproxy-status
+$VLPHOME/bin/lproxy-status

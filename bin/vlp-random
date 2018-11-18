@@ -1,9 +1,9 @@
 #!/bin/bash
 
 DIR=`dirname $0`
-VLPDIR="$(cd $DIR; cd ..; pwd)"
-. $VLPDIR/vlp.env
-VLPHOME="$HOME/.vpn-launchpad"
+VLPHOME="$(cd $DIR; cd ..; pwd)"
+. $VLPHOME/vlp.env
+VLPCFG="$HOME/.vpn-launchpad"
 
 while [[ $# > 0 ]]; do
 	case $1 in
@@ -28,16 +28,16 @@ fi
 echo "Randomising VPN passwords..."
 echo
 
-sed -i "s/PSK=.*/PSK=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
-#sed -i "s/USERS=.*/USERS=user0:`pwgen -cB1`;user1:`pwgen -cB1`;/g" $VLPDIR/server-softether/softether.env
-sed -i "s/SPW=.*/SPW=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
-sed -i "s/HPW=.*/HPW=`pwgen -cB1`/g" $VLPDIR/server-softether/softether.env
-cat $VLPDIR/server-softether/softether.env
+sed -i "s/PSK=.*/PSK=`pwgen -cB1`/g" $VLPHOME/server-softether/softether.env
+#sed -i "s/USERS=.*/USERS=user0:`pwgen -cB1`;user1:`pwgen -cB1`;/g" $VLPHOME/server-softether/softether.env
+sed -i "s/SPW=.*/SPW=`pwgen -cB1`/g" $VLPHOME/server-softether/softether.env
+sed -i "s/HPW=.*/HPW=`pwgen -cB1`/g" $VLPHOME/server-softether/softether.env
+cat $VLPHOME/server-softether/softether.env
 echo
 
-sed -i "s/SSPORT=.*/SSPORT=`echo \"50000+$RANDOM%10000\"|bc`/g" $VLPDIR/server-ssslibev/ssslibev.env
-sed -i "s/SSPASS=.*/SSPASS=`pwgen -cB1`/g" $VLPDIR/server-ssslibev/ssslibev.env
-cat $VLPDIR/server-ssslibev/ssslibev.env
+sed -i "s/SSPORT=.*/SSPORT=`echo \"50000+$RANDOM%10000\"|bc`/g" $VLPHOME/server-ssslibev/ssslibev.env
+sed -i "s/SSPASS=.*/SSPASS=`pwgen -cB1`/g" $VLPHOME/server-ssslibev/ssslibev.env
+cat $VLPHOME/server-ssslibev/ssslibev.env
 echo
 
 echo "Done."

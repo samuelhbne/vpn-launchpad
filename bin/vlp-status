@@ -1,10 +1,10 @@
 #!/bin/bash
 
 DIR=`dirname $0`
-VLPDIR="$(cd $DIR; cd ..; pwd)"
-. $VLPDIR/vlp.env
-VLPHOME="$HOME/.vpn-launchpad"
-VLPKEY="$VLPHOME/$STACKID-key.pem"
+VLPHOME="$(cd $DIR; cd ..; pwd)"
+. $VLPHOME/vlp.env
+VLPCFG="$HOME/.vpn-launchpad"
+VLPKEY="$VLPCFG/$STACKID-key.pem"
 REGION=`aws --profile $PROFILE configure get region`
 aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then

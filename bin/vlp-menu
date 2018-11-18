@@ -1,9 +1,9 @@
 #!/bin/sh
 
 DIR=`dirname $0`
-VLPDIR="$(cd $DIR; cd ..; pwd)"
-. $VLPDIR/vlp.env
-VLPHOME="$HOME/.vpn-launchpad"
+VLPHOME="$(cd $DIR; cd ..; pwd)"
+. $VLPHOME/vlp.env
+VLPCFG="$HOME/.vpn-launchpad"
 
 while true; do
 	echo

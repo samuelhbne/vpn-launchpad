@@ -1,11 +1,11 @@
 #!/bin/bash
 
 DIR=`dirname $0`
-VLPDIR="$(cd $DIR; pwd)"
-. $VLPDIR/vlp.env
-VLPHOME="$VLPDIR/.vpn-launchpad"
-VLPKEY="$VLPHOME/$STACKID-key.pem"
-VLPDKDIR="$VLPDIR/vpnlaunchpad"
+VLPHOME="$(cd $DIR; pwd)"
+. $VLPHOME/vlp.env
+VLPCFG="$VLPHOME/.vpn-launchpad"
+VLPKEY="$VLPCFG/$STACKID-key.pem"
+VLPDKDIR="$VLPHOME/vpnlaunchpad"
 
 ARCH=`arch`
 DKUID=`id -u`
@@ -52,13 +52,13 @@ if [ "$BUILD" = "1" ]; then
 	echo
 fi
 
-mkdir -p $VLPDIR/.vpn-launchpad $VLPDIR/.aws
-BPROFILE=`grep -c "\[profile $PROFILE\]" $VLPDIR/.aws/config 2>/dev/null`
+mkdir -p $VLPHOME/.vpn-launchpad $VLPHOME/.aws
+BPROFILE=`grep -c "\[profile $PROFILE\]" $VLPHOME/.aws/config 2>/dev/null`
 if [ "$BPROFILE" = "0" ]; then
-        echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPDIR/.aws/config
+        echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPHOME/.aws/config
 fi
 
-DOCKERCMD="docker run --user $DKUID:$DKGID --rm=true -v $VLPDIR:/home/vlp -it $IMGTAG"
+DOCKERCMD="docker run --user $DKUID:$DKGID --rm=true -v $VLPHOME:/home/vlp -it $IMGTAG"
 
 if [[ $# = 0 ]]; then
 	$DOCKERCMD /home/vlp/bin/vlp-menu
