@@ -25,9 +25,9 @@ Command vlp creates EC2 instance with Shadowsocks and L2TP support installed out
 #### Local proxy management
 ```
 ./lproxy <command> [options]
-  build       -- Build local proxy server.
-  status      -- Check local proxy server status.
-  purge       -- Destory local proxy process.
+  build       -- Build local proxy container.
+  status      -- Check local proxy container status.
+  purge       -- Destory local proxy container.
 ```
 Note: Please build VPN server before local proxy building.
 
@@ -108,7 +108,7 @@ Done.
 #### 5. Browser configuration
 Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
 
-#### 6. Stop and remove local proxy from Pi box after surfing
+#### 6. Stop and remove local proxy container from Pi box after surfing
 ```
 $ ./lproxy purge
 ```
