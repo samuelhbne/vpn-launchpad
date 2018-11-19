@@ -2,7 +2,7 @@
 - [What if vlp build build command stalled with no response?](#what-if-vlp-build-command-stalled-with-no-response)
 - [What if Local proxy stops working after I rebuilt VPN server?](#what-if-local-proxy-stops-working-after-i-rebuilt-vpn-server)
 - [Can I build multiple VPN servers with the same AWS account?](#can-i-build-multiple-vpn-servers-with-the-same-aws-account)
-- [Can I create a instance other than t2.micro for saving money?](#can-i-create-a-instance-other-than-t2-micro-for-saving-money)
+- [Can I create an instance other than t2.micro for saving money?](#can-i-create-an-instance-other-than-t2micro-for-saving-money)
 - [Can I share VPN server with multiple Pi boxes located in different sites?](#can-i-share-vpn-server-with-multiple-pi-boxes-located-in-different-sites)
 
 
