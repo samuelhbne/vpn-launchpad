@@ -18,7 +18,7 @@ VPN server IP address may changed after rebuilding. Running "lproxy build" again
 Yes. But they must be located in different regions. For example: one in ap-northeast-1 and one in ap-northeast-2. Another words: one server in a region.
 
 
-## Can I create a instance other than t2.micro for saving money?
+## Can I create an instance other than t2.micro for saving money?
 Yes. Modify the settings in $VLPHOME/vlp.env please.
 ```
 $ cat vlp.env 
