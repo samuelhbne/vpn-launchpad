@@ -1,8 +1,8 @@
 #/bin/bash
 
-BEXIST=`docker ps -a| grep ssllibev|wc -l`
+BEXIST=`docker ps| grep ssllibev|wc -l`
 if [ $BEXIST -eq 0 ]; then
-	echo "Local proxy not found."
+	echo "Local proxy is not running."
 	exit
 else
 	echo "Local proxy started."
