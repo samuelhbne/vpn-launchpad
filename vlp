@@ -67,14 +67,11 @@ else
 	case $subcmd in
 		init)
 			shift
-			$DOCKERCMD /usr/bin/aws --profile $PROFILE configure
-			$DOCKERCMD /home/vlp/bin/vlp-random "$@"
+			$DOCKERCMD bash -c "while read -r -t 0;do read -r;done; /usr/bin/aws --profile $PROFILE configurei; $DOCKERCMD /home/vlp/bin/vlp-random"
 			;;
 		build)
 			shift
-			$DOCKERCMD /home/vlp/bin/vlp-random "$@"
-			$DOCKERCMD /home/vlp/bin/vlp-build "$@"
-			$DOCKERCMD /home/vlp/bin/vlp-status --all
+			$DOCKERCMD bash -c "/home/vlp/bin/vlp-random; /home/vlp/bin/vlp-build; /home/vlp/bin/vlp-status --all"
 			;;
 		status)
 			shift
@@ -82,11 +79,11 @@ else
 			;;
 		purge)
 			shift
-			$DOCKERCMD /home/vlp/bin/vlp-purge "$@"
+			$DOCKERCMD /home/vlp/bin/vlp-purge
 			;;
 		random)
 			shift
-			$DOCKERCMD /home/vlp/bin/vlp-random "$@"
+			$DOCKERCMD /home/vlp/bin/vlp-random
 			;;
 		ssh)
 			shift
@@ -100,7 +97,7 @@ else
 			;;
 		*)
 			shift
-			$DOCKERCMD /home/vlp/bin/vlp-menu "$@"
+			$DOCKERCMD /home/vlp/bin/vlp-menu
 			;;
 	esac
 fi
