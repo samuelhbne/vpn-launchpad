@@ -67,7 +67,7 @@ else
 	case $subcmd in
 		init)
 			shift
-			$DOCKERCMD bash -c "while read -r -t 0;do read -r;done; /usr/bin/aws --profile $PROFILE configurei; $DOCKERCMD /home/vlp/bin/vlp-random"
+			$DOCKERCMD bash -c "while read -r -t 0; do read -r; done; /usr/bin/aws --profile $PROFILE configure; /home/vlp/bin/vlp-random"
 			;;
 		build)
 			shift
