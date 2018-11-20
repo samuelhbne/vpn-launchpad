@@ -53,8 +53,8 @@ if [ "$BUILD" = "1" ]; then
 fi
 
 mkdir -p $VLPHOME/.vpn-launchpad $VLPHOME/.aws
-BPROFILE=`grep -c "\[profile $PROFILE\]" $VLPHOME/.aws/config 2>/dev/null`
-if [ "$BPROFILE" = "0" ]; then
+BPROFILE=`grep "\[profile $PROFILE\]" $VLPHOME/.aws/config 2>/dev/null`
+if [ "$BPROFILE" = "" ]; then
         echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPHOME/.aws/config
 fi
 
