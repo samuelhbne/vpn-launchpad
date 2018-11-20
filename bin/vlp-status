@@ -45,10 +45,10 @@ aws --profile $PROFILE --output table ec2 describe-tags --filters "Name=resource
 echo
 
 SSENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key:Key, Value:Value}'|grep ssslibev.|sed 's/ssslibev.//g'`
-SSMETHOD=`echo "$SSENV"|grep SSMETHOD|awk '{print $2}'`
+SSMTHD=`echo "$SSENV"|grep SSMTHD|awk '{print $2}'`
 SSPASS=`echo "$SSENV"|grep SSPASS|awk '{print $2}'`
 SSPORT=`echo "$SSENV"|grep SSPORT|awk '{print $2}'`
-if [ "$SSMETHOD" = "" ] || [ "SSPASS" = "" ] || [ "SSPORT" = "" ]; then
+if [ "$SSMTHD" = "" ] || [ "$SSPASS" = "" ] || [ "$SSPORT" = "" ]; then
 	echo "Shadowsocks configuration not found. Incomplete VPN server installation?"
 	exit 2
 fi
@@ -56,7 +56,7 @@ echo "Shadowsocks-URI: ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
 
 if [ "$QRCODE" = "1" ]; then
 	echo "Scan QR code from Shadowsocks compatible mobile app to connect your mobile phone/tablet:"
-	SSUINFO=`echo "$SSMETHOD:$SSPASS"|tr -d '\n'|base64`
+	SSUINFO=`echo "$SSMTHD:$SSPASS"|tr -d '\n'|base64`
 	qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
 fi
 echo
