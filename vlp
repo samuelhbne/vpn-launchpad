@@ -88,9 +88,11 @@ else
 		ssh)
 			shift
 			if [ -f $VLPKEY ]; then
+				echo "Found private key: $VLPKEY"
 				$DOCKERCMD /home/vlp/bin/vlp-ssh "$@"
 			else
-				echo "$VLPKEY not found. Not created from this box?"
+				echo "Missing private key: $VLPKEY"
+				echo "Not created from this box?"
 				echo "Abort."
 				exit
 			fi
