@@ -8,7 +8,7 @@ VLPKEY="$VLPCFG/$STACKID-key.pem"
 REGION=`aws --profile $PROFILE configure get region`
 aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
-	echo "Please run 'vlp --init' first."
+	echo "Please run 'vlp init' first."
 	exit 255
 fi
 
