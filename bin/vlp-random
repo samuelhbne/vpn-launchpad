@@ -19,6 +19,7 @@ while [[ $# > 0 ]]; do
 done
 
 if [[ "$OVW" != 1 ]]; then
+	while read -r -t 0; do read -r; done
 	read -p 'Randomise VPN passwords?(Y/n) ' choice
 	if [ "${choice:0:1}" = "n" ] || [ "${choice:0:1}" = "N" ]; then
 		exit

@@ -14,6 +14,7 @@ while true; do
 	echo "0  Exit vpn-launchpad"
 	echo
 
+	while read -r -t 0; do read -r; done
 	read -p 'Please select:	' choice
 	echo
 
