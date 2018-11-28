@@ -3,7 +3,7 @@
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
-ARCH=`arch`
+ARCH=`uname -m`
 IMGNAME="samuelhbne/ssllibev"
 IMGVER="$ARCH"
 IMGTAG="$IMGNAME:$IMGVER"

@@ -7,7 +7,7 @@ VLPCFG="$VLPHOME/.vpn-launchpad"
 VLPKEY="$VLPCFG/$STACKID-key.pem"
 VLPDKDIR="$VLPHOME/vpnlaunchpad"
 
-ARCH=`arch`
+ARCH=`uname -m`
 DKUID=`id -u`
 DKGID=`id -g`
 IMGNAME="samuelhbne/vpnlaunchpad"
