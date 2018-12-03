@@ -32,13 +32,9 @@ if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ] || [ "$TENVSSLL" -gt "$TIMG" 
 			exit
 			;;
 	esac
-	sed -i.bak "s/EXPOSE.*/EXPOSE $SOCKSPORT $HTTPPORT $DNSPORT/g" $DIR/Dockerfile
-	sed -i.bak "s/SOCKSPORT=.*/SOCKSPORT=\"$SOCKSPORT\"/g" $DIR/Dockerfile
-	sed -i.bak "s/HTTPPORT=.*/HTTPPORT=\"$HTTPPORT\"/g" $DIR/Dockerfile
-	sed -i.bak "s/DNSPORT=.*/DNSPORT=\"$DNSPORT\"/g" $DIR/Dockerfile
 	rm -rf $DIR/Dockerfile.bak
 	echo "Building local proxy image..."
-	docker build --rm=true -t $IMGTAG -f $DIR/Dockerfile $DIR
+	docker build -t $IMGTAG -f $DIR/Dockerfile $DIR
 	echo "Done."
 	echo
 fi
@@ -50,6 +46,6 @@ if [ $BEXIST -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:$SOCKSPORT -p $DNSPORT:$DNSPORT/udp -p $HTTPPORT:$HTTPPORT -d $IMGTAG -s ${SSHOST} -p ${SSPORT} -b ${LISTENADDR} -l ${SOCKSPORT} -k "${SSPASS}" -m "${SSMTHD}" >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGTAG -s ${SSHOST} -p ${SSPORT} -b ${LISTENADDR} -l ${SOCKSPORT} -k "${SSPASS}" -m "${SSMTHD}" >/dev/null
 echo "Done."
 echo
