@@ -13,12 +13,12 @@ CTNNAME="ssllibev"
 . $DIR/ssllibev.env.out
 
 BIMG=`docker images |grep $IMGNAME|grep -c $IMGVER`
-TDKFILE=`date +%Y%m%d%H%M%S -r $DIR/Dockerfile.in`
-TENVSSLL=`date +%Y%m%d%H%M%S -r $DIR/ssllibev.env`
-TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG 2>/dev/null`
-TIMG=`date --date "$TIMG" +%Y%m%d%H%M%S`
+#TDKFILE=`date +%Y%m%d%H%M%S -r $DIR/Dockerfile.in`
+#TENVSSLL=`date +%Y%m%d%H%M%S -r $DIR/ssllibev.env`
+#TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG 2>/dev/null`
+#TIMG=`date --date "$TIMG" +%Y%m%d%H%M%S`
 
-if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ] || [ "$TENVSSLL" -gt "$TIMG" ]; then
+#if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ] || [ "$TENVSSLL" -gt "$TIMG" ]; then
 	cp -a $DIR/Dockerfile.in $DIR/Dockerfile
 	case $ARCH in
 		armv6l|armv7l)
@@ -37,7 +37,7 @@ if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ] || [ "$TENVSSLL" -gt "$TIMG" 
 	docker build -t $IMGTAG -f $DIR/Dockerfile $DIR
 	echo "Done."
 	echo
-fi
+#fi
 
 BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
 if [ $BEXIST -gt 0 ]; then
