@@ -15,17 +15,17 @@ DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).
 
 echo "Checking local HTTP proxy on TCP:$HTTPPORT ..."
 echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
-docker exec -it ssllibev curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co
+curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co
 echo
 
 echo "Checking local SOCKS5 proxy on TCP:$SOCKSPORT ..."
 echo "curl -x socks5://127.0.0.1:$SOCKSPORT http://ifconfig.co"
-docker exec -it ssllibev curl -x socks5://127.0.0.1:$SOCKSPORT http://ifconfig.co
+curl -x socks5://127.0.0.1:$SOCKSPORT http://ifconfig.co
 echo
 
 echo "Checking local DNS proxy on UDP:$DNSPORT ..."
 echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
-docker exec -it ssllibev dig +short @127.0.0.1 -p $DNSPORT twitter.com
+dig +short @127.0.0.1 -p $DNSPORT twitter.com
 echo
 
 echo "Done."
