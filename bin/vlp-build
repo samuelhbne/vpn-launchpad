@@ -27,6 +27,11 @@ echo
 
 echo "Querying $UBUNTUVER image AMIID in $REGION ..."
 AMIID=`aws --profile $PROFILE --output text ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]'|sort -k2 -r|grep $UBUNTUVER|head -n1|awk '{print $1}'`
+if [ "$AMIID" = "" ]; then
+	echo "$UBUNTUVER image not found."
+	echo "Abort."
+	exit 253
+fi
 echo "Latest $UBUNTUVER image AMIID in $REGION: $AMIID"
 echo "Done."
 echo
@@ -67,7 +72,7 @@ if [ "$INSTID" = "" ]; then
         echo "Instance building failed. Please purge the incomplete building first before redo building."
 	echo "Abort."
 	echo
-        exit 253
+        exit 252
 fi
 echo "Done."
 echo
