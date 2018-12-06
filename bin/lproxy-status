@@ -9,8 +9,8 @@ else
 	echo
 fi
 
-HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' ssllibev`
-SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' ssllibev`
+HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' ssllibev`
+SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' ssllibev`
 DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' ssllibev`
 
 echo "Checking local HTTP proxy on TCP:$HTTPPORT ..."
