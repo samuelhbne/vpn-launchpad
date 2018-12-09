@@ -1,9 +1,17 @@
 #/bin/sh
 
+DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
+if [ "$DKVER" = "" ]; then
+	echo "Docker executable not found."
+	echo "Abort."
+	exit 255
+fi
+
 BEXIST=`docker ps -a| grep ssllibev|wc -l`
 if [ $BEXIST -gt 0 ]; then
 	echo "Local proxy found. Purging..."
-	docker stop ssllibev; docker rm ssllibev
+	docker stop ssllibev >/dev/null
+	docker rm ssllibev >/dev/null
 	echo
 	echo "Done."
 else

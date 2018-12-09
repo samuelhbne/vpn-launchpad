@@ -14,15 +14,22 @@ IMGNAME="samuelhbne/vpnlaunchpad"
 IMGVER="$ARCH.$DKUID.$DKGID"
 IMGTAG="$IMGNAME:$IMGVER"
 
-BIMG=`docker images |grep $IMGNAME|grep -c $IMGVER`
+DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
+if [ "$DKVER" = "" ]; then
+	echo "Docker executable not found.."
+	echo "Abort."
+	exit 255
+fi
+
+#BIMG=`docker images |grep $IMGNAME|grep -c $IMGVER`
 #TDKFILE=`date +%Y%m%d%H%M%S -r $VLPDKDIR/Dockerfile.in`
 #TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG 2>/dev/null`
 #TIMG=`date --date "$TIMG" +%Y%m%d%H%M%S`
 
-if [ "$BIMG" = "0" ]; then
-	echo "Image $IMGNAME not found."
-	BUILD=1
-fi
+#if [ "$BIMG" = "0" ]; then
+#	echo "Image $IMGNAME not found."
+#	BUILD=1
+#fi
 
 #if [ "$TDKFILE" -gt "$TIMG" ]; then
 #	echo "Updated upstream detected: $VLPDKDIR/Dockerfile.in"

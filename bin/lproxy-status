@@ -1,5 +1,12 @@
 #/bin/bash
 
+DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
+if [ "$DKVER" = "" ]; then
+	echo "Docker executable not found."
+	echo "Abort."
+	exit 255
+fi
+
 BEXIST=`docker ps| grep ssllibev|wc -l`
 if [ $BEXIST -eq 0 ]; then
 	echo "Local proxy is not running."
