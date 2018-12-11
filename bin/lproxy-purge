@@ -1,18 +1,19 @@
 #/bin/sh
 
+CTNNAME="proxy-ssllibev"
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
+
 if [ "$DKVER" = "" ]; then
 	echo "Docker executable not found."
 	echo "Abort."
 	exit 255
 fi
 
-BEXIST=`docker ps -a| grep proxy-ssllibev|wc -l`
+BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
 if [ $BEXIST -gt 0 ]; then
 	echo "Local proxy found. Purging..."
-	docker stop proxy-ssllibev >/dev/null
-	docker rm proxy-ssllibev >/dev/null
-	echo
+	docker stop $CTNNAME >/dev/null
+	docker rm $CTNNAME >/dev/null
 	echo "Done."
 else
 	echo "Local proxy not found."

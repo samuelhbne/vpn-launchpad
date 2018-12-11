@@ -1,13 +1,16 @@
 #/bin/bash
 
+CTNNAME="proxy-ssllibev"
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
+
 if [ "$DKVER" = "" ]; then
 	echo "Docker executable not found."
 	echo "Abort."
 	exit 255
 fi
 
-BEXIST=`docker ps| grep proxy-ssllibev|wc -l`
+BEXIST=`docker ps| grep $CTNNAME|wc -l`
+
 if [ $BEXIST -eq 0 ]; then
 	echo "Local proxy is not running."
 	exit
@@ -16,9 +19,9 @@ else
 	echo
 fi
 
-HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' proxy-ssllibev`
-SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' proxy-ssllibev`
-DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' proxy-ssllibev`
+HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' $CTNNAME`
+SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' $CTNNAME`
+DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' $CTNNAME`
 
 echo "Checking local HTTP proxy on TCP:$HTTPPORT ..."
 echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
