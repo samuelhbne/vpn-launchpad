@@ -7,7 +7,7 @@ if [ "$DKVER" = "" ]; then
 	exit 255
 fi
 
-BEXIST=`docker ps| grep ssllibev|wc -l`
+BEXIST=`docker ps| grep proxy-ssllibev|wc -l`
 if [ $BEXIST -eq 0 ]; then
 	echo "Local proxy is not running."
 	exit
@@ -16,9 +16,9 @@ else
 	echo
 fi
 
-HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' ssllibev`
-SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' ssllibev`
-DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' ssllibev`
+HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' proxy-ssllibev`
+SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' proxy-ssllibev`
+DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' proxy-ssllibev`
 
 echo "Checking local HTTP proxy on TCP:$HTTPPORT ..."
 echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"

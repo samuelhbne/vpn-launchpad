@@ -7,11 +7,11 @@ if [ "$DKVER" = "" ]; then
 	exit 255
 fi
 
-BEXIST=`docker ps -a| grep ssllibev|wc -l`
+BEXIST=`docker ps -a| grep proxy-ssllibev|wc -l`
 if [ $BEXIST -gt 0 ]; then
 	echo "Local proxy found. Purging..."
-	docker stop ssllibev >/dev/null
-	docker rm ssllibev >/dev/null
+	docker stop proxy-ssllibev >/dev/null
+	docker rm proxy-ssllibev >/dev/null
 	echo
 	echo "Done."
 else

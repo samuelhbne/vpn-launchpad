@@ -146,7 +146,7 @@ Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
 #### SOCKS/HTTP/DNS port for local proxy
 ```
-$ cat proxy-ssllibev/sslilibev.env
+$ cat proxy-ssllibev/proxy-sslibev.env
 SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"

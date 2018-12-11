@@ -4,17 +4,17 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 ARCH=`uname -m`
-IMGNAME="samuelhbne/ssllibev"
+IMGNAME="samuelhbne/proxy-ssllibev"
 IMGVER="$ARCH"
 IMGTAG="$IMGNAME:$IMGVER"
-CTNNAME="ssllibev"
+CTNNAME="proxy-ssllibev"
 
 . $DIR/ssslibev.env
-. $DIR/ssllibev.env.out
+. $DIR/proxy-ssllibev.env.out
 
 #BIMG=`docker images |grep $IMGNAME|grep -c $IMGVER`
 #TDKFILE=`date +%Y%m%d%H%M%S -r $DIR/Dockerfile.in`
-#TENVSSLL=`date +%Y%m%d%H%M%S -r $DIR/ssllibev.env`
+#TENVSSLL=`date +%Y%m%d%H%M%S -r $DIR/proxy-ssllibev.env`
 #TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG 2>/dev/null`
 #TIMG=`date --date "$TIMG" +%Y%m%d%H%M%S`
 
