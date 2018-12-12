@@ -1,0 +1,17 @@
+FROM alpine
+
+MAINTAINER Samuel Huang "samuelh2006@gmail.com"
+
+ENV DKUID 1000
+ENV DKGID 1000
+
+# Work around with gid conflict between OSX and Alpine
+# MacOSX: gid=20(staff)
+# Alpine: gid=20(dialout)
+
+RUN if [ "$(getent group ${DKGID}|cut -d":" -f1)" == "" ]; then addgroup -g ${DKGID} vlp; fi
+RUN adduser -G `getent group ${DKGID}|cut -d":" -f1` -u ${DKUID} -s /bin/ash -h /home/vlp -D vlp
+
+RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make bash py-pip pwgen bc npm
+RUN npm install -g qrcode-terminal
+RUN pip install awscli

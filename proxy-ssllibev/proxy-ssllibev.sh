@@ -19,7 +19,7 @@ CTNNAME="proxy-ssllibev"
 #if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ] || [ "$TENVSSLL" -gt "$TIMG" ]; then
 	case $ARCH in
 		armv6l|armv7l)
-			TARGET=arm32v6
+			TARGET=arm
 			;;
 		x86_64|i686|i386)
 			TARGET=amd64

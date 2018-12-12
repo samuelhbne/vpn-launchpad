@@ -11,8 +11,6 @@ ARCH=`uname -m`
 DKUID=`id -u`
 DKGID=`id -g`
 IMGNAME="samuelhbne/vpnlaunchpad"
-IMGVER="$ARCH.$DKUID.$DKGID"
-IMGTAG="$IMGNAME:$IMGVER"
 
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
 if [ "$DKVER" = "" ]; then
@@ -39,25 +37,23 @@ fi
 BUILD=1
 
 if [ "$BUILD" = "1" ]; then
-	cp -a $VLPDKDIR/Dockerfile.in $VLPDKDIR/Dockerfile
 	case $ARCH in
 		armv6l|armv7l)
-			sed -i.bak  's/^FROM .*/FROM arm32v6\/alpine/g' $VLPDKDIR/Dockerfile
-			rm -rf $VLPDKDIR/Dockerfile.bak
+			TARGET=arm
 			;;
 		x86_64|i686|i386)
-			sed -i.bak  's/^FROM .*/FROM alpine/g' $VLPDKDIR/Dockerfile
-			rm -rf $VLPDKDIR/Dockerfile.bak
+			TARGET=amd64
 			;;
 		*)
 			echo "Unsupported arch"
 			exit
 			;;
 	esac
+	cp -a $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/Dockerfile
 	sed -i.bak "s/^ENV DKUID .*/ENV DKUID ${DKUID}/" $VLPDKDIR/Dockerfile && rm -rf $VLPDKDIR/Dockerfile.bak
 	sed -i.bak "s/^ENV DKGID .*/ENV DKGID ${DKGID}/" $VLPDKDIR/Dockerfile && rm -rf $VLPDKDIR/Dockerfile.bak
 	echo "Building vpnlaunchpad image..."
-	docker build --rm=true -t $IMGTAG $VLPDKDIR/
+	docker build --rm=true -t $IMGNAME:$TARGET.$DKUID.$DKGID $VLPDKDIR/
 	echo
 fi
 
@@ -67,7 +63,7 @@ if [ "$BPROFILE" = "" ]; then
         echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPHOME/.aws/config
 fi
 
-DOCKERCMD="docker run --user $DKUID:$DKGID --rm=true -v $VLPHOME:/home/vlp -it $IMGTAG"
+DOCKERCMD="docker run --user $DKUID:$DKGID --rm=true -v $VLPHOME:/home/vlp -it $IMGNAME:$TARGET.$DKUID.$DKGID"
 
 if [[ $# = 0 ]]; then
 	$DOCKERCMD /home/vlp/bin/vlp-menu
