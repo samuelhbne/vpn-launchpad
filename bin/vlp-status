@@ -52,15 +52,16 @@ if [ "$SSMTHD" = "" ] || [ "$SSPASS" = "" ] || [ "$SSPORT" = "" ]; then
 	echo "Shadowsocks configuration not found. Incomplete VPN server installation?"
 	exit 2
 fi
+SSUINFO=`echo "$SSMTHD:$SSPASS"|tr -d '\n'|base64`
+
 echo "Shadowsocks-URI: ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
+echo
 
 if [ "$QRCODE" = "1" ]; then
-	echo "Scan QR code from Shadowsocks compatible mobile app to connect your mobile phone/tablet:"
-	SSUINFO=`echo "$SSMTHD:$SSPASS"|tr -d '\n'|base64`
 	qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
+	echo
+	echo "Scan QR code above from Shadowsocks compatible mobile app to connect your mobile phone/tablet."
 fi
-echo
 
 echo "Done."
-echo
 exit 0
