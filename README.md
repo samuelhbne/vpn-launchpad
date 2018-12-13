@@ -48,7 +48,7 @@ Done.
 Scan the QR code generated above from Shadowsocks compatible mobile app ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) to connect your mobile phone/tablet and enjoy.
 
 #### 5. Build local proxy on Pi box (optional)
-You don't have to do this if PC/Mac browser connection is not necessary.
+Jump to step 8 please if PC/Mac browser connection is not necessary.
 ```
 $ ./lproxy build
 ...
@@ -76,13 +76,24 @@ Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/
 #### 7. Stop and remove local proxy container from Pi box after surfing (optional)
 ```
 $ ./lproxy purge
+Local proxy found. Purging...
+Done.
 ```
 
 #### 8. Stop and remove VPN server from AWS after surfing
 ```
 $ ./vlp purge
+...
+Waiting Instance shutdown...
+Done.
+
+Removing Security Group of vlp-bionic...
+Security Group Removed.
+
+Deleting SSH Key-Pair of vlp-bionic...
+Done.
 ```
-Note: Removing VPN server from AWS after surfing is always recommended. Not only it reduces the cost for AWS service hiring, also it removes the potential trails from cloud to protect your privacy.
+Note: Removing VPN server from AWS after surfing is always recommended. It removes the potential trails from cloud to protect your privacy as well as reduces the cost for AWS service hiring.
 
 
 
