@@ -19,7 +19,7 @@ $ sudo usermod -aG docker `whoami`; exit
 ```
 Note: It is necessary to log out current session and back to get docker group setting take effect.
 
-#### 2. AWS account set up
+#### 2. Initialize AWS credential and VPN server region
 ```
 $ git clone https://github.com/samuelhbne/vpn-launchpad.git
 $ cd vpn-launchpad
@@ -28,21 +28,27 @@ AWS Access Key ID [None]: INPUT-YOUR-AWS-ID-HERE
 AWS Secret Access Key [None]: INPUT-YOUR-AWS-KEY-HERE
 Default region name [ap-northeast-1]: 
 Default output format [json]: 
-Randomise VPN passwords?(Y/n) 
-Randomising VPN passwords...
-...
 Done.
 ```
 
-#### 3. Build a VPN server on AWS
+#### 3. Build VPN server on AWS
 ```
 $ ./vlp build
+Randomise VPN passwords?(Y/n) 
+Randomising VPN passwords...
 ...
-VPN-SERVER: 13.231.224.253 i-03803b568524f801b
+Shadowsocks-URI: ss://YWVzLTI1Ni1nY206U1NTTElCRVYtUEFTUw==@13.231.224.253:28388#VLP-shadowsocks
 ...
+Scan QR code above from Shadowsocks compatible mobile app to connect your mobile phone/tablet.
+Done.
 ```
+![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
-#### 4. Build a local proxy on Pi box
+#### 4. Connect your mobile phone
+Scan the QR code generated above from Shadowsocks compatible mobile app ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) to connect your mobile phone/tablet and enjoy.
+
+#### 5. Build local proxy on Pi box (optional)
+You don't have to do this if PC/Mac browser connection is not necessary.
 ```
 $ ./lproxy build
 ...
@@ -64,15 +70,15 @@ dig +short @127.0.0.1 -p 65353 twitter.com
 Done.
 ```
 
-#### 5. Browser configuration
+#### 6. Browser configuration (optional)
 Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
 
-#### 6. Stop and remove local proxy container from Pi box after surfing
+#### 7. Stop and remove local proxy container from Pi box after surfing (optional)
 ```
 $ ./lproxy purge
 ```
 
-#### 7. Stop and remove VPN server from AWS after surfing
+#### 8. Stop and remove VPN server from AWS after surfing
 ```
 $ ./vlp purge
 ```
@@ -171,7 +177,7 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 ## Connect to the VPN server via Shadowsocks from mobile devices:
-Both "vlp build" and "vlp status --qrcode" print QR code as well as the shadowsocks URI. Scanning this QR code from Shadowsocks compatible mobile apps (Shadowsocks for Android, Shadowrocket for iOS etc.) will gives you a new connection entry named VLP-shadowsocks. Connect and Enjoy please.
+Both "vlp build" and "vlp status --qrcode" print QR code as well as the shadowsocks URI. Scanning this QR code from Shadowsocks compatible mobile apps ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) will gives you a new connection entry named VLP-shadowsocks. Connect and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
