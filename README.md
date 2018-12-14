@@ -48,7 +48,7 @@ Done.
 Scan the QR code generated above from Shadowsocks compatible mobile app ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) to connect your mobile phone/tablet and enjoy.
 
 #### 5. Build local proxy on Pi box (optional)
-Jump to step 8 please if PC/Mac browser connection is not necessary.
+Jump to step 8 please if PC/Mac browser connection is not your goal.
 ```
 $ ./lproxy build
 ...
