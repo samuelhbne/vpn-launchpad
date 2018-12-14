@@ -168,7 +168,7 @@ SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"
 ```
-NOTE: Local proxy re-creation is necessary to get new configuration applied.
+NOTE: './lproxy build' is necessary to get new configuration applied.
 
 Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
