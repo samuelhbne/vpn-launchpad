@@ -10,30 +10,22 @@ CTNNAME="proxy-ssllibev"
 . $DIR/ssslibev.env
 . $DIR/proxy-ssllibev.env.out
 
-#BIMG=`docker images |grep $IMGNAME|grep -c $IMGVER`
-#TDKFILE=`date +%Y%m%d%H%M%S -r $DIR/Dockerfile.in`
-#TENVSSLL=`date +%Y%m%d%H%M%S -r $DIR/proxy-ssllibev.env`
-#TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG 2>/dev/null`
-#TIMG=`date --date "$TIMG" +%Y%m%d%H%M%S`
-
-#if [ "$BIMG" = "0" ] || [ "$TDKFILE" -gt "$TIMG" ] || [ "$TENVSSLL" -gt "$TIMG" ]; then
-	case $ARCH in
-		armv6l|armv7l)
-			TARGET=arm
-			;;
-		x86_64|i686|i386)
-			TARGET=amd64
-			;;
-		*)
-			echo "Unsupported arch"
-			exit
-			;;
-	esac
-	echo "Building local proxy image..."
-	docker build -t $IMGNAME:$TARGET -f $DIR/Dockerfile.$TARGET $DIR
-	echo "Done."
-	echo
-#fi
+case $ARCH in
+	armv6l|armv7l)
+		TARGET=arm
+		;;
+	x86_64|i686|i386)
+		TARGET=amd64
+		;;
+	*)
+		echo "Unsupported arch"
+		exit
+		;;
+esac
+echo "Building local proxy image..."
+docker build -t $IMGNAME:$TARGET -f $DIR/Dockerfile.$TARGET $DIR
+echo "Done."
+echo
 
 BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
 if [ $BEXIST -gt 0 ]; then

@@ -19,21 +19,6 @@ if [ "$DKVER" = "" ]; then
 	exit 255
 fi
 
-#BIMG=`docker images |grep $IMGNAME|grep -c $IMGVER`
-#TDKFILE=`date +%Y%m%d%H%M%S -r $VLPDKDIR/Dockerfile.in`
-#TIMG=`docker inspect -f '{{ .Created }}' $IMGTAG 2>/dev/null`
-#TIMG=`date --date "$TIMG" +%Y%m%d%H%M%S`
-
-#if [ "$BIMG" = "0" ]; then
-#	echo "Image $IMGNAME not found."
-#	BUILD=1
-#fi
-
-#if [ "$TDKFILE" -gt "$TIMG" ]; then
-#	echo "Updated upstream detected: $VLPDKDIR/Dockerfile.in"
-#	BUILD=1
-#fi
-
 BUILD=1
 
 if [ "$BUILD" = "1" ]; then
