@@ -140,15 +140,6 @@ Note: Please build VPN server before local proxy building.
 
 ## VPN server and local proxy configuration
 
-#### Username, password and pre-shared secret for L2TP VPN.
-```
-$ cat server-softether/softether.env
-PSK=YOUR-SHARED-SECRET
-USERS=user0:pass0;user1:pass1;
-```
-Credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEtherVPN](https://github.com/SoftEtherVPN/SoftEtherVPN)
-
-
 #### Password, encryption method and listening port for ShadowSocks VPN.
 ```
 $ cat server-ssslibev/ssslibev.env
@@ -156,9 +147,20 @@ SSPORT=" 8388"
 SSPASS="YOUR-PASS"
 SSMTHD="aes-256-gcm"
 ```
-NOTE: VPS purging and re-creation are necessary for getting new configuration applied.
+NOTE: './vlp purge && ./vlp build' is necessary to get new VPN configuration applied.
 
 Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
+
+
+#### Username, password and pre-shared secret for L2TP VPN.
+```
+$ cat server-softether/softether.env
+PSK=YOUR-SHARED-SECRET
+USERS=user0:pass0;user1:pass1;
+```
+NOTE: './vlp purge && ./vlp build' is necessary to get new VPN configuration applied.
+
+Credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEtherVPN](https://github.com/SoftEtherVPN/SoftEtherVPN)
 
 
 #### SOCKS/HTTP/DNS port for local proxy
@@ -168,7 +170,7 @@ SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"
 ```
-NOTE: './lproxy build' is necessary to get new configuration applied.
+NOTE: './lproxy build' is necessary to get new proxy configuration applied.
 
 Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
