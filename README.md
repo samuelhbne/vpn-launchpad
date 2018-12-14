@@ -168,14 +168,14 @@ SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"
 ```
-NOTE: Local proxy purging and re-creation will be necessary to get new configuration applied.
+NOTE: Local proxy re-creation is necessary to get new configuration applied.
 
 Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
 
 
 ## Before running
-Docker is necessary for running vlp and lproxy. curl and dig are convenient tools for connection test and diagnosis but not compulsory.
+Docker installation is necessary for running vlp and lproxy. curl and dig are convenient tools for connection test and diagnosis but not compulsory.
 
 #### Docker installation for Raspbian or Ubuntu
 ```
