@@ -61,7 +61,7 @@ else
 			;;
 		build)
 			shift
-			$DOCKERCMD bash -c "/home/vlp/bin/vlp-random; /home/vlp/bin/vlp-build; /home/vlp/bin/vlp-status --all"
+			$DOCKERCMD bash -c "/home/vlp/bin/vlp-random $@; /home/vlp/bin/vlp-build $@; /home/vlp/bin/vlp-status --all"
 			;;
 		status)
 			shift
