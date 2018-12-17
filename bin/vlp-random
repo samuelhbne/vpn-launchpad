@@ -29,11 +29,11 @@ fi
 echo "Randomising VPN passwords..."
 echo
 
-sed -i "s/PSK=.*/PSK=`pwgen -cB1`/g" $VLPHOME/server-softether/softether.env
-#sed -i "s/USERS=.*/USERS=user0:`pwgen -cB1`;user1:`pwgen -cB1`;/g" $VLPHOME/server-softether/softether.env
-sed -i "s/SPW=.*/SPW=`pwgen -cB1`/g" $VLPHOME/server-softether/softether.env
-sed -i "s/HPW=.*/HPW=`pwgen -cB1`/g" $VLPHOME/server-softether/softether.env
-cat $VLPHOME/server-softether/softether.env
+sed -i "s/PSK=.*/PSK=`pwgen -cB1`/g" $VLPHOME/server-softether/server-softether.env
+#sed -i "s/USERS=.*/USERS=user0:`pwgen -cB1`;user1:`pwgen -cB1`;/g" $VLPHOME/server-softether/server-softether.env
+sed -i "s/SPW=.*/SPW=`pwgen -cB1`/g" $VLPHOME/server-softether/server-softether.env
+sed -i "s/HPW=.*/HPW=`pwgen -cB1`/g" $VLPHOME/server-softether/server-softether.env
+cat $VLPHOME/server-softether/server-softether.env
 echo
 
 sed -i "s/SSPORT=.*/SSPORT=`echo \"50000+$RANDOM%10000\"|bc`/g" $VLPHOME/server-ssslibev/ssslibev.env

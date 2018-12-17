@@ -125,7 +125,7 @@ echo
 
 echo "L2TP provisioning..."
 scp -i $VLPKEY -r $VLPHOME/server-softether ubuntu@$IPPUB:
-ssh -i $VLPKEY ubuntu@$IPPUB "cd server-softether; sh softether.sh"
+ssh -i $VLPKEY ubuntu@$IPPUB "cd server-softether; sh server-softether.sh"
 echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
@@ -134,7 +134,7 @@ while read p; do
           continue
   fi
   aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=softether.$KEY,Value=$VAL"
-done <$VLPHOME/server-softether/softether.env
+done <$VLPHOME/server-softether/server-softether.env
 echo "Done."
 echo
 

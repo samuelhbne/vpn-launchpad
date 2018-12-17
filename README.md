@@ -154,7 +154,7 @@ Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
 #### Username, password and pre-shared secret for L2TP VPN.
 ```
-$ cat server-softether/softether.env
+$ cat server-softether/server-softether.env
 PSK=YOUR-SHARED-SECRET
 USERS=user0:pass0;user1:pass1;
 ```
