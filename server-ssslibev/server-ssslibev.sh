@@ -5,8 +5,8 @@ DIR="$(cd $DIR; pwd)"
 
 while [[ $# > 0 ]]; do
 	case $1 in
-		--source)
-			DKSRC=1
+		--build-from-source)
+			BDSRC=1
 			shift
 			;;
 		*)
@@ -15,7 +15,7 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-if [[ "$DKSRC" = 1 ]]; then
+if [[ "$BDSRC" = 1 ]]; then
 	docker build --rm=true -t samuelhbne/server-ssslibev $DIR
 fi
 

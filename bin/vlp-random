@@ -7,11 +7,11 @@ VLPCFG="$HOME/.vpn-launchpad"
 
 while [[ $# > 0 ]]; do
 	case $1 in
-		--yes)
+		--random-pass)
 			OVW=1
 			shift
 			;;
-		--no)
+		--no-random-pass)
 			OVW=0
 			shift
 			exit 0
