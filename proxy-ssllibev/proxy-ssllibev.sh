@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
@@ -22,10 +22,25 @@ case $ARCH in
 		exit
 		;;
 esac
-echo "Building local proxy image..."
-docker build -t $IMGNAME:$TARGET -f $DIR/Dockerfile.$TARGET $DIR
-echo "Done."
-echo
+
+while [[ $# > 0 ]]; do
+	case $1 in
+		--source)
+			DKSRC=1
+			shift
+			;;
+		*)
+			shift
+			;;
+	esac
+done
+
+if [[ "$DKSRC" = 1 ]]; then
+	echo "Building local proxy image..."
+	docker build -t $IMGNAME:$TARGET -f $DIR/Dockerfile.$TARGET $DIR
+	echo "Done."
+	echo
+fi
 
 BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
 if [ $BEXIST -gt 0 ]; then
