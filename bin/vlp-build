@@ -123,9 +123,9 @@ ssh -i $VLPKEY ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
 echo "Done."
 echo
 
-echo "server-softether provisioning..."
+echo "L2TP provisioning..."
 scp -i $VLPKEY -r $VLPHOME/server-softether ubuntu@$IPPUB:
-ssh -i $VLPKEY ubuntu@$IPPUB "cd server-softether; sh server-softether.sh"
+ssh -i $VLPKEY ubuntu@$IPPUB "server-softether/server-softether.sh"
 echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
@@ -138,9 +138,9 @@ done <$VLPHOME/server-softether/server-softether.env
 echo "Done."
 echo
 
-echo "server-ssslibev provisioning..."
+echo "Shadowsocks provisioning..."
 scp -i $VLPKEY -r $VLPHOME/server-ssslibev ubuntu@$IPPUB:
-ssh -i $VLPKEY ubuntu@$IPPUB "cd server-ssslibev; sh server-ssslibev.sh"
+ssh -i $VLPKEY ubuntu@$IPPUB "server-ssslibev/server-ssslibev.sh"
 echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
