@@ -1,9 +1,24 @@
-#!/bin/sh
+#!/bin/bash
 
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
+while [[ $# > 0 ]]; do
+	case $1 in
+		--source)
+			DKSRC=1
+			shift
+			;;
+		*)
+			shift
+			;;
+	esac
+done
+
+if [[ "$DKSRC" = 1 ]]; then
+	docker build --rm=true -t samuelhbne/server-ssslibev $DIR
+fi
+
 . $DIR/server-ssslibev.env
 
-docker build --rm=true -t samuelhbne/server-ssslibev $DIR
 docker run --restart unless-stopped --name server-ssslibev -p $SSPORT:$SSPORT -p $SSPORT:$SSPORT/udp -d samuelhbne/server-ssslibev -s 0.0.0.0 -s ::0 -p $SSPORT -k $SSPASS -m $SSMTHD -t 300 --fast-open -d 8.8.8.8,8.8.4.4 -u
