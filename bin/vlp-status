@@ -44,7 +44,7 @@ echo "Querying Instance configuration..."
 aws --profile $PROFILE --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId:ResourceId,Key:Key,Value:Value}'|tee /dev/null
 echo
 
-SSENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key:Key, Value:Value}'|grep ssslibev.|sed 's/ssslibev.//g'`
+SSENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key:Key, Value:Value}'|grep server-ssslibev.|sed 's/server-ssslibev.//g'`
 SSMTHD=`echo "$SSENV"|grep SSMTHD|awk '{print $2}'`
 SSPASS=`echo "$SSENV"|grep SSPASS|awk '{print $2}'`
 SSPORT=`echo "$SSENV"|grep SSPORT|awk '{print $2}'`

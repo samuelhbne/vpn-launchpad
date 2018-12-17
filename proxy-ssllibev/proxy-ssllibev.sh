@@ -7,7 +7,7 @@ ARCH=`uname -m`
 IMGNAME="samuelhbne/proxy-ssllibev"
 CTNNAME="proxy-ssllibev"
 
-. $DIR/ssslibev.env
+. $DIR/server-ssslibev.env
 . $DIR/proxy-ssllibev.env.out
 
 case $ARCH in

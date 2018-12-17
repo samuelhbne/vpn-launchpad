@@ -50,8 +50,8 @@ aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --grou
 aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 1701 --cidr 0.0.0.0/0
 aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
 aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
-# ssslibev
-SSPORT=`grep "SSPORT=" $VLPHOME/server-ssslibev/ssslibev.env |cut -d'=' -f2|sed 's/\"//g'`
+# server-ssslibev
+SSPORT=`grep "SSPORT=" $VLPHOME/server-ssslibev/server-ssslibev.env |cut -d'=' -f2|sed 's/\"//g'`
 aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSPORT --cidr 0.0.0.0/0
 aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSPORT --cidr 0.0.0.0/0
 echo "Done."
@@ -90,7 +90,7 @@ echo
 
 echo "Taging instance of $STACKID..."
 aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=Name,Value=$STACKID"
-aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=Services,Value=softether\,ssslibev"
+aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=Services,Value=server-softether\,server-ssslibev"
 echo "Done."
 echo
 
@@ -123,7 +123,7 @@ ssh -i $VLPKEY ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
 echo "Done."
 echo
 
-echo "L2TP provisioning..."
+echo "server-softether provisioning..."
 scp -i $VLPKEY -r $VLPHOME/server-softether ubuntu@$IPPUB:
 ssh -i $VLPKEY ubuntu@$IPPUB "cd server-softether; sh server-softether.sh"
 echo "Update Instance Tags..."
@@ -133,14 +133,14 @@ while read p; do
   if [ "$KEY" = "" ]; then
           continue
   fi
-  aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=softether.$KEY,Value=$VAL"
+  aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=server-softether.$KEY,Value=$VAL"
 done <$VLPHOME/server-softether/server-softether.env
 echo "Done."
 echo
 
-echo "ssslibev provisioning..."
+echo "server-ssslibev provisioning..."
 scp -i $VLPKEY -r $VLPHOME/server-ssslibev ubuntu@$IPPUB:
-ssh -i $VLPKEY ubuntu@$IPPUB "cd server-ssslibev; sh ssslibev.sh"
+ssh -i $VLPKEY ubuntu@$IPPUB "cd server-ssslibev; sh server-ssslibev.sh"
 echo "Update Instance Tags..."
 while read p; do
   KEY=`echo "$p"|cut -d'=' -f1`
@@ -148,8 +148,8 @@ while read p; do
   if [ "$KEY" = "" ]; then
           continue
   fi
-  aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=ssslibev.$KEY,Value=$VAL"
-done <$VLPHOME/server-ssslibev/ssslibev.env
+  aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=server-ssslibev.$KEY,Value=$VAL"
+done <$VLPHOME/server-ssslibev/server-ssslibev.env
 echo "Done."
 echo
 exit 0

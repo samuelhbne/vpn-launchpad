@@ -142,7 +142,7 @@ Note: Please build VPN server before local proxy building.
 
 #### Password, encryption method and listening port for ShadowSocks VPN.
 ```
-$ cat server-ssslibev/ssslibev.env
+$ cat server-ssslibev/server-ssslibev.env
 SSPORT=" 8388"
 SSPASS="YOUR-PASS"
 SSMTHD="aes-256-gcm"
