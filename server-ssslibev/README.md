@@ -1,5 +1,5 @@
 # server-ssslibev
-[Shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev) server implementation.
+Very unofficial [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev) server implementation.
 
 # How to use
 ```
