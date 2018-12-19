@@ -21,7 +21,6 @@ while [[ $# > 0 ]]; do
 			;;
 		*)
 			shift
-			echo "Unknown option \"$option\""
 			;;
 	esac
 done

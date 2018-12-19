@@ -29,7 +29,7 @@ rm -rf $SSLLDIR/proxy-ssllibev.env.out.bak
 echo "Done."
 echo
 
-$SSLLDIR/proxy-ssllibev.sh
+$SSLLDIR/proxy-ssllibev.sh $*
 echo "Wait 15s for local proxy initialisation..."
 sleep 15
 echo "Done."
