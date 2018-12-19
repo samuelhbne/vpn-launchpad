@@ -17,6 +17,9 @@ case $ARCH in
 	x86_64|i686|i386)
 		TARGET=amd64
 		;;
+	aarch64)
+		TARGET=arm64
+		;;
 	*)
 		echo "Unsupported arch"
 		exit
