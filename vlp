@@ -38,9 +38,18 @@ case $ARCH in
 		;;
 esac
 
-BUILD=1
+for option in "$@"
+do
+	case "$option" in
+		--from-src)
+			BDSRC=1
+			;;
+		*)
+			;;
+	esac
+done
 
-if [ "$BUILD" = "1" ]; then
+if [ "$BDSRC" = "1" ]; then
 	echo "Building vpnlaunchpad image..."
 	docker build --rm=true -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
 	echo "Done."
