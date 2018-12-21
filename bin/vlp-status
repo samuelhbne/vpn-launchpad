@@ -4,7 +4,6 @@ DIR=`dirname $0`
 VLPHOME="$(cd $DIR; cd ..; pwd)"
 . $VLPHOME/vlp.env
 VLPCFG="$HOME/.vpn-launchpad"
-VLPKEY="$VLPCFG/$STACKID-key.pem"
 REGION=`aws --profile $PROFILE configure get region`
 aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
@@ -21,7 +20,6 @@ while [[ $# > 0 ]]; do
 			;;
 		*)
 			shift
-			echo "Unknown option \"$option\""
 			;;
 	esac
 done
