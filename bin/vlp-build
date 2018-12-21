@@ -3,7 +3,7 @@
 DIR=`dirname $0`
 VLPHOME="$(cd $DIR; cd ..; pwd)"
 . $VLPHOME/vlp.env
-VLPCFG="$HOME/.vpn-launchpad"
+VLPCFG="$VLPHOME/.vpn-launchpad"
 REGION=`aws --profile $PROFILE configure get region`
 VLPKEY="$VLPCFG/$STACKID.$REGION.pem"
 

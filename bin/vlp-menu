@@ -3,7 +3,7 @@
 DIR=`dirname $0`
 VLPHOME="$(cd $DIR; cd ..; pwd)"
 . $VLPHOME/vlp.env
-VLPCFG="$HOME/.vpn-launchpad"
+VLPCFG="$VLPHOME/.vpn-launchpad"
 
 while true; do
 	echo

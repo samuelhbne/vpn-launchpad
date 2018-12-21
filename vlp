@@ -10,7 +10,10 @@ VLPDKDIR="$VLPHOME/vpnlaunchpad"
 ARCH=`uname -m`
 DKUID=`id -u`
 DKGID=`id -g`
+VLPUSER="vlp"
+VLPGROUP="vlp"
 IMGNAME="samuelhbne/vpnlaunchpad"
+CTNNAME="vpnlaunchpad"
 
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
 if [ "$DKVER" = "" ]; then
@@ -19,30 +22,37 @@ if [ "$DKVER" = "" ]; then
 	exit 255
 fi
 
+case $ARCH in
+	armv6l|armv7l)
+		TARGET=arm
+		;;
+	x86_64|i686|i386)
+		TARGET=amd64
+		;;
+	aarch64)
+		TARGET=arm64
+		;;
+	*)
+		echo "Unsupported arch"
+		exit
+		;;
+esac
+
 BUILD=1
 
 if [ "$BUILD" = "1" ]; then
-	case $ARCH in
-		armv6l|armv7l)
-			TARGET=arm
-			;;
-		x86_64|i686|i386)
-			TARGET=amd64
-			;;
-		aarch64)
-			TARGET=arm64
-			;;
-		*)
-			echo "Unsupported arch"
-			exit
-			;;
-	esac
-	cp -a $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/Dockerfile
-	sed -i.bak "s/^ENV DKUID .*/ENV DKUID ${DKUID}/" $VLPDKDIR/Dockerfile && rm -rf $VLPDKDIR/Dockerfile.bak
-	sed -i.bak "s/^ENV DKGID .*/ENV DKGID ${DKGID}/" $VLPDKDIR/Dockerfile && rm -rf $VLPDKDIR/Dockerfile.bak
 	echo "Building vpnlaunchpad image..."
-	docker build --rm=true -t $IMGNAME:$TARGET.$DKUID.$DKGID $VLPDKDIR/
-	echo
+	docker build --rm=true -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
+	echo "Done."
+fi
+
+BEXIST=`docker ps| grep $CTNNAME.$DKUID.$DKGID|wc -l`
+if [ $BEXIST -eq 0 ]; then
+	echo "Start AWS control center sandbox..."
+	docker run --name=$CTNNAME.$DKUID.$DKGID --rm=true -v $VLPHOME:/vlp -itd $IMGNAME:$TARGET /bin/bash
+	docker exec -it $CTNNAME.$DKUID.$DKGID groupmod -g $DKGID $VLPGROUP
+	docker exec -it $CTNNAME.$DKUID.$DKGID usermod -u $DKUID -g $DKGID $VLPUSER
+	echo "Done."
 fi
 
 mkdir -p $VLPHOME/.vpn-launchpad $VLPHOME/.aws
@@ -51,10 +61,10 @@ if [ "$BPROFILE" = "" ]; then
         echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPHOME/.aws/config
 fi
 
-DOCKERCMD="docker run --user $DKUID:$DKGID --rm=true -v $VLPHOME:/home/vlp -it $IMGNAME:$TARGET.$DKUID.$DKGID"
+DOCKERCMD="docker exec --user $DKUID:$DKGID -it $CTNNAME.$DKUID.$DKGID"
 
 if [[ $# = 0 ]]; then
-	$DOCKERCMD /home/vlp/bin/vlp-menu
+	$DOCKERCMD /vlp/bin/vlp-menu
 else
 	subcmd="$1"
 	case $subcmd in
@@ -64,25 +74,25 @@ else
 			;;
 		build)
 			shift
-			$DOCKERCMD bash -c "/home/vlp/bin/vlp-random $*; /home/vlp/bin/vlp-build $*; /home/vlp/bin/vlp-status --all"
+			$DOCKERCMD bash -c "/vlp/bin/vlp-random $*; /vlp/bin/vlp-build $*; /vlp/bin/vlp-status --all"
 			;;
 		status)
 			shift
-			$DOCKERCMD /home/vlp/bin/vlp-status "$*"
+			$DOCKERCMD /vlp/bin/vlp-status "$*"
 			;;
 		purge)
 			shift
-			$DOCKERCMD /home/vlp/bin/vlp-purge
+			$DOCKERCMD /vlp/bin/vlp-purge
 			;;
 		random)
 			shift
-			$DOCKERCMD /home/vlp/bin/vlp-random
+			$DOCKERCMD /vlp/bin/vlp-random
 			;;
 		ssh)
 			shift
 			if ls $VLPKEY 1> /dev/null 2>&1; then
 				echo "Private key found: `ls $VLPKEY`"
-				$DOCKERCMD /home/vlp/bin/vlp-ssh "$@"
+				$DOCKERCMD /vlp/bin/vlp-ssh "$@"
 			else
 				echo "Private key not found"
 				echo "Not created from this box?"
@@ -92,7 +102,7 @@ else
 			;;
 		*)
 			shift
-			$DOCKERCMD /home/vlp/bin/vlp-menu
+			$DOCKERCMD /vlp/bin/vlp-menu
 			;;
 	esac
 fi
