@@ -1,4 +1,4 @@
-FROM alpine
+FROM arm64v8/alpine
 
 MAINTAINER Samuel Huang "samuelh2006@gmail.com"
 
@@ -13,6 +13,5 @@ RUN if [ "$(getent group ${DKGID}|cut -d":" -f1)" == "" ]; then addgroup -g ${DK
 RUN adduser -G `getent group ${DKGID}|cut -d":" -f1` -u ${DKUID} -s /bin/ash -h /home/vlp -D vlp
 
 RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make bash py-pip pwgen bc npm
-RUN npm config set unsafe-perm true
 RUN npm install -g qrcode-terminal
 RUN pip install awscli

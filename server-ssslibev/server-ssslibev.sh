@@ -5,7 +5,7 @@ DIR="$(cd $DIR; pwd)"
 
 while [[ $# > 0 ]]; do
 	case $1 in
-		--build-from-source)
+		--from-src)
 			BDSRC=1
 			shift
 			;;
