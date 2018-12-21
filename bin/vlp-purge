@@ -5,6 +5,8 @@ VLPHOME="$(cd $DIR; cd ..; pwd)"
 . $VLPHOME/vlp.env
 VLPCFG="$HOME/.vpn-launchpad"
 REGION=`aws --profile $PROFILE configure get region`
+VLPKEY="$VLPCFG/$STACKID.$REGION.pem"
+
 aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
@@ -48,6 +50,6 @@ echo
 
 echo "Deleting SSH Key-Pair of $STACKID..."
 aws --profile $PROFILE --output text ec2 delete-key-pair --key-name $STACKID-key
-rm -rf $VLPCFG/$STACKID-key.pem
+rm -rf $VLPKEY
 echo "Done."
 exit 0

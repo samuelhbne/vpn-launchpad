@@ -4,7 +4,7 @@ DIR=`dirname $0`
 VLPHOME="$(cd $DIR; pwd)"
 . $VLPHOME/vlp.env
 VLPCFG="$VLPHOME/.vpn-launchpad"
-VLPKEY="$VLPCFG/$STACKID-key.pem"
+VLPKEY="$VLPCFG/$STACKID.*.pem"
 VLPDKDIR="$VLPHOME/vpnlaunchpad"
 
 ARCH=`uname -m`
@@ -80,11 +80,11 @@ else
 			;;
 		ssh)
 			shift
-			if [ -f $VLPKEY ]; then
-				echo "Found private key: $VLPKEY"
+			if ls $VLPKEY 1> /dev/null 2>&1; then
+				echo "Private key found: `ls $VLPKEY`"
 				$DOCKERCMD /home/vlp/bin/vlp-ssh "$@"
 			else
-				echo "Missing private key: $VLPKEY"
+				echo "Private key not found"
 				echo "Not created from this box?"
 				echo "Abort."
 				exit

@@ -4,8 +4,9 @@ DIR=`dirname $0`
 VLPHOME="$(cd $DIR; cd ..; pwd)"
 . $VLPHOME/vlp.env
 VLPCFG="$HOME/.vpn-launchpad"
-VLPKEY="$VLPCFG/$STACKID-key.pem"
 REGION=`aws --profile $PROFILE configure get region`
+VLPKEY="$VLPCFG/$STACKID.$REGION.pem"
+
 aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp init' first."
