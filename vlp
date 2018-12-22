@@ -38,22 +38,16 @@ case $ARCH in
 		;;
 esac
 
-for option in "$@"
-do
-	case "$option" in
-		--from-src)
-			BDSRC=1
-			;;
-		*)
-			;;
-	esac
-done
-
-if [ "$BDSRC" = "1" ]; then
-	echo "Building vpnlaunchpad image..."
-	docker build --rm=true -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
-	echo "Done."
-fi
+VLPOPT="$1"
+case "$VLPOPT" in
+	--from-src)
+		echo "Building vpnlaunchpad image..."
+		docker build --rm=true -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
+		echo "Done."
+		;;
+	*)
+		;;
+esac
 
 BEXIST=`docker ps| grep $CTNNAME.$DKUID.$DKGID|wc -l`
 if [ $BEXIST -eq 0 ]; then
@@ -69,9 +63,7 @@ fi
 
 DOCKERCMD="docker exec --user $DKUID:$DKGID -it $CTNNAME.$DKUID.$DKGID"
 
-if [[ $# = 0 ]]; then
-	$DOCKERCMD /vlp/bin/vlp-menu
-else
+while [[ $# > 0 ]]; do
 	subcmd="$1"
 	case $subcmd in
 		init)
@@ -82,14 +74,17 @@ else
 				echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPHOME/.aws/config
 			fi
 			$DOCKERCMD bash -c "while read -r -t 0; do read -r; done; /usr/bin/aws --profile $PROFILE configure"
+			exit $?
 			;;
 		build)
 			shift
 			$DOCKERCMD bash -c "/vlp/bin/vlp-random $*; /vlp/bin/vlp-build $*; /vlp/bin/vlp-status --all"
+			exit $?
 			;;
 		status)
 			shift
 			$DOCKERCMD /vlp/bin/vlp-status "$*"
+			exit $?
 			;;
 		purge)
 			shift
@@ -99,26 +94,30 @@ else
 			docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 			docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
 			echo "Done."
+			exit 0
 			;;
 		random)
 			shift
 			$DOCKERCMD /vlp/bin/vlp-random
+			exit $?
 			;;
 		ssh)
 			shift
 			if ls $VLPKEY 1> /dev/null 2>&1; then
 				echo "Private key found: `ls $VLPKEY`"
 				$DOCKERCMD /vlp/bin/vlp-ssh "$@"
+				exit $?
 			else
 				echo "Private key not found"
 				echo "Not created from this box?"
 				echo "Abort."
-				exit
+				exit 255
 			fi
 			;;
 		*)
 			shift
-			$DOCKERCMD /vlp/bin/vlp-menu
+			continue;
 			;;
 	esac
-fi
+done
+$DOCKERCMD /vlp/bin/vlp-menu
