@@ -50,7 +50,6 @@ do
 done
 
 if [ "$BDSRC" = "1" ]; then
-	docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 	echo "Building vpnlaunchpad image..."
 	docker build --rm=true -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
 	echo "Done."
@@ -58,6 +57,7 @@ fi
 
 BEXIST=`docker ps| grep $CTNNAME.$DKUID.$DKGID|wc -l`
 if [ $BEXIST -eq 0 ]; then
+	docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 	docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
 	echo "Start AWS control center sandbox..."
 	docker run --name=$CTNNAME.$DKUID.$DKGID -v $VLPHOME:/vlp -itd $IMGNAME:$TARGET /bin/bash
@@ -93,6 +93,8 @@ else
 		purge)
 			shift
 			$DOCKERCMD /vlp/bin/vlp-purge
+			docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
+			docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
 			;;
 		random)
 			shift
