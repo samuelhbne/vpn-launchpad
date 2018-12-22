@@ -50,6 +50,7 @@ do
 done
 
 if [ "$BDSRC" = "1" ]; then
+	docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 	echo "Building vpnlaunchpad image..."
 	docker build --rm=true -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
 	echo "Done."
@@ -57,19 +58,12 @@ fi
 
 BEXIST=`docker ps| grep $CTNNAME.$DKUID.$DKGID|wc -l`
 if [ $BEXIST -eq 0 ]; then
-	docker stop $CTNNAME.$DKUID.$DKGID >/dev/null
-	docker rm $CTNNAME.$DKUID.$DKGID >/dev/null
+	docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
 	echo "Start AWS control center sandbox..."
 	docker run --name=$CTNNAME.$DKUID.$DKGID -v $VLPHOME:/vlp -itd $IMGNAME:$TARGET /bin/bash
 	docker exec -it $CTNNAME.$DKUID.$DKGID groupmod -g $DKGID $VLPGROUP
 	docker exec -it $CTNNAME.$DKUID.$DKGID usermod -u $DKUID -g $DKGID $VLPUSER
 	echo "Done."
-fi
-
-mkdir -p $VLPHOME/.vpn-launchpad $VLPHOME/.aws
-BPROFILE=`grep "\[profile $PROFILE\]" $VLPHOME/.aws/config 2>/dev/null`
-if [ "$BPROFILE" = "" ]; then
-        echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPHOME/.aws/config
 fi
 
 DOCKERCMD="docker exec --user $DKUID:$DKGID -it $CTNNAME.$DKUID.$DKGID"
@@ -81,6 +75,11 @@ else
 	case $subcmd in
 		init)
 			shift
+			mkdir -p $VLPHOME/.vpn-launchpad $VLPHOME/.aws
+			BPROFILE=`grep "\[profile $PROFILE\]" $VLPHOME/.aws/config 2>/dev/null`
+			if [ "$BPROFILE" = "" ]; then
+				echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPHOME/.aws/config
+			fi
 			$DOCKERCMD bash -c "while read -r -t 0; do read -r; done; /usr/bin/aws --profile $PROFILE configure"
 			;;
 		build)
