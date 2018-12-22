@@ -57,8 +57,10 @@ fi
 
 BEXIST=`docker ps| grep $CTNNAME.$DKUID.$DKGID|wc -l`
 if [ $BEXIST -eq 0 ]; then
+	docker stop $CTNNAME.$DKUID.$DKGID >/dev/null
+	docker rm $CTNNAME.$DKUID.$DKGID >/dev/null
 	echo "Start AWS control center sandbox..."
-	docker run --name=$CTNNAME.$DKUID.$DKGID --rm=true -v $VLPHOME:/vlp -itd $IMGNAME:$TARGET /bin/bash
+	docker run --name=$CTNNAME.$DKUID.$DKGID -v $VLPHOME:/vlp -itd $IMGNAME:$TARGET /bin/bash
 	docker exec -it $CTNNAME.$DKUID.$DKGID groupmod -g $DKGID $VLPGROUP
 	docker exec -it $CTNNAME.$DKUID.$DKGID usermod -u $DKUID -g $DKGID $VLPUSER
 	echo "Done."
