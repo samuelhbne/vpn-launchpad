@@ -59,7 +59,7 @@ BEXIST=`docker ps| grep $CTNNAME.$DKUID.$DKGID|wc -l`
 if [ $BEXIST -eq 0 ]; then
 	docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 	docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
-	echo "Start AWS control center sandbox..."
+	echo "Start vpnlaunchpad sandbox..."
 	docker run --name=$CTNNAME.$DKUID.$DKGID -v $VLPHOME:/vlp -itd $IMGNAME:$TARGET /bin/bash
 	docker exec -it $CTNNAME.$DKUID.$DKGID groupmod -g $DKGID $VLPGROUP
 	docker exec -it $CTNNAME.$DKUID.$DKGID usermod -u $DKUID -g $DKGID $VLPUSER
@@ -93,8 +93,11 @@ else
 		purge)
 			shift
 			$DOCKERCMD /vlp/bin/vlp-purge
+			echo
+			echo "Stop vpnlaunchpad sandbox..."
 			docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 			docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
+			echo "Done."
 			;;
 		random)
 			shift
