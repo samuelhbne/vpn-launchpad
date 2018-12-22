@@ -30,6 +30,7 @@ Default region name [ap-northeast-1]:
 Default output format [json]: 
 Done.
 ```
+Note: './vlp init' need to download docker image(about 100MB) for the 1st time execution. However hub.docker.com might be 'throttled' mysteriously in certain country. Please try './vlp --from-src init' instead to build the docker image from source if './vlp init' stuck on downloading over 30 minutes without response.
 
 #### 3. Build VPN server on AWS
 ```
@@ -69,6 +70,7 @@ dig +short @127.0.0.1 -p 65353 twitter.com
 
 Done.
 ```
+Note: './lproxy build' need to download docker image(about 90MB) for the 1st time execution. However hub.docker.com might be 'throttled' mysteriously in certain country. Please try './lproxy build --from-src' instead to build the docker image from source if './lproxy build' stuck on downloading over 30 minutes without response.
 
 #### 6. Browser configuration (optional)
 Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
