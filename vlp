@@ -64,6 +64,7 @@ if [ $BEXIST -eq 0 ]; then
 	docker exec -it $CTNNAME.$DKUID.$DKGID groupmod -g $DKGID $VLPGROUP
 	docker exec -it $CTNNAME.$DKUID.$DKGID usermod -u $DKUID -g $DKGID $VLPUSER
 	echo "Done."
+	echo
 fi
 
 DOCKERCMD="docker exec --user $DKUID:$DKGID -it $CTNNAME.$DKUID.$DKGID"
