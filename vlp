@@ -42,7 +42,7 @@ VLPOPT="$1"
 case "$VLPOPT" in
 	--from-src)
 		echo "Building vpnlaunchpad image..."
-		docker build --rm=true -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
+		docker build -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
 		echo "Done."
 		;;
 	*)
