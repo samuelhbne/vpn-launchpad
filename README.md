@@ -129,9 +129,9 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
       --without-random  -- Build VPN server without VPN passwords randomisation.
       --with-l2tp       -- Build VPN server with SoftEther L2TP services installed
       --from-src        -- Build VPN server from source rather than docker image downloading
-    status          -- Check VPN server status.
-    purge           -- Destory VPN server instance.
-    random          -- Randomise VPN passwords.
+    status            -- Check VPN server status.
+    purge             -- Destory VPN server instance.
+    random            -- Randomise VPN passwords.
 ```
 
 #### Local proxy management
