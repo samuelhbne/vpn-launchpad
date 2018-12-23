@@ -29,21 +29,17 @@ esac
 while [[ $# > 0 ]]; do
 	case $1 in
 		--from-src)
-			BDSRC=1
-			shift
+			echo "Building local proxy image..."
+			docker build -t $IMGNAME:$TARGET -f $DIR/Dockerfile.$TARGET $DIR
+			echo "Done."
+			echo
+			break
 			;;
 		*)
 			shift
 			;;
 	esac
 done
-
-if [[ "$BDSRC" = 1 ]]; then
-	echo "Building local proxy image..."
-	docker build -t $IMGNAME:$TARGET -f $DIR/Dockerfile.$TARGET $DIR
-	echo "Done."
-	echo
-fi
 
 BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
 if [ $BEXIST -gt 0 ]; then
