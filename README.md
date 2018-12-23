@@ -122,16 +122,16 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 #### VPN server management
 ```
 ./vlp [--from-src] <command> [options]
-  --from-src        -- Build vpnlaunchpad container from source rather than docker image downloading
-    init              -- Init aws account credential.
-    build             -- Build VPN server.
-      --from-src        -- Build VPN server from source rather than docker image downloading
-      --with-l2tp       -- Build VPN server with L2TP services installed
-      --with-random     -- Build VPN server with VPN passwords randomisation.
-      --without-random  -- Build VPN server without VPN passwords randomisation.
-    status            -- Check VPN server status.
-    purge             -- Destory VPN server instance.
-    random            -- Randomise VPN passwords.
+  --from-src          -- Build vpnlaunchpad container from source rather than docker image downloading
+    init                -- Init aws account credential.
+    build               -- Build VPN server.
+      --from-src          -- Build VPN server from source rather than docker image downloading
+      --with-l2tp         -- Build VPN server with L2TP services installed
+      --with-random       -- Build VPN server with VPN passwords randomisation.
+      --without-random    -- Build VPN server without VPN passwords randomisation.
+    status              -- Check VPN server status.
+    purge               -- Destory VPN server instance.
+    random              -- Randomise VPN passwords.
 ```
 
 #### Local proxy management
