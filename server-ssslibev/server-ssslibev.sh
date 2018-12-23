@@ -19,13 +19,17 @@ case $ARCH in
 		;;
 esac
 
-case $1 in
-	--from-src)
-		docker build -t $IMGNAME:$TARGET -f $DIR/Dockerfile.$TARGET $DIR
-		;;
-	*)
-		;;
-esac
+while [[ $# > 0 ]]; do
+	case $1 in
+		--from-src)
+			docker build -t $IMGNAME:$TARGET -f $DIR/Dockerfile.$TARGET $DIR
+			break
+			;;
+		*)
+			shift
+			;;
+	esac
+done
 
 . $DIR/server-ssslibev.env
 
