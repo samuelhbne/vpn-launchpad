@@ -121,20 +121,26 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 
 #### VPN server management
 ```
-./vlp <command> [options]
-  init        -- Init aws account credential.
-  build       -- Build VPN server.
-  status      -- Check VPN server status.
-  purge       -- Destory VPN server instance.
-  random      -- Randomise VPN passwords.
+./vlp [--from-src] <command> [options]
+  --from-src        -- Build vpnlaunchpad container from source rather than docker image downloading
+    init              -- Init aws account credential.
+    build             -- Build VPN server.
+      --with-random     -- Build VPN server with VPN passwords randomisation.
+      --without-random  -- Build VPN server without VPN passwords randomisation.
+      --with-l2tp       -- Build VPN server with SoftEther L2TP services installed
+      --from-src        -- Build VPN server from source rather than docker image downloading
+    status          -- Check VPN server status.
+    purge           -- Destory VPN server instance.
+    random          -- Randomise VPN passwords.
 ```
 
 #### Local proxy management
 ```
 ./lproxy <command> [options]
-  build       -- Build local proxy container.
-  status      -- Check local proxy container status.
-  purge       -- Destory local proxy container.
+  build         -- Build local proxy container.
+    --from-src    -- Build local proxy container from source rather than docker image downloading
+  status        -- Check local proxy container status.
+  purge         -- Destory local proxy container.
 ```
 Note: Please build VPN server before local proxy building.
 
