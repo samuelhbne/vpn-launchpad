@@ -19,19 +19,16 @@ IPADDR=`echo $RESULT|awk '{print $1}'`
 INSTID=`echo $RESULT|awk '{print $2}'`
 
 echo
-if [ ! -z "$IPADDR" ]; then
-	echo "VPN-SERVER: $IPADDR $INSTID"
-else
-	echo "VPN-SERVER: None"
-	exit 1
+if [ -z "$IPADDR" ]; then
+	echo "VPN Server not found."
+	exit 2
 fi
-echo
 
 if [ -f $VLPKEY ]; then
-	echo "SSH private key found. ssh to $IPADDR..."
-	echo
-	ssh -i $VLPKEY ubuntu@$IPADDR "$@"
+	echo -e "VPSKEY=$STACKID.$REGION.pem\nVPSADDR=$IPADDR" > $VLPCFG/ssh.env
+	exit 0
 else
-	echo "SSH private key not found. Not created from this box?"
+	echo "SSH private key $STACKID.$REGION.pem not found. Not created from this box?"
+	exit 1
 fi
 exit 0

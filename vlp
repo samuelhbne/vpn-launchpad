@@ -103,15 +103,21 @@ while [[ $# > 0 ]]; do
 			;;
 		ssh)
 			shift
-			if ls $VLPKEY 1> /dev/null 2>&1; then
-				echo "Private key found: `ls $VLPKEY`"
-				$DOCKERCMD /vlp/bin/vlp-ssh "$@"
-				exit $?
+			$DOCKERCMD /vlp/bin/vlp-ssh
+			RETCODE="$?"
+			if [ $RETCODE = "0" ]; then
+				. $VLPCFG/ssh.env
+				if [ "$VPSKEY" != "" ] || [ "$VPSADDR" != "" ]; then
+					echo "ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR \"$*\""
+					echo
+					ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR "$*"
+					exit 0
+				else
+					echo "Failed reading ssh env. Read only folder?"
+					exit 254
+				fi
 			else
-				echo "Private key not found"
-				echo "Not created from this box?"
-				echo "Abort."
-				exit 255
+				exit $RETCODE
 			fi
 			;;
 		*)
