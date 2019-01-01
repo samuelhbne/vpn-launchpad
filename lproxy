@@ -1,28 +1,28 @@
-#/bin/sh
+#!/bin/bash
 
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
-if [[ $# = 0 ]]; then
-	$DIR/bin/lproxy-status
-else
-	act="$1"
-	case $act in
-		build)
-			shift
-			$DIR/bin/lproxy-build $*
-			;;
-		status)
-			shift
-			$DIR/bin/lproxy-status $*
-			;;
-		purge)
-			shift
-			$DIR/bin/lproxy-purge $*
-			;;
-		*)
-			shift
-			$DIR/bin/lproxy-status $*
-			;;
-	esac
-fi
+act="$1"
+case $act in
+	build)
+		shift
+		$DIR/bin/lproxy-build $*
+		;;
+	status)
+		shift
+		$DIR/bin/lproxy-status $*
+		;;
+	purge)
+		shift
+		$DIR/bin/lproxy-purge $*
+		;;
+	*)
+		shift
+		echo "lproxy <command> [options]"
+		echo "  build         -- Build local proxy container."
+		echo "    --from-src    -- Build local proxy container from source rather than docker image downloading."
+		echo "  status        -- Check local proxy container status."
+		echo "  purge         -- Destory local proxy container."
+		;;
+esac

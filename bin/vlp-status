@@ -14,7 +14,7 @@ fi
 while [[ $# > 0 ]]; do
 	option="$1"
 	case $option in
-		--all|--qrcode)
+		--all|--with-qrcode)
 			shift
 			QRCODE=1
 			;;

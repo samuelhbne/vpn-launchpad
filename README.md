@@ -130,6 +130,7 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
       --with-random       -- Build VPN server with VPN passwords randomisation.
       --without-random    -- Build VPN server without VPN passwords randomisation.
     status              -- Check VPN server status.
+      --with-qrcode     -- Print Shadowsocks connection QR Code alongside VPN server status.
     purge               -- Destory VPN server instance.
     random              -- Randomise VPN passwords.
     ssh                 -- SSH login into VPN server instance.
@@ -139,7 +140,7 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 ```
 ./lproxy <command> [options]
   build         -- Build local proxy container.
-    --from-src    -- Build local proxy container from source rather than docker image downloading
+    --from-src    -- Build local proxy container from source rather than docker image downloading.
   status        -- Check local proxy container status.
   purge         -- Destory local proxy container.
 ```
@@ -199,7 +200,7 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 ## Connect to the VPN server via Shadowsocks from mobile devices:
-Both "vlp build" and "vlp status --qrcode" print QR code as well as the shadowsocks URI. Scanning this QR code from Shadowsocks compatible mobile apps ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) will gives you a new connection entry named VLP-shadowsocks. Connect and Enjoy please.
+Both "vlp build" and "vlp status --with-qrcode" print QR code as well as the shadowsocks URI. Scanning this QR code from Shadowsocks compatible mobile apps ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) will gives you a new connection entry named VLP-shadowsocks. Connect and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)

@@ -41,6 +41,7 @@ esac
 VLPOPT="$1"
 case "$VLPOPT" in
 	--from-src)
+		shift
 		echo "Building vpnlaunchpad image..."
 		docker build -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
 		echo "Done."
@@ -63,66 +64,81 @@ fi
 
 DOCKERCMD="docker exec --user $DKUID:$DKGID -it $CTNNAME.$DKUID.$DKGID"
 
-while [[ $# > 0 ]]; do
-	subcmd="$1"
-	case $subcmd in
-		init)
-			shift
-			mkdir -p $VLPHOME/.vpn-launchpad $VLPHOME/.aws
-			BPROFILE=`grep "\[profile $PROFILE\]" $VLPHOME/.aws/config 2>/dev/null`
-			if [ "$BPROFILE" = "" ]; then
-				echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPHOME/.aws/config
-			fi
-			$DOCKERCMD bash -c "while read -r -t 0; do read -r; done; /usr/bin/aws --profile $PROFILE configure"
-			exit $?
-			;;
-		build)
-			shift
-			$DOCKERCMD bash -c "/vlp/bin/vlp-random $*; /vlp/bin/vlp-build $*; /vlp/bin/vlp-status --all"
-			exit $?
-			;;
-		status)
-			shift
-			$DOCKERCMD /vlp/bin/vlp-status "$*"
-			exit $?
-			;;
-		purge)
-			shift
-			$DOCKERCMD /vlp/bin/vlp-purge
-			echo
-			echo "Stop vpnlaunchpad sandbox..."
-			docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
-			docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
-			echo "Done."
-			exit 0
-			;;
-		random)
-			shift
-			$DOCKERCMD /vlp/bin/vlp-random
-			exit $?
-			;;
-		ssh)
-			shift
-			$DOCKERCMD /vlp/bin/vlp-ssh
-			RETCODE="$?"
-			if [ $RETCODE = "0" ]; then
-				. $VLPCFG/ssh.env
-				if [ "$VPSKEY" != "" ] || [ "$VPSADDR" != "" ]; then
-					echo "ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR" "$@"
-					echo
-					exec ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR "$@"
-				else
-					echo "Failed reading ssh env. Read only folder?"
-					exit 254
-				fi
+subcmd="$1"
+case $subcmd in
+	init)
+		shift
+		mkdir -p $VLPHOME/.vpn-launchpad $VLPHOME/.aws
+		BPROFILE=`grep "\[profile $PROFILE\]" $VLPHOME/.aws/config 2>/dev/null`
+		if [ "$BPROFILE" = "" ]; then
+			echo -e "[profile $PROFILE]\nregion = ap-northeast-1\noutput = json">>$VLPHOME/.aws/config
+		fi
+		$DOCKERCMD bash -c "while read -r -t 0; do read -r; done; /usr/bin/aws --profile $PROFILE configure"
+		exit $?
+		;;
+	build)
+		shift
+		$DOCKERCMD bash -c "/vlp/bin/vlp-random $*; /vlp/bin/vlp-build $*; /vlp/bin/vlp-status --all"
+		exit $?
+		;;
+	status)
+		shift
+		$DOCKERCMD /vlp/bin/vlp-status "$*"
+		exit $?
+		;;
+	purge)
+		shift
+		$DOCKERCMD /vlp/bin/vlp-purge
+		echo
+		echo "Stop vpnlaunchpad sandbox..."
+		docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
+		docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
+		echo "Done."
+		exit 0
+		;;
+	random)
+		shift
+		$DOCKERCMD /vlp/bin/vlp-random
+		exit $?
+		;;
+	ssh)
+		shift
+		$DOCKERCMD /vlp/bin/vlp-ssh
+		RETCODE="$?"
+		if [ $RETCODE = "0" ]; then
+			. $VLPCFG/ssh.env
+			if [ "$VPSKEY" != "" ] || [ "$VPSADDR" != "" ]; then
+				echo "ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR" "$@"
+				echo
+				exec ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR "$@"
 			else
-				exit $RETCODE
+				echo "Failed reading ssh env. Read only folder?"
+				exit 254
 			fi
-			;;
-		*)
-			shift
-			continue;
-			;;
-	esac
-done
-$DOCKERCMD /vlp/bin/vlp-menu
+		else
+			exit $RETCODE
+		fi
+		;;
+	menu)
+		shift
+		$DOCKERCMD /vlp/bin/vlp-menu
+		exit $?
+		;;
+	*)
+		shift
+		echo "vlp [--from-src] <command> [options]"
+		echo "  --from-src          -- Build vpnlaunchpad container from source rather than docker image downloading"
+		echo "    init                -- Init aws account credential."
+		echo "    build               -- Build VPN server."
+		echo "      --from-src          -- Build VPN server from source rather than docker image downloading"
+		echo "      --with-l2tp         -- Build VPN server with L2TP services installed"
+		echo "      --with-random       -- Build VPN server with VPN passwords randomisation."
+		echo "      --without-random    -- Build VPN server without VPN passwords randomisation."
+		echo "    status              -- Check VPN server status."
+		echo "      --with-qrcode     -- Print Shadowsocks connection QR Code alongside VPN server status."
+		echo "    purge               -- Destory VPN server instance."
+		echo "    random              -- Randomise VPN passwords."
+		echo "    ssh                 -- SSH login into VPN server instance."
+		exit 0;
+		;;
+esac
