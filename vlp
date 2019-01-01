@@ -108,9 +108,9 @@ while [[ $# > 0 ]]; do
 			if [ $RETCODE = "0" ]; then
 				. $VLPCFG/ssh.env
 				if [ "$VPSKEY" != "" ] || [ "$VPSADDR" != "" ]; then
-					echo "ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR $@"
+					echo "ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR" "$@"
 					echo
-					exec ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR $@
+					exec ssh -i $VLPCFG/$VPSKEY ubuntu@$VPSADDR "$@"
 				else
 					echo "Failed reading ssh env. Read only folder?"
 					exit 254
