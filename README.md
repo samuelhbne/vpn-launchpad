@@ -132,6 +132,7 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
     status              -- Check VPN server status.
     purge               -- Destory VPN server instance.
     random              -- Randomise VPN passwords.
+    ssh                 -- SSH login into VPN server instance.
 ```
 
 #### Local proxy management
