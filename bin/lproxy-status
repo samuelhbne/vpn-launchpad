@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 CTNNAME="proxy-ssllibev"
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
@@ -19,23 +19,52 @@ else
 	echo
 fi
 
-HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' $CTNNAME`
 SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' $CTNNAME`
+HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' $CTNNAME`
 DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' $CTNNAME`
+VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 1)}}' $CTNNAME`
 
 echo "Checking local HTTP proxy on TCP:$HTTPPORT ..."
-echo "curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co"
-curl -x http://127.0.0.1:$HTTPPORT http://ifconfig.co
+echo "curl -sx http://127.0.0.1:$HTTPPORT http://ifconfig.co"
+IFADDR=`curl -sx http://127.0.0.1:$HTTPPORT http://ifconfig.co`
+echo "$IFADDR"
+if [ "$IFADDR" = "$VPSADDR" ]; then
+	echo -e "Passed"
+else
+	echo -e "Failed"
+fi
 echo
 
 echo "Checking local SOCKS5 proxy on TCP:$SOCKSPORT ..."
-echo "curl -x socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co"
-curl -x socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co
+echo "curl -sx socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co"
+IFADDR=`curl -sx socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co`
+echo "$IFADDR"
+if [ "$IFADDR" = "$VPSADDR" ]; then
+	echo -e "Passed"
+else
+	echo -e "Failed"
+fi
 echo
 
 echo "Checking local DNS proxy on UDP:$DNSPORT ..."
 echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
-dig +short @127.0.0.1 -p $DNSPORT twitter.com
-echo
+TWITTIP=`dig +short @127.0.0.1 -p $DNSPORT twitter.com`
+echo "$TWITTIP"
 
+TWITTIP=`echo "$TWITTIP"|head -n1`
+if [ "$TWITTIP" = "" ]; then
+	echo "Failed"
+else
+	echo
+	echo "Checking $TWITTIP IP owner ..."
+	echo "docker exec -it $CTNNAME whois $TWITTIP|grep OrgId"
+	docker exec -it $CTNNAME whois $TWITTIP|grep OrgId
+	ORGID=`docker exec -it $CTNNAME whois $TWITTIP|grep OrgId|awk '{print $2}'|tr -d '\r\n'`
+	if [ "$ORGID" = "TWITT" ]; then
+		echo -e "Passed"
+	else
+		echo -e "Failed"
+	fi
+	echo
+fi
 echo "Done."
