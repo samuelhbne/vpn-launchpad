@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/bash
 
 CTNNAME="proxy-ssllibev"
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
