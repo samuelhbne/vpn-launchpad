@@ -10,11 +10,11 @@ Command vlp creates EC2 instance with Shadowsocks and L2TP support installed out
 
 
 
-## Quick start on Raspbian or Ubuntu
+## Quick start on Raspbian / Ubuntu
 
 #### 1. Dependencies installation
 ```
-$ sudo apt-get update; sudo apt-get install docker.io git
+$ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl
 $ sudo usermod -aG docker `whoami`; exit
 ```
 Note: It is necessary to log out current session and back to get docker group setting take effect.
@@ -47,11 +47,11 @@ $
 ```
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
-#### 4. Connect your mobile phone
+#### 4. Connect from your mobile phone
 Scan the QR code generated above from Shadowsocks compatible mobile app ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) to connect your mobile phone/tablet and enjoy.
 
 #### 5. Build local proxy on Pi box (optional)
-Jump to step 8 please if PC/Mac browser connection is not your goal.
+Please jump to step 8 please if PC/Mac browser connection is not your goal.
 ```
 $ ./lproxy build
 ...
@@ -86,7 +86,7 @@ Done.
 $
 ```
 
-#### 8. Stop and remove VPN server from AWS after surfing
+#### 8. Terminate VPN server instance from AWS after surfing
 ```
 $ ./vlp purge
 ...
@@ -100,7 +100,7 @@ Deleting SSH Key-Pair of vlp-bionic...
 Done.
 $
 ```
-Note: Removing VPN server from AWS after surfing is always recommended. It removes the potential trails from cloud to protect your privacy as well as reduces the cost for AWS service hiring.
+Note: Terminating VPN server instance from AWS after surfing is always recommended. It removes the potential trails from cloud to protect your privacy as well as reduces the cost for AWS service hiring in case you are not AWS free tier user.
 
 
 
@@ -122,13 +122,13 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 
 
 
-## vpn-launchpad command Usage
+## Full command Usage
 
 #### VPN server management
 ```
 vlp [--from-src] <command> [options]
-  --from-src            -- Build vpnlaunchpad container from source rather than docker image downloading
-    init                -- Init aws account credential.
+  --from-src            -- Build vpnlaunchpad container from source rather than hub.docker.com image downloading
+    init                -- Init AWS account credential.
     build               -- Build VPN server.
       --from-src        -- Build VPN server from source rather than docker image downloading
       --with-l2tp       -- Build VPN server with L2TP services installed
@@ -136,7 +136,7 @@ vlp [--from-src] <command> [options]
       --without-random  -- Build VPN server without VPN passwords randomisation.
     status              -- Check VPN server status.
       --with-qrcode     -- Print Shadowsocks connection QR Code alongside VPN server status.
-    purge               -- Destory VPN server instance.
+    purge               -- Terminate VPN server instance.
     random              -- Randomise VPN passwords.
     ssh                 -- SSH login into VPN server instance.
 ```
@@ -145,7 +145,7 @@ vlp [--from-src] <command> [options]
 ```
 lproxy <command> [options]
   build         -- Build local proxy container.
-    --from-src  -- Build local proxy container from source rather than docker image downloading.
+    --from-src  -- Build local proxy container from source rather than hub.docker.com image downloading.
   status        -- Check local proxy container status.
   purge         -- Destory local proxy container.
 ```
@@ -163,7 +163,7 @@ SSPASS="YOUR-PASS"
 SSMTHD="aes-256-gcm"
 $
 ```
-NOTE: './vlp purge; ./vlp build' is necessary to get new VPN configuration applied.
+NOTE: Please run './vlp purge; ./vlp build' to get the new Shadowsocks server configuration applied.
 
 Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
@@ -175,7 +175,7 @@ PSK=YOUR-SHARED-SECRET
 USERS=user0:pass0;user1:pass1;
 $
 ```
-NOTE: './vlp purge && ./vlp build' is necessary to get new VPN configuration applied.
+NOTE: Please run './vlp purge && ./vlp build' to get the new L2TP server configuration applied.
 
 Credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEtherVPN](https://github.com/SoftEtherVPN/SoftEtherVPN)
 
@@ -188,18 +188,18 @@ HTTPPORT="8123"
 DNSPORT="65353"
 $
 ```
-NOTE: './lproxy build' is necessary to get new proxy configuration applied.
+NOTE: Please run './lproxy build' to get the new Shadowsocks client configuration applied.
 
 Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
 
 
 ## Before running
-Docker installation is necessary for running vlp and lproxy. curl and dig are convenient tools for connection test and diagnosis but not compulsory.
+Docker installation is necessary for running vlp and lproxy. curl and dig will be used by 'lproxy status' for connection test and diagnosis but not compulsory.
 
-#### Docker installation for Raspbian or Ubuntu
+#### Docker and other dependencies installation for Raspbian / Ubuntu
 ```
-$ sudo apt-get update; sudo apt-get install docker.io
+$ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl
 $ sudo usermod -aG docker `whoami`; exit
 ```
 #### Docker installation for Mac OSX
@@ -208,7 +208,7 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 ## Connect to the VPN server via Shadowsocks from mobile devices:
-Both "vlp build" and "vlp status --with-qrcode" print QR code as well as the shadowsocks URI. Scanning this QR code from Shadowsocks compatible mobile apps ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) will gives you a new connection entry named VLP-shadowsocks. Connect and Enjoy please.
+Both "vlp build" and "vlp status --with-qrcode" print QR code as well as the shadowsocks URI. Scanning the QR code from Shadowsocks compatible mobile apps ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) will gives you a new connection entry named VLP-shadowsocks. Connect it and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
