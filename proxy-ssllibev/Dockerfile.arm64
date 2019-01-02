@@ -1,6 +1,6 @@
 FROM arm64v8/alpine
 
-RUN apk add --no-cache bash curl bind-tools dnscrypt-proxy
+RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy
 RUN apk add --no-cache --virtual .build-deps \
       autoconf \
       automake \
