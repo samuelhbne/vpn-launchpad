@@ -121,7 +121,7 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 
 #### VPN server management
 ```
-./vlp [--from-src] <command> [options]
+vlp [--from-src] <command> [options]
   --from-src            -- Build vpnlaunchpad container from source rather than docker image downloading
     init                -- Init aws account credential.
     build               -- Build VPN server.
@@ -138,7 +138,7 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 
 #### Local proxy management
 ```
-./lproxy <command> [options]
+lproxy <command> [options]
   build         -- Build local proxy container.
     --from-src  -- Build local proxy container from source rather than docker image downloading.
   status        -- Check local proxy container status.
