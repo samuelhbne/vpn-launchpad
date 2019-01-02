@@ -29,8 +29,9 @@ AWS Secret Access Key [None]: INPUT-YOUR-AWS-KEY-HERE
 Default region name [ap-northeast-1]: 
 Default output format [json]: 
 Done.
+$
 ```
-Note: './vlp init' need to download docker image(about 100MB) for the 1st time execution. However hub.docker.com might be 'throttled' mysteriously in certain country. Please try './vlp --from-src init' instead to build the docker image from source if './vlp init' stuck on downloading over 10 minutes without response.
+Note: './vlp init' need to download docker image(about 100MB) during the 1st time execution. However hub.docker.com might be 'throttled' mysteriously in certain country. Please try './vlp --from-src init' instead to build the docker image from source in case './vlp init' stuck on downloading over 10 minutes without progress.
 
 #### 3. Build VPN server on AWS
 ```
@@ -42,6 +43,7 @@ Shadowsocks-URI: ss://YWVzLTI1Ni1nY206U1NTTElCRVYtUEFTUw==@13.231.224.253:28388#
 ...
 Scan QR code above from Shadowsocks compatible mobile app to connect your mobile phone/tablet.
 Done.
+$
 ```
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
@@ -69,8 +71,9 @@ dig +short @127.0.0.1 -p 65353 twitter.com
 104.244.42.193
 
 Done.
+$
 ```
-Note: './lproxy build' need to download docker image(about 90MB) on the 1st time execution. However hub.docker.com might be 'throttled' mysteriously in certain country. Please try './lproxy build --from-src' instead to build the docker image from source if './lproxy build' stuck on downloading over 10 minutes without response.
+Note: './lproxy build' need to download docker image(about 90MB) during the 1st time execution. However hub.docker.com might be 'throttled' mysteriously in certain country. Please try './lproxy build --from-src' instead to build the docker image from source in case './lproxy build' stuck on downloading over 10 minutes without progress.
 
 #### 6. Browser configuration (optional)
 Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
@@ -80,6 +83,7 @@ Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/
 $ ./lproxy purge
 Local proxy found. Purging...
 Done.
+$
 ```
 
 #### 8. Stop and remove VPN server from AWS after surfing
@@ -94,6 +98,7 @@ Security Group Removed.
 
 Deleting SSH Key-Pair of vlp-bionic...
 Done.
+$
 ```
 Note: Removing VPN server from AWS after surfing is always recommended. It removes the potential trails from cloud to protect your privacy as well as reduces the cost for AWS service hiring.
 
@@ -156,6 +161,7 @@ $ cat server-ssslibev/server-ssslibev.env
 SSPORT=" 8388"
 SSPASS="YOUR-PASS"
 SSMTHD="aes-256-gcm"
+$
 ```
 NOTE: './vlp purge; ./vlp build' is necessary to get new VPN configuration applied.
 
@@ -167,6 +173,7 @@ Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 $ cat server-softether/server-softether.env
 PSK=YOUR-SHARED-SECRET
 USERS=user0:pass0;user1:pass1;
+$
 ```
 NOTE: './vlp purge && ./vlp build' is necessary to get new VPN configuration applied.
 
@@ -179,6 +186,7 @@ $ cat proxy-ssllibev/proxy-sslibev.env
 SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"
+$
 ```
 NOTE: './lproxy build' is necessary to get new proxy configuration applied.
 
