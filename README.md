@@ -157,7 +157,7 @@ SSPORT=" 8388"
 SSPASS="YOUR-PASS"
 SSMTHD="aes-256-gcm"
 ```
-NOTE: './vlp purge && ./vlp build' is necessary to get new VPN configuration applied.
+NOTE: './vlp purge; ./vlp build' is necessary to get new VPN configuration applied.
 
 Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
