@@ -48,6 +48,6 @@ if [ $BEXIST -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -s ${SSHOST} -p ${SSPORT} -b ${LISTENADDR} -l ${SOCKSPORT} -k "${SSPASS}" -m "${SSMTHD}" >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -s ${SSHOST} -p ${SSPORT} -b ${LISTENADDR} -l 1080 -k "${SSPASS}" -m "${SSMTHD}" >/dev/null
 echo "Done."
 echo
