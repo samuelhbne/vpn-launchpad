@@ -55,20 +55,37 @@ Please jump to step 8 please if PC/Mac browser connection is not your goal.
 ```
 $ ./lproxy build
 ...
-Local proxy started.
+Setting up local proxy daemon...
+Done.
 
-Checking local HTTP PROXY on TCP:8123 ...
-curl -x http://127.0.0.1:8123 http://ifconfig.co
+Starting up local proxy daemon...
+Done.
+
+Wait 15s for local proxy initialisation...
+Done.
+
+Local proxy is running.
+
+VPN sever address: 13.231.224.253
+
+Checking SOCKS5 proxy on 127.0.0.1:1080 TCP ...
+curl -sx socks5h://127.0.0.1:1080 http://ifconfig.co
 13.231.224.253
+SOCKS5 proxy check passed.
 
-Checking local SOCKS PROXY on TCP:1080 ...
-curl -x socks5h://127.0.0.1:1080 http://ifconfig.co
+Checking HTTP proxy on 127.0.0.1:8123 TCP ...
+curl -sx http://127.0.0.1:8123 http://ifconfig.co
 13.231.224.253
+HTTP proxy check passed.
 
-Checking local DNS PROXY on UDP:65353 ...
+Checking DNS server on 127.0.0.1:65353 UDP ...
 dig +short @127.0.0.1 -p 65353 twitter.com
-104.244.42.65
+104.244.42.1
 104.244.42.193
+Checking 104.244.42.1 IP owner ...
+docker exec -it proxy-ssllibev whois 104.244.42.1|grep OrgId
+OrgId:          TWITT
+DNS server check passed.
 
 Done.
 $
