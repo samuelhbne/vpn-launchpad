@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PXYIP="127.0.0.1"
 CTNNAME="proxy-ssllibev"
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
 
@@ -26,47 +27,47 @@ VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 1)}}' $CTNNAME`
 
 echo "VPN sever address: $VPSADDR"
 echo
-echo "Checking local HTTP proxy on TCP:$HTTPPORT ..."
-echo "curl -sx http://127.0.0.1:$HTTPPORT http://ifconfig.co"
-IFADDR=`curl -sx http://127.0.0.1:$HTTPPORT http://ifconfig.co`
+
+echo "Checking SOCKS5 proxy on $PXYIP:$SOCKSPORT TCP ..."
+echo "curl -sx socks5h://$PXYIP:$SOCKSPORT http://ifconfig.co"
+IFADDR=`curl -sx socks5h://$PXYIP:$SOCKSPORT http://ifconfig.co`
 echo "$IFADDR"
 if [ "$IFADDR" = "$VPSADDR" ]; then
-	echo -e "Passed"
+	echo -e "SOCKS5 proxy check passed."
 else
-	echo -e "Failed"
+	echo -e "SOCKS5 proxy check failed."
 fi
 echo
 
-echo "Checking local SOCKS5 proxy on TCP:$SOCKSPORT ..."
-echo "curl -sx socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co"
-IFADDR=`curl -sx socks5h://127.0.0.1:$SOCKSPORT http://ifconfig.co`
+echo "Checking HTTP proxy on $PXYIP:$HTTPPORT TCP ..."
+echo "curl -sx http://$PXYIP:$HTTPPORT http://ifconfig.co"
+IFADDR=`curl -sx http://$PXYIP:$HTTPPORT http://ifconfig.co`
 echo "$IFADDR"
 if [ "$IFADDR" = "$VPSADDR" ]; then
-	echo -e "Passed"
+	echo -e "HTTP proxy check passed."
 else
-	echo -e "Failed"
+	echo -e "HTTP proxy check failed."
 fi
 echo
 
-echo "Checking local DNS proxy on UDP:$DNSPORT ..."
-echo "dig +short @127.0.0.1 -p $DNSPORT twitter.com"
-TWITTIP=`dig +short @127.0.0.1 -p $DNSPORT twitter.com`
+echo "Checking DNS server on $PXYIP:$DNSPORT UDP ..."
+echo "dig +short @$PXYIP -p $DNSPORT twitter.com"
+TWITTIP=`dig +short @$PXYIP -p $DNSPORT twitter.com`
 echo "$TWITTIP"
 
 TWITTIP=`echo "$TWITTIP"|head -n1`
 if [ "$TWITTIP" = "" ]; then
 	echo "Failed"
 else
-	echo
 	echo "Checking $TWITTIP IP owner ..."
 	echo "docker exec -it $CTNNAME whois $TWITTIP|grep OrgId"
 	ORGID=`docker exec -it $CTNNAME whois $TWITTIP|grep OrgId`
 	echo "$ORGID"
 	ORGID=`echo "$ORGID"|awk '{print $2}'|tr -d '\r\n'`
 	if [ "$ORGID" = "TWITT" ]; then
-		echo -e "Passed"
+		echo -e "DNS server check passed."
 	else
-		echo -e "Failed"
+		echo -e "DNS server check failed."
 	fi
 	echo
 fi
