@@ -15,7 +15,7 @@ if [ $BEXIST -eq 0 ]; then
 	echo "Local proxy is not running."
 	exit
 else
-	echo "Local proxy started."
+	echo "Local proxy is running."
 	echo
 fi
 
@@ -24,6 +24,8 @@ HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 
 DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' $CTNNAME`
 VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 1)}}' $CTNNAME`
 
+echo "VPN sever address: $VPSADDR"
+echo
 echo "Checking local HTTP proxy on TCP:$HTTPPORT ..."
 echo "curl -sx http://127.0.0.1:$HTTPPORT http://ifconfig.co"
 IFADDR=`curl -sx http://127.0.0.1:$HTTPPORT http://ifconfig.co`
@@ -58,8 +60,9 @@ else
 	echo
 	echo "Checking $TWITTIP IP owner ..."
 	echo "docker exec -it $CTNNAME whois $TWITTIP|grep OrgId"
-	docker exec -it $CTNNAME whois $TWITTIP|grep OrgId
-	ORGID=`docker exec -it $CTNNAME whois $TWITTIP|grep OrgId|awk '{print $2}'|tr -d '\r\n'`
+	ORGID=`docker exec -it $CTNNAME whois $TWITTIP|grep OrgId`
+	echo "$ORGID"
+	ORGID=`echo "$ORGID"|awk '{print $2}'|tr -d '\r\n'`
 	if [ "$ORGID" = "TWITT" ]; then
 		echo -e "Passed"
 	else
