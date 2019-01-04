@@ -44,6 +44,7 @@ case "$VLPOPT" in
 		shift
 		echo "Building vpnlaunchpad image..."
 		docker build -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
+		docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 		echo "Done."
 		;;
 	*)
