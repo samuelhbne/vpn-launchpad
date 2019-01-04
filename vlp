@@ -127,7 +127,7 @@ case $subcmd in
 	*)
 		shift
 		echo "vlp [--from-src] <command> [options]"
-		echo "  --from-src            -- Build vpnlaunchpad container from source rather than docker image downloading"
+		echo "  --from-src            -- Build dependency container from source rather than docker image downloading"
 		echo "    init                -- Init aws account credential."
 		echo "    build               -- Build VPN server."
 		echo "      --from-src        -- Build VPN server from source rather than docker image downloading"

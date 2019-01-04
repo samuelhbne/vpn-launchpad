@@ -144,7 +144,7 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 #### VPN server management
 ```
 vlp [--from-src] <command> [options]
-  --from-src            -- Build vpnlaunchpad container from source rather than hub.docker.com image downloading
+  --from-src            -- Build dependency container from source rather than hub.docker.com image downloading
     init                -- Init AWS account credential.
     build               -- Build VPN server.
       --from-src        -- Build VPN server from source rather than docker image downloading
