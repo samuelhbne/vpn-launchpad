@@ -4,7 +4,6 @@ DIR=`dirname $0`
 VLPHOME="$(cd $DIR; pwd)"
 . $VLPHOME/vlp.env
 VLPCFG="$VLPHOME/.vpn-launchpad"
-VLPKEY="$VLPCFG/$STACKID.*.pem"
 VLPDKDIR="$VLPHOME/vpnlaunchpad"
 
 ARCH=`uname -m`

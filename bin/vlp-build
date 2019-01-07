@@ -5,7 +5,7 @@ VLPHOME="$(cd $DIR; cd ..; pwd)"
 . $VLPHOME/vlp.env
 VLPCFG="$VLPHOME/.vpn-launchpad"
 REGION=`aws --profile $PROFILE configure get region`
-VLPKEY="$VLPCFG/$STACKID.$REGION.pem"
+VLPKEY="$VLPCFG/$STACKID.$REGION.$PROFILE.pem"
 
 aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then

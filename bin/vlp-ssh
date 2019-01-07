@@ -5,7 +5,7 @@ VLPHOME="$(cd $DIR; cd ..; pwd)"
 . $VLPHOME/vlp.env
 VLPCFG="$VLPHOME/.vpn-launchpad"
 REGION=`aws --profile $PROFILE configure get region`
-VLPKEY="$VLPCFG/$STACKID.$REGION.pem"
+VLPKEY="$VLPCFG/$STACKID.$REGION.$PROFILE.pem"
 
 aws --profile $PROFILE --output table iam get-user >/dev/null
 if [ "$?" != "0" ]; then
@@ -25,10 +25,10 @@ if [ -z "$IPADDR" ]; then
 fi
 
 if [ -f $VLPKEY ]; then
-	echo -e "VPSKEY=$STACKID.$REGION.pem\nVPSADDR=$IPADDR" > $VLPCFG/ssh.env
+	echo -e "VPSKEY=$STACKID.$REGION.$PROFILE.pem\nVPSADDR=$IPADDR" > $VLPCFG/ssh.env
 	exit 0
 else
-	echo "SSH private key $STACKID.$REGION.pem not found. Not created from this box?"
+	echo -e "SSH private key $STACKID.$REGION.$PROFILE.pem not found. Not created from this box?"
 	exit 1
 fi
 exit 0
