@@ -41,9 +41,9 @@ VLPOPT="$1"
 case "$VLPOPT" in
 	--from-src)
 		shift
+		docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 		echo "Building vpnlaunchpad image..."
 		docker build -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
-		docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 		echo "Done."
 		;;
 	*)
@@ -52,12 +52,12 @@ esac
 
 BEXIST=`docker ps| grep $CTNNAME.$DKUID.$DKGID|wc -l`
 if [ $BEXIST -eq 0 ]; then
-	docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
 	docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
 	echo "Start vpnlaunchpad sandbox..."
-	docker run --name=$CTNNAME.$DKUID.$DKGID -v $VLPHOME:/vlp -itd $IMGNAME:$TARGET /bin/bash
+	docker run --name=$CTNNAME.$DKUID.$DKGID -v $VLPHOME:/vlp -p 8080:80 -itd $IMGNAME:$TARGET
 	docker exec -it $CTNNAME.$DKUID.$DKGID groupmod -g $DKGID $VLPGROUP
 	docker exec -it $CTNNAME.$DKUID.$DKGID usermod -u $DKUID -g $DKGID $VLPUSER
+	docker exec -it $CTNNAME.$DKUID.$DKGID php-fpm7
 	echo "Done."
 	echo
 fi
