@@ -4,5 +4,6 @@ proxy-ssllibev/Dockerfile
 vpnlaunchpad/Dockerfile
 .vpn-launchpad
 .bash_history
+.ash_history
 .ssh
 .aws
