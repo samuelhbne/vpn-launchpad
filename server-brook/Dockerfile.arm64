@@ -1,0 +1,9 @@
+FROM arm64v8/golang:alpine
+MAINTAINER Samuel Huang "samuelh2006@gmail.com"
+
+RUN apk add git
+RUN go get github.com/txthinking/brook/cli/brook
+
+USER nobody
+
+ENTRYPOINT ["/usr/bin/brook"]

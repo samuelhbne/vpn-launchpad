@@ -32,8 +32,12 @@ while [[ $# > 0 ]]; do
 			SVROPT="--from-src"
 			shift
 			;;
+		--with-brook)
+			BROOK=1
+			shift
+			;;
 		--with-l2tp)
-			WL2TP=1
+			L2TP=1
 			shift
 			;;
 		*)
@@ -58,21 +62,41 @@ SGID=`aws --profile $PROFILE --output text ec2 create-security-group --group-nam
 echo "Done."
 echo
 
+SG_ENABLE () {
+	if [ "$1" = "" ] || [ "$2" = "" ] || [ "$3" = "" ]; then
+		return 1
+	fi
+	for sgport in `echo $2|sed 's/:/\n/g'`;
+	do
+		echo "aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol $1 --port $sgport --cidr $3"
+		aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol $1 --port $sgport --cidr $3
+	done
+}
+
 echo "Creating Firewall rules of $STACKID..."
-# SSH
-aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
-if [ "$WL2TP" = "1" ]; then
-	# SoftEther
-	aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 500 --cidr 0.0.0.0/0
-	aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 4500 --cidr 0.0.0.0/0
-	aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 1701 --cidr 0.0.0.0/0
-	aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port 1194 --cidr 0.0.0.0/0
-	aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port 5555 --cidr 0.0.0.0/0
+# ssh
+echo "Firewall rules ssh..."
+SG_ENABLE "tcp" "22" "0.0.0.0/0"
+
+# server-brook
+if [ "$BROOK" = "1" ]; then
+	echo "Firewall rules server-brook..."
+	SG_ENABLE "tcp" `grep "SGTCP" $VLPHOME/server-brook/server-brook.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
+	SG_ENABLE "udp" `grep "SGUDP" $VLPHOME/server-brook/server-brook.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
 fi
+
+# server-softether
+if [ "$L2TP" = "1" ]; then
+	echo "Firewall rules server-softether..."
+	SG_ENABLE "udp" `grep "SGUDP" $VLPHOME/server-softether/server-softether.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
+	SG_ENABLE "tcp" `grep "SGTCP" $VLPHOME/server-softether/server-softether.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
+fi
+
 # server-ssslibev
-SSPORT=`grep "SSPORT=" $VLPHOME/server-ssslibev/server-ssslibev.env |cut -d'=' -f2|sed 's/\"//g'`
-aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol tcp --port $SSPORT --cidr 0.0.0.0/0
-aws --profile $PROFILE --output text ec2 authorize-security-group-ingress --group-name $STACKID-sg --protocol udp --port $SSPORT --cidr 0.0.0.0/0
+echo "Firewall rules server-ssslibev..."
+SG_ENABLE "tcp" `grep "SGTCP" $VLPHOME/server-ssslibev/server-ssslibev.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
+SG_ENABLE "udp" `grep "SGUDP" $VLPHOME/server-ssslibev/server-ssslibev.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
+
 echo "Done."
 echo
 
@@ -141,35 +165,32 @@ ssh -i $VLPKEY ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
 echo "Done."
 echo
 
-if [ "$WL2TP" = "1" ]; then
-	echo "L2TP provisioning..."
-	scp -i $VLPKEY -r $VLPHOME/server-softether ubuntu@$IPPUB:
-	ssh -i $VLPKEY ubuntu@$IPPUB "server-softether/server-softether.sh $SVROPT"
+SERVER_DEPLOY () {
+	echo "$1 provisioning..."
+	scp -i $VLPKEY -r $VLPHOME/$2 ubuntu@$IPPUB:
+	ssh -i $VLPKEY ubuntu@$IPPUB "$2/$2.sh $SVROPT"
 	echo "Update Instance Tags..."
 	while read p; do
-	  KEY=`echo "$p"|cut -d'=' -f1`
-	  VAL=`echo "$p"|cut -d'=' -f2`
-	  if [ "$KEY" = "" ]; then
-	          continue
-	  fi
-	  aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=server-softether.$KEY,Value=$VAL"
-	done <$VLPHOME/server-softether/server-softether.env
+		KEY=`echo "$p"|cut -d'=' -f1`
+		VAL=`echo "$p"|cut -d'=' -f2`
+		if [ "$KEY" = "" ]; then
+			continue
+		fi
+		echo 
+		aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=$2.$KEY,Value=$VAL"
+	done <$VLPHOME/$2/$2.env
 	echo "Done."
 	echo
+}
+
+if [ "$BROOK" = "1" ]; then
+	SERVER_DEPLOY "Brook" "server-brook"
 fi
 
-echo "Shadowsocks provisioning..."
-scp -i $VLPKEY -r $VLPHOME/server-ssslibev ubuntu@$IPPUB:
-ssh -i $VLPKEY ubuntu@$IPPUB "server-ssslibev/server-ssslibev.sh $SVROPT"
-echo "Update Instance Tags..."
-while read p; do
-  KEY=`echo "$p"|cut -d'=' -f1`
-  VAL=`echo "$p"|cut -d'=' -f2`
-  if [ "$KEY" = "" ]; then
-          continue
-  fi
-  aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=server-ssslibev.$KEY,Value=$VAL"
-done <$VLPHOME/server-ssslibev/server-ssslibev.env
-echo "Done."
-echo
+if [ "$L2TP" = "1" ]; then
+	SERVER_DEPLOY "L2TP" "server-softether"
+fi
+
+SERVER_DEPLOY "Shadowsocks" "server-ssslibev"
+
 exit 0
