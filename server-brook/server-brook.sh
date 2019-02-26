@@ -33,4 +33,4 @@ done
 
 . $DIR/server-brook.env
 
-docker run --restart unless-stopped --name server-brook -p $LSTNPORT:$LSTNPORT -d $IMGNAME:$TARGET server -l $LSTNPORT -p $PASSWORD
+docker run --restart unless-stopped --name server-brook -p $BRKPORT:$BRKPORT -d $IMGNAME:$TARGET server -l :$BRKPORT -p $BRKPASS
