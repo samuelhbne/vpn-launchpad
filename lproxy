@@ -19,10 +19,12 @@ case $act in
 		;;
 	*)
 		shift
-		echo "lproxy <command> [options]"
-		echo "  build         -- Build local proxy container."
-		echo "    --from-src  -- Build local proxy container from source rather than docker image downloading."
-		echo "  status        -- Check local proxy container status."
-		echo "  purge         -- Destory local proxy container."
+		echo "lproxy <command> [options] <brook|shadowsocks>"
+		echo "  build            -- Build local proxy container."
+		echo "    --from-src     -- Build local proxy container from source rather than docker image downloading."
+		echo "      brook        -- Build local proxy container that connect to VPN server via Brook connector"
+		echo "      shadowsocks  -- Build local proxy container that connect to VPN server via ShadowSocks VPN connector"
+		echo "  status           -- Check local proxy container status."
+		echo "  purge            -- Destory local proxy container."
 		;;
 esac

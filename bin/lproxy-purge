@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CTNNAME="proxy-ssllibev"
+CTNNAME=`docker ps|grep samuelhbne/proxy-| awk '{print $NF}'`
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
 
 if [ "$DKVER" = "" ]; then
@@ -11,7 +11,7 @@ fi
 
 BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
 if [ $BEXIST -gt 0 ]; then
-	echo "Local proxy found. Purging..."
+	echo "Local proxy $CTNNAME found. Purging..."
 	docker stop $CTNNAME >/dev/null
 	docker rm $CTNNAME >/dev/null
 	echo "Done."

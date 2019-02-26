@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PXYIP="127.0.0.1"
-CTNNAME="proxy-ssllibev"
+CTNNAME=`docker ps|grep samuelhbne/proxy-| awk '{print $NF}'`
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
 
 if [ "$DKVER" = "" ]; then
@@ -12,18 +12,26 @@ fi
 
 BEXIST=`docker ps| grep $CTNNAME|wc -l`
 
-if [ $BEXIST -eq 0 ]; then
+if [ "$CTNNAME" = "" ] || [ $BEXIST -eq 0 ]; then
 	echo "Local proxy is not running."
 	exit
 else
-	echo "Local proxy is running."
+	echo "Local proxy $CTNNAME is running."
 	echo
 fi
+
+case $CTNNAME in
+	proxy-ssllibev)
+		VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 1)}}' $CTNNAME`
+		;;
+	proxy-brook)
+		VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 6)}}' $CTNNAME|cut -d':' -f1`
+		;;
+esac
 
 SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' $CTNNAME`
 HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' $CTNNAME`
 DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' $CTNNAME`
-VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 1)}}' $CTNNAME`
 
 echo "VPN sever address: $VPSADDR"
 echo

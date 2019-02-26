@@ -36,7 +36,7 @@ RUN apk del .build-deps
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 
-ENV LISTENADDR="0.0.0.0"
+ENV LSTNADDR="0.0.0.0"
 ENV SOCKSPORT="1080"
 ENV HTTPPORT="8123"
 ENV DNSPORT="53"
@@ -46,7 +46,7 @@ RUN sed -i "s/^dnscrypt_servers = .*/dnscrypt_servers = false/g" /etc/dnscrypt-p
 RUN sed -i "s/^doh_servers = .*/doh_servers = true/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 
 RUN echo "socksParentProxy=localhost:$SOCKSPORT" >>/root/polipo/config
-RUN echo "proxyAddress=$LISTENADDR" >>/root/polipo/config
+RUN echo "proxyAddress=$LSTNADDR" >>/root/polipo/config
 RUN echo "proxyPort=$HTTPPORT" >>/root/polipo/config
 RUN echo "daemonise=true" >>/root/polipo/config
 RUN echo "diskCacheRoot=" >>/root/polipo/config

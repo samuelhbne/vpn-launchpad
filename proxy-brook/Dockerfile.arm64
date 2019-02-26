@@ -1,36 +1,14 @@
-FROM arm32v6/alpine
+FROM arm64v8/golang:alpine
 
 RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy
 RUN apk add --no-cache --virtual .build-deps \
       autoconf \
       automake \
       build-base \
-      c-ares-dev \
-      libev-dev \
-      libtool \
-      libsodium-dev \
-      linux-headers \
-      mbedtls-dev \
-      pcre-dev \
       git
 
-RUN set -ex \
- && mkdir /tmp/repo \
- && cd /tmp/repo \
- && git clone https://github.com/shadowsocks/shadowsocks-libev.git \
- && cd shadowsocks-libev \
- && git submodule update --init --recursive \
- && ./autogen.sh \
- && ./configure --prefix=/usr --disable-documentation \
- && make install \
- && apk add --no-cache \
-      rng-tools \
-      $(scanelf --needed --nobanner /usr/bin/ss-* \
-      | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-      | sort -u) \
- && rm -rf /tmp/repo
-
 RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
+RUN go get github.com/txthinking/brook/cli/brook
 RUN apk del .build-deps
 
 ADD run.sh /run.sh
