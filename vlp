@@ -131,6 +131,7 @@ case $subcmd in
 		echo "    init                -- Init aws account credential."
 		echo "    build               -- Build VPN server."
 		echo "      --from-src        -- Build VPN server from source rather than docker image downloading"
+		echo "      --with-brook      -- Build VPN server with Brook services installed"
 		echo "      --with-l2tp       -- Build VPN server with L2TP services installed"
 		echo "      --with-random     -- Build VPN server with VPN passwords randomisation."
 		echo "      --without-random  -- Build VPN server without VPN passwords randomisation."

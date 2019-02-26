@@ -148,6 +148,7 @@ vlp [--from-src] <command> [options]
     init                -- Init AWS account credential.
     build               -- Build VPN server.
       --from-src        -- Build VPN server from source rather than docker image downloading
+      --with-brook      -- Build VPN server with Brook services installed
       --with-l2tp       -- Build VPN server with L2TP services installed
       --with-random     -- Build VPN server with VPN passwords randomisation.
       --without-random  -- Build VPN server without VPN passwords randomisation.
