@@ -1,6 +1,6 @@
-FROM golang:alpine
+FROM alpine
 
-RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy
+RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy go
 RUN apk add --no-cache --virtual .build-deps \
       autoconf \
       automake \
