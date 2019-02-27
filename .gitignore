@@ -1,7 +1,7 @@
 proxy-ssllibev/proxy-ssllibev.env.out
 proxy-ssllibev/server-ssslibev.env
-proxy-ssllibev/Dockerfile
-vpnlaunchpad/Dockerfile
+proxy-brook/proxy-brook.env.out
+proxy-brook/server-brook.env
 .vpn-launchpad
 .bash_history
 .ash_history
