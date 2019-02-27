@@ -161,11 +161,13 @@ vlp [--from-src] <command> [options]
 
 #### Local proxy management
 ```
-lproxy <command> [options]
-  build         -- Build local proxy container.
-    --from-src  -- Build local proxy container from source rather than hub.docker.com image downloading.
-  status        -- Check local proxy container status.
-  purge         -- Destory local proxy container.
+lproxy <command> [options] <brook|shadowsocks>
+  build            -- Build local proxy container.
+    --from-src     -- Build local proxy container from source rather than hub.docker.com image downloading.
+      brook        -- Build local proxy container that connect to VPN server via Brook connector
+      shadowsocks  -- Build local proxy container that connect to VPN server via ShadowSocks VPN connector
+  status           -- Check local proxy container status.
+  purge            -- Destory local proxy container.
 ```
 Note: Please build VPN server before local proxy building.
 
