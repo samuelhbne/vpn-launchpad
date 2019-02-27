@@ -165,7 +165,7 @@ lproxy <command> [options] <brook|shadowsocks>
   build            -- Build local proxy container.
     --from-src     -- Build local proxy container from source rather than hub.docker.com image downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector
-      shadowsocks  -- Build local proxy container that connect to VPN server via ShadowSocks VPN connector
+      shadowsocks  -- Build local proxy container that connect to VPN server via ShadowSocks connector
   status           -- Check local proxy container status.
   purge            -- Destory local proxy container.
 ```
