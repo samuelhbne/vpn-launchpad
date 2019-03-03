@@ -34,6 +34,11 @@ do
 			CLN="proxy-ssllibev"
 			break
 			;;
+		v2ray)
+			SVR="server-v2ray"
+			CLN="proxy-v2ray"
+			break
+			;;
 	esac
 done
 

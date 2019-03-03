@@ -22,8 +22,9 @@ case $act in
 		echo "lproxy <command> [options] <brook|shadowsocks>"
 		echo "  build            -- Build local proxy container."
 		echo "    --from-src     -- Build local proxy container from source rather than docker image downloading."
-		echo "      brook        -- Build local proxy container that connect to VPN server via Brook connector"
-		echo "      shadowsocks  -- Build local proxy container that connect to VPN server via ShadowSocks connector"
+		echo "      brook        -- Build local proxy container that connect to VPN server via brook connector"
+		echo "      shadowsocks  -- Build local proxy container that connect to VPN server via shadowsocks connector"
+		echo "      v2ray        -- Build local proxy container that connect to VPN server via v2ray connector"
 		echo "  status           -- Check local proxy container status."
 		echo "  purge            -- Destory local proxy container."
 		;;

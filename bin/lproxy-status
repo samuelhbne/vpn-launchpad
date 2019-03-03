@@ -3,16 +3,13 @@
 PXYIP="127.0.0.1"
 CTNNAME=`docker ps|grep samuelhbne/proxy-| awk '{print $NF}'`
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
-
 if [ "$DKVER" = "" ]; then
 	echo "Docker executable not found."
 	echo "Abort."
 	exit 255
 fi
 
-BEXIST=`docker ps| grep $CTNNAME|wc -l`
-
-if [ "$CTNNAME" = "" ] || [ $BEXIST -eq 0 ]; then
+if [ "$CTNNAME" = "" ] || [ `docker ps| grep $CTNNAME|wc -l` -eq 0 ]; then
 	echo "Local proxy is not running."
 	exit
 else
@@ -26,6 +23,9 @@ case $CTNNAME in
 		;;
 	proxy-brook)
 		VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 6)}}' $CTNNAME|cut -d':' -f1`
+		;;
+	proxy-v2ray)
+		VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 1)}}' $CTNNAME`
 		;;
 esac
 

@@ -4,8 +4,9 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 ARCH=`uname -m`
-IMGNAME="samuelhbne/proxy-brook"
-CTNNAME="proxy-brook"
+SVCID="v2ray"
+CTNNAME="proxy-$SVCID"
+IMGNAME="samuelhbne/proxy-$SVCID"
 
 case $ARCH in
 	armv6l|armv7l)
@@ -38,8 +39,8 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-. $DIR/server-brook.env
-. $DIR/proxy-brook.env.out
+. $DIR/server-$SVCID.env
+. $DIR/proxy-$SVCID.env.out
 
 BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
 if [ $BEXIST -gt 0 ]; then
@@ -48,6 +49,6 @@ if [ $BEXIST -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET client -l ${LSTNADDR}:1080 -i ${LSTNADDR} -s ${HOST}:${BRKPORT} -p "${BRKPASS}" >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${HOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -l ${LSTNADDR} -k 1080 >/dev/null
 echo "Done."
 echo

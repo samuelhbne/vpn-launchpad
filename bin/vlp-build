@@ -40,6 +40,10 @@ while [[ $# > 0 ]]; do
 			L2TP=1
 			shift
 			;;
+		--with-v2ray)
+			V2RAY=1
+			shift
+			;;
 		*)
 			shift
 			;;
@@ -62,7 +66,7 @@ SGID=`aws --profile $PROFILE --output text ec2 create-security-group --group-nam
 echo "Done."
 echo
 
-SG_ENABLE () {
+FIREWALL_ENABLE () {
 	if [ "$1" = "" ] || [ "$2" = "" ] || [ "$3" = "" ]; then
 		return 1
 	fi
@@ -73,30 +77,9 @@ SG_ENABLE () {
 	done
 }
 
-echo "Creating Firewall rules of $STACKID..."
-# ssh
+# Enable ssh Ingress
 echo "Firewall rules ssh..."
-SG_ENABLE "tcp" "22" "0.0.0.0/0"
-
-# server-brook
-if [ "$BROOK" = "1" ]; then
-	echo "Firewall rules server-brook..."
-	SG_ENABLE "tcp" `grep "SGTCP" $VLPHOME/server-brook/server-brook.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
-	SG_ENABLE "udp" `grep "SGUDP" $VLPHOME/server-brook/server-brook.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
-fi
-
-# server-softether
-if [ "$L2TP" = "1" ]; then
-	echo "Firewall rules server-softether..."
-	SG_ENABLE "udp" `grep "SGUDP" $VLPHOME/server-softether/server-softether.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
-	SG_ENABLE "tcp" `grep "SGTCP" $VLPHOME/server-softether/server-softether.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
-fi
-
-# server-ssslibev
-echo "Firewall rules server-ssslibev..."
-SG_ENABLE "tcp" `grep "SGTCP" $VLPHOME/server-ssslibev/server-ssslibev.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
-SG_ENABLE "udp" `grep "SGUDP" $VLPHOME/server-ssslibev/server-ssslibev.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
-
+FIREWALL_ENABLE "tcp" "22" "0.0.0.0/0"
 echo "Done."
 echo
 
@@ -165,7 +148,7 @@ ssh -i $VLPKEY ubuntu@$IPPUB "sudo usermod -aG docker ubuntu"
 echo "Done."
 echo
 
-SERVER_DEPLOY () {
+SVC_DEPLOY () {
 	echo "$1 provisioning..."
 	scp -i $VLPKEY -r $VLPHOME/$2 ubuntu@$IPPUB:
 	ssh -i $VLPKEY ubuntu@$IPPUB "$2/$2.sh $SVROPT"
@@ -179,18 +162,25 @@ SERVER_DEPLOY () {
 		echo 
 		aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=$2.$KEY,Value=$VAL"
 	done <$VLPHOME/$2/$2.env
+	echo "Firewall rules $1..."
+	FIREWALL_ENABLE "tcp" `grep "SGTCP" $VLPHOME/$2/$2.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
+	FIREWALL_ENABLE "udp" `grep "SGUDP" $VLPHOME/$2/$2.env|cut -d'=' -f2|sed 's/"//g'` "0.0.0.0/0"
 	echo "Done."
 	echo
 }
 
 if [ "$BROOK" = "1" ]; then
-	SERVER_DEPLOY "Brook" "server-brook"
+	SVC_DEPLOY "Brook" "server-brook"
 fi
 
 if [ "$L2TP" = "1" ]; then
-	SERVER_DEPLOY "L2TP" "server-softether"
+	SVC_DEPLOY "L2TP" "server-softether"
 fi
 
-SERVER_DEPLOY "Shadowsocks" "server-ssslibev"
+if [ "$V2RAY" = "1" ]; then
+	SVC_DEPLOY "v2ray" "server-v2ray"
+fi
+
+SVC_DEPLOY "Shadowsocks" "server-ssslibev"
 
 exit 0
