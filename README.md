@@ -150,6 +150,7 @@ vlp [--from-src] <command> [options]
       --from-src        -- Build VPN server from source rather than docker image downloading
       --with-brook      -- Build VPN server with Brook services installed
       --with-l2tp       -- Build VPN server with L2TP services installed
+      --with-v2ray      -- Build VPN server with V2Ray services installed
       --with-random     -- Build VPN server with VPN passwords randomisation.
       --without-random  -- Build VPN server without VPN passwords randomisation.
     status              -- Check VPN server status.
@@ -161,11 +162,12 @@ vlp [--from-src] <command> [options]
 
 #### Local proxy management
 ```
-lproxy <command> [options] <brook|shadowsocks>
+lproxy <command> [options] <brook|shadowsocks|v2ray>
   build            -- Build local proxy container.
     --from-src     -- Build local proxy container from source rather than hub.docker.com image downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector
       shadowsocks  -- Build local proxy container that connect to VPN server via ShadowSocks connector
+      v2ray        -- Build local proxy container that connect to VPN server via v2ray connector
   status           -- Check local proxy container status.
   purge            -- Destory local proxy container.
 ```
