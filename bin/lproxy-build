@@ -2,8 +2,6 @@
 
 DIR=`dirname $0`
 VLPHOME="$(cd $DIR; cd ..; pwd)"
-SSLLDIR="$VLPHOME/proxy-ssllibev"
-
 VLPQUERY="$VLPHOME/vlp status"
 
 echo "Checking VPS status..."
@@ -21,16 +19,44 @@ case $VPSIP in
 		;;
 esac
 
+SVR="server-ssslibev"
+CLN="proxy-ssllibev"
+for arg in "$@"
+do
+	case $arg in
+		brook)
+			SVR="server-brook"
+			CLN="proxy-brook"
+			break
+			;;
+		shadowsocks|ss)
+			SVR="server-ssslibev"
+			CLN="proxy-ssllibev"
+			break
+			;;
+		v2ray)
+			SVR="server-v2ray"
+			CLN="proxy-v2ray"
+			break
+			;;
+	esac
+done
+
 echo
 echo "Setting up local proxy daemon..."
-cat $RESULT|grep $INSTID|grep "server-ssslibev\."|sed 's/server-ssslibev.//g'|sed 's/|//g'|awk '{print $1"="$3}'>$SSLLDIR/server-ssslibev.env
-cp -a $SSLLDIR/proxy-ssllibev.env $SSLLDIR/proxy-ssllibev.env.out
-sed -i.bak "s/SSHOST=.*/SSHOST=$VPSIP/g" $SSLLDIR/proxy-ssllibev.env.out
-rm -rf $SSLLDIR/proxy-ssllibev.env.out.bak
+
+cat $RESULT|grep $INSTID|grep "$SVR\."|sed "s/$SVR.//g"|sed 's/|//g'|awk '{print $1"="$3}'>$VLPHOME/$CLN/$SVR.env
+cp -a $VLPHOME/$CLN/$CLN.env $VLPHOME/$CLN/$CLN.env.out
+sed -i.bak "s/HOST=.*/HOST=$VPSIP/g" $VLPHOME/$CLN/$CLN.env.out
+rm -rf $VLPHOME/$CLN/$CLN.env.out.bak
+
 echo "Done."
 echo
 
-$SSLLDIR/proxy-ssllibev.sh $*
+$VLPHOME/lproxy purge
+echo
+
+$VLPHOME/$CLN/$CLN.sh $*
 echo "Wait 15s for local proxy initialisation..."
 sleep 15
 echo "Done."

@@ -4,11 +4,9 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 ARCH=`uname -m`
-IMGNAME="samuelhbne/proxy-ssllibev"
-CTNNAME="proxy-ssllibev"
-
-. $DIR/server-ssslibev.env
-. $DIR/proxy-ssllibev.env.out
+SVCID="v2ray"
+CTNNAME="proxy-$SVCID"
+IMGNAME="samuelhbne/proxy-$SVCID"
 
 case $ARCH in
 	armv6l|armv7l)
@@ -41,6 +39,9 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
+. $DIR/server-$SVCID.env
+. $DIR/proxy-$SVCID.env.out
+
 BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
 if [ $BEXIST -gt 0 ]; then
         docker stop $CTNNAME >/dev/null
@@ -48,6 +49,6 @@ if [ $BEXIST -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -s ${HOST} -p ${SSPORT} -b ${LSTNADDR} -l 1080 -k "${SSPASS}" -m "${SSMTHD}" >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${HOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -l ${LSTNADDR} -k 1080 >/dev/null
 echo "Done."
 echo

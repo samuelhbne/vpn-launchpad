@@ -1,5 +1,5 @@
 # VPN Launchpad
-Builds VPN server on EC2 with Shadowsocks-libev and SoftEther L2TP support. Turns your Raspberry Pi (1/2/3/zero) into an AWS based VPN server control centre.
+Builds VPN server on EC2 with Shadowsocks-libev and SoftEther L2TP support. Turns Raspberry Pi (1/2/3/zero) into an AWS based VPN server control centre.
 
 Works on Ubuntu (Xenial and above), Mac OSX(Yosemite and above) or Debian(Jessie and above) as well.
 
@@ -148,7 +148,9 @@ vlp [--from-src] <command> [options]
     init                -- Init AWS account credential.
     build               -- Build VPN server.
       --from-src        -- Build VPN server from source rather than docker image downloading
+      --with-brook      -- Build VPN server with Brook services installed
       --with-l2tp       -- Build VPN server with L2TP services installed
+      --with-v2ray      -- Build VPN server with V2Ray services installed
       --with-random     -- Build VPN server with VPN passwords randomisation.
       --without-random  -- Build VPN server without VPN passwords randomisation.
     status              -- Check VPN server status.
@@ -160,11 +162,14 @@ vlp [--from-src] <command> [options]
 
 #### Local proxy management
 ```
-lproxy <command> [options]
-  build         -- Build local proxy container.
-    --from-src  -- Build local proxy container from source rather than hub.docker.com image downloading.
-  status        -- Check local proxy container status.
-  purge         -- Destory local proxy container.
+lproxy <command> [options] <brook|shadowsocks|v2ray>
+  build            -- Build local proxy container.
+    --from-src     -- Build local proxy container from source rather than hub.docker.com image downloading.
+      brook        -- Build local proxy container that connect to VPN server via Brook connector
+      shadowsocks  -- Build local proxy container that connect to VPN server via ShadowSocks connector
+      v2ray        -- Build local proxy container that connect to VPN server via v2ray connector
+  status           -- Check local proxy container status.
+  purge            -- Destory local proxy container.
 ```
 Note: Please build VPN server before local proxy building.
 

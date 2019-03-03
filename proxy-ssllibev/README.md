@@ -1,5 +1,5 @@
 # proxy-ssllibev
-Turns Raspberry Pi into SOCKS/HTTP/DNS proxy that tunnelling traffic via remote Shadowsocks server.
+SOCKS/HTTP/DNS proxy that tunnelling traffic via remote Shadowsocks server.
 
 # How to use
 ```

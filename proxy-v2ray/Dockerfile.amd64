@@ -1,37 +1,20 @@
 FROM alpine
 
-RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy
-RUN apk add --no-cache --virtual .build-deps \
-      autoconf \
-      automake \
-      build-base \
-      c-ares-dev \
-      libev-dev \
-      libtool \
-      libsodium-dev \
-      linux-headers \
-      mbedtls-dev \
-      pcre-dev \
-      git
-
-RUN set -ex \
- && mkdir /tmp/repo \
- && cd /tmp/repo \
- && git clone https://github.com/shadowsocks/shadowsocks-libev.git \
- && cd shadowsocks-libev \
- && git submodule update --init --recursive \
- && ./autogen.sh \
- && ./configure --prefix=/usr --disable-documentation \
- && make install \
- && apk add --no-cache \
-      rng-tools \
-      $(scanelf --needed --nobanner /usr/bin/ss-* \
-      | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-      | sort -u) \
- && rm -rf /tmp/repo
+RUN apk add --no-cache bash git build-base go \
+	musl-dev openssl jq curl bind-tools whois \
+	dnscrypt-proxy autoconf automake \
+	ca-certificates \
+	&& update-ca-certificates
 
 RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
-RUN apk del .build-deps
+
+RUN mkdir /etc/v2ray/
+RUN mkdir /var/log/v2ray/
+RUN mkdir -p /usr/bin/v2ray/
+RUN go get -u v2ray.com/core/...
+RUN go build -o /usr/bin/v2ray/v2ray v2ray.com/core/main
+RUN go build -o /usr/bin/v2ray/v2ctl v2ray.com/core/infra/control/main
+RUN cp -r /root/go/src/v2ray.com/core/release/config/* /usr/bin/v2ray/
 
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
