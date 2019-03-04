@@ -41,8 +41,13 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
-if [ $BEXIST -gt 0 ]; then
+if [ -z "$HOST" ] || [ -z "$SSPORT" ] || [ -z "$SSPASS" ] || [ -z "$SSMTHD" ]; then
+	echo "Shadowsocks-libev service not found."
+	echo "Abort."
+	exit 1
+fi
+
+if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
         docker stop $CTNNAME >/dev/null
 	docker rm $CTNNAME >/dev/null
 fi

@@ -41,8 +41,13 @@ done
 . $DIR/server-brook.env
 . $DIR/proxy-brook.env.out
 
-BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
-if [ $BEXIST -gt 0 ]; then
+if [ -z "$HOST" ] || [ -z "$BRKPORT" ] || [ -z "$BRKPASS" ]; then
+	echo "Brook service not found."
+	echo "Abort."
+	exit 1
+fi
+
+if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
         docker stop $CTNNAME >/dev/null
 	docker rm $CTNNAME >/dev/null
 fi

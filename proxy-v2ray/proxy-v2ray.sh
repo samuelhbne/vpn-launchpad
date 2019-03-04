@@ -42,8 +42,13 @@ done
 . $DIR/server-$SVCID.env
 . $DIR/proxy-$SVCID.env.out
 
-BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
-if [ $BEXIST -gt 0 ]; then
+if [ -z "$HOST" ] || [ -z "$V2RAYPORT" ] || [ -z "$V2RAYUUID" ]; then
+	echo "V2ray service not found."
+	echo "Abort."
+	exit 1
+fi
+
+if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
         docker stop $CTNNAME >/dev/null
 	docker rm $CTNNAME >/dev/null
 fi
