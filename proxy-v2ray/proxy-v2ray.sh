@@ -30,7 +30,6 @@ DKVERMINOR=`echo $DOCKERVER|cut -d. -f2`
 if (("$DKVERMAJOR" < 17)) || ( (("$DKVERMAJOR" == 17)) && (("$DKVERMINOR" < 05 )) ); then
 	TARGET=$TARGET"1s"
 fi
-echo $TARGET; exit
 
 while [[ $# > 0 ]]; do
 	case $1 in
