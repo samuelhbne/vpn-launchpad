@@ -24,6 +24,13 @@ case $ARCH in
 		;;
 esac
 
+DOCKERVER=`docker --version|awk '{print $3}'`
+DKVERMAJOR=`echo $DOCKERVER|cut -d. -f1`
+DKVERMINOR=`echo $DOCKERVER|cut -d. -f2`
+if (("$DKVERMAJOR" < 17)) || ( (("$DKVERMAJOR" == 17)) && (("$DKVERMINOR" < 05 )) ); then
+	TARGET=$TARGET"1s"
+fi
+
 while [[ $# > 0 ]]; do
 	case $1 in
 		--from-src)
@@ -54,6 +61,6 @@ if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${HOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -l ${LSTNADDR} -k 1080 >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${HOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -v ${V2RAYLEVEL} -a ${V2RAYALTERID} -s ${V2RSYSECURITY} -l ${LSTNADDR} -k 1080 >/dev/null
 echo "Done."
 echo
