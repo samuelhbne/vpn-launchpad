@@ -1,6 +1,6 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 [-h <v2ray hostname/address] [-p <port numbert>] [-u <client uuid>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-h <v2ray hostname/address>] [-p <port numbert>] [-u <client uuid>]" 1>&2; exit 1; }
 while getopts ":a:k:l:h:p:s:u:v:" o; do
 	case "${o}" in
 		a)
