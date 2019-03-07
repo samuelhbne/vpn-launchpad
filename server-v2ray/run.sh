@@ -1,12 +1,12 @@
 #!/bin/bash
 
 usage() { echo "Usage: $0 [-p <port numbert>] [-u <client uuid>]" 1>&2; exit 1; }
-while getopts ":a:l:p:u:" o; do
+while getopts ":a:p:u:v:" o; do
 	case "${o}" in
 		a)
 			ALTERID=${OPTARG}
 			;;
-		l)
+		v)
 			LEVEL=${OPTARG}
 			;;
 		p)
@@ -20,7 +20,7 @@ while getopts ":a:l:p:u:" o; do
 	esac
 done
 
-if [ -z "${PORT}" ] || [ -z "{$UUID}" ]; then
+if [ -z "${PORT}" ] || [ -z "${UUID}" ] || [ -z "${ALTERID}" ] || [ -z "${LEVEL}" ]; then
 	usage
 fi
 shift $((OPTIND-1))
