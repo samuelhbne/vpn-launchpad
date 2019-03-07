@@ -3,5 +3,6 @@ Yet another unofficial [Brook](https://github.com/txthinking/brook) server imple
 
 # How to use
 ```
-$ docker run --restart unless-stopped --name server-brook -p 16060:6060 -d samuelhbne/server-brook server -l :6060 -p BROOK-PASS
+$ docker build -t samuelhbne/server-brook:amd64 -f Dockerfile.amd64 .
+$ docker run --restart unless-stopped --name server-brook -p 16060:6060 -d samuelhbne/server-brook:amd64 server -l :6060 -p BROOK-PASS
 ```
