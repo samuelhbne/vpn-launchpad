@@ -68,8 +68,8 @@ if [ "$TWITTIP" = "" ]; then
 	echo "Failed"
 else
 	echo "Checking $TWITTIP IP owner ..."
-	echo "docker exec -it $CTNNAME whois $TWITTIP|grep OrgId"
-	ORGID=`docker exec -it $CTNNAME whois $TWITTIP|grep OrgId`
+	echo "whois $TWITTIP|grep OrgId"
+	ORGID=`whois $TWITTIP|grep OrgId`
 	echo "$ORGID"
 	ORGID=`echo "$ORGID"|awk '{print $2}'|tr -d '\r\n'`
 	if [ "$ORGID" = "TWITT" ]; then
