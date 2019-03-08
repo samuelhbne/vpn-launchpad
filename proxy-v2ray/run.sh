@@ -44,7 +44,7 @@ fi
 
 shift $((OPTIND-1))
 
-cd /etc/v2ray/
+cd /tmp
 cp -a /usr/bin/v2ray/vpoint_socks_vmess.json vsv.json
 jq "(.inbounds[] | select( .protocol == \"socks\") | .listen) |= \"$LSTNADDR\"" vsv.json >vsv.json.1
 jq "(.inbounds[] | select( .protocol == \"socks\") | .port) |= \"$SOCKSPORT\"" vsv.json.1 >vsv.json.2
@@ -52,6 +52,6 @@ jq "(.inbounds[] | select( .protocol == \"socks\") | .settings.ip) |= \"0.0.0.0\
 jq "(.outbounds[] | select( .protocol == \"freedom\") | .protocol) |= \"vmess\"" vsv.json.3>vsv.json.4
 jq ".outbounds[0].settings |= . + { \"vnext\": [{\"address\": \"$HOST\", \"port\": $PORT, \"users\": [{\"id\": \"$UUID\", \"alterId\": $ALTERID, \"security\": \"$SECURITY\", \"level\": $LEVEL}]}] }" vsv.json.4>client.json
 
-/usr/bin/nohup /usr/bin/v2ray/v2ray -config=/etc/v2ray/client.json &
+/usr/bin/nohup /usr/bin/v2ray/v2ray -config=/tmp/client.json &
 /root/polipo/polipo -c /root/polipo/config
 exec /usr/bin/dnscrypt-proxy -config /etc/dnscrypt-proxy/dnscrypt-proxy.toml
