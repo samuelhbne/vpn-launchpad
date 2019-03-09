@@ -14,7 +14,7 @@ Command vlp creates EC2 instance with Shadowsocks and L2TP support installed out
 
 #### 1. Dependencies installation
 ```
-$ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl
+$ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl whois
 $ sudo usermod -aG docker `whoami`; exit
 ```
 Note: It is necessary to log out current session and back to get docker group setting take effect.
@@ -221,7 +221,7 @@ Docker installation is necessary for running vlp and lproxy. curl and dig will b
 
 #### Docker and other dependencies installation for Raspbian / Ubuntu
 ```
-$ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl
+$ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl whois
 $ sudo usermod -aG docker `whoami`; exit
 ```
 #### Docker installation for Mac OSX
