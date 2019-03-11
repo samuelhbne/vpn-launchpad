@@ -42,7 +42,9 @@ echo "Querying Instance configuration..."
 aws --profile $PROFILE --output table ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{ResourceId:ResourceId,Key:Key,Value:Value}'|tee /dev/null
 echo
 
-SSENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key:Key, Value:Value}'|grep server-ssslibev.|sed 's/server-ssslibev.//g'`
+SVRENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key:Key, Value:Value}'`
+
+SSENV=`echo "$SVRENV"|grep server-ssslibev.|sed 's/server-ssslibev.//g'`
 SSMTHD=`echo "$SSENV"|grep SSMTHD|awk '{print $2}'`
 SSPASS=`echo "$SSENV"|grep SSPASS|awk '{print $2}'`
 SSPORT=`echo "$SSENV"|grep SSPORT|awk '{print $2}'`
@@ -50,15 +52,38 @@ if [ "$SSMTHD" = "" ] || [ "$SSPASS" = "" ] || [ "$SSPORT" = "" ]; then
 	echo "Shadowsocks configuration not found. Incomplete VPN server installation?"
 	exit 2
 fi
-SSUINFO=`echo "$SSMTHD:$SSPASS"|tr -d '\n'|base64`
-
+SSUINFO=`echo "$SSMTHD:$SSPASS"|tr -d '\n'|base64|tr -d '\n'`
 echo "Shadowsocks-URI: ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
+echo
+
+V2RAYENV=`echo "$SVRENV"|grep server-v2ray.|sed 's/server-v2ray.//g'`
+if [ "$V2RAYENV" != "" ]; then
+	V2RAYUUID=`echo "$V2RAYENV"|grep V2RAYUUID|awk '{print $2}'`
+	V2RAYPORT=`echo "$V2RAYENV"|grep V2RAYPORT|awk '{print $2}'`
+	V2RAYAID=`echo "$V2RAYENV"|grep V2RAYAID|awk '{print $2}'`
+	if [ "$V2RAYUUID" = "" ] || [ "$V2RAYPORT" = "" ] || [ "$V2RAYAID" = "" ]; then
+		echo "Incorrect V2RAY configuration. Incomplete VPN server installation?"
+		exit 2
+	fi
+	V2RAYINFO=`echo "{'add':'$IPADDR','aid':'$V2RAYAID','id':'$V2RAYUUID','net':'tcp','port':'$V2RAYPORT','ps':'VLP-V2RAY'}"`
+	V2RAYINFO=`echo $V2RAYINFO|base64|tr -d '\n'`
+fi
+echo "V2Ray-vmess-URI: vmess://$V2RAYINFO"
 echo
 
 if [ "$QRCODE" = "1" ]; then
 	qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
 	echo
 	echo "Scan QR code above from Shadowsocks compatible mobile app to connect your mobile phone/tablet."
+
+	echo
+	echo
+
+	if [ "$V2RAYINFO" != "" ]; then
+		qrcode-terminal "vmess://$V2RAYINFO"
+		echo
+		echo "Scan QR code above from V2RayNG compatible mobile app to connect your mobile phone/tablet."
+	fi
 fi
 
 echo "Done."
