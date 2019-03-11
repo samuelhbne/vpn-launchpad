@@ -24,6 +24,13 @@ case $ARCH in
 		;;
 esac
 
+DOCKERVER=`docker --version|awk '{print $3}'`
+DKVERMAJOR=`echo $DOCKERVER|cut -d. -f1`
+DKVERMINOR=`echo $DOCKERVER|cut -d. -f2`
+if (("$DKVERMAJOR" < 17)) || ( (("$DKVERMAJOR" == 17)) && (("$DKVERMINOR" < 05 )) ); then
+	TARGET=$TARGET"1s"
+fi
+
 while [[ $# > 0 ]]; do
 	case $1 in
 		--from-src)
@@ -42,13 +49,18 @@ done
 . $DIR/server-$SVCID.env
 . $DIR/proxy-$SVCID.env.out
 
-BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
-if [ $BEXIST -gt 0 ]; then
+if [ -z "$HOST" ] || [ -z "$V2RAYPORT" ] || [ -z "$V2RAYUUID" ]; then
+	echo "V2ray service not found."
+	echo "Abort."
+	exit 1
+fi
+
+if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
         docker stop $CTNNAME >/dev/null
 	docker rm $CTNNAME >/dev/null
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${HOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -l ${LSTNADDR} -k 1080 >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${HOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -v ${V2RAYLEVEL} -a ${V2RAYAID} -s ${V2RSYSECURITY} -l ${LSTNADDR} -k 1080 >/dev/null
 echo "Done."
 echo

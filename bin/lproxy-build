@@ -43,7 +43,7 @@ do
 done
 
 echo
-echo "Setting up local proxy daemon..."
+echo "Config local proxy daemon..."
 
 cat $RESULT|grep $INSTID|grep "$SVR\."|sed "s/$SVR.//g"|sed 's/|//g'|awk '{print $1"="$3}'>$VLPHOME/$CLN/$SVR.env
 cp -a $VLPHOME/$CLN/$CLN.env $VLPHOME/$CLN/$CLN.env.out
@@ -53,9 +53,7 @@ rm -rf $VLPHOME/$CLN/$CLN.env.out.bak
 echo "Done."
 echo
 
-$VLPHOME/lproxy purge
-echo
-
+$VLPHOME/lproxy purge > /dev/null 2>&1
 $VLPHOME/$CLN/$CLN.sh $*
 echo "Wait 15s for local proxy initialisation..."
 sleep 15

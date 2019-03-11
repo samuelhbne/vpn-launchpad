@@ -1,9 +1,6 @@
 proxy-ssllibev/proxy-ssllibev.env.out
-proxy-ssllibev/server-ssslibev.env
 proxy-brook/proxy-brook.env.out
-proxy-brook/server-brook.env
 proxy-v2ray/proxy-v2ray.env.out
-proxy-v2ray/server-v2ray.env
 .vpn-launchpad
 .bash_history
 .ash_history

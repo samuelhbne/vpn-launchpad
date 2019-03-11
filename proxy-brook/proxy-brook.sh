@@ -23,6 +23,13 @@ case $ARCH in
 		;;
 esac
 
+DOCKERVER=`docker --version|awk '{print $3}'`
+DKVERMAJOR=`echo $DOCKERVER|cut -d. -f1`
+DKVERMINOR=`echo $DOCKERVER|cut -d. -f2`
+if (("$DKVERMAJOR" < 17)) || ( (("$DKVERMAJOR" == 17)) && (("$DKVERMINOR" < 05 )) ); then
+	TARGET=$TARGET"1s"
+fi
+
 while [[ $# > 0 ]]; do
 	case $1 in
 		--from-src)
@@ -41,8 +48,13 @@ done
 . $DIR/server-brook.env
 . $DIR/proxy-brook.env.out
 
-BEXIST=`docker ps -a| grep $CTNNAME|wc -l`
-if [ $BEXIST -gt 0 ]; then
+if [ -z "$HOST" ] || [ -z "$BRKPORT" ] || [ -z "$BRKPASS" ]; then
+	echo "Brook service not found."
+	echo "Abort."
+	exit 1
+fi
+
+if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
         docker stop $CTNNAME >/dev/null
 	docker rm $CTNNAME >/dev/null
 fi

@@ -35,4 +35,4 @@ done
 
 . $DIR/server-$SVCID.env
 
-docker run --restart unless-stopped --name $CTNNAME -p $V2RAYPORT:$V2RAYPORT -d $IMGNAME:$TARGET -p $V2RAYPORT -u $V2RAYUUID
+docker run --restart unless-stopped --name $CTNNAME -p $V2RAYPORT:10086 -d $IMGNAME:$TARGET -p 10086 -u $V2RAYUUID -v $V2RAYLEVEL -a $V2RAYAID
