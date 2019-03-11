@@ -173,6 +173,8 @@ lproxy <command> [options] <brook|shadowsocks|v2ray>
 ```
 Note: Please build VPN server before local proxy building.
 
+Note: Component depency fetching from golang.org is necessary during the progress of building v2ray/brook with '--from-src' switch. However, golang.org might be blocked in cetain country hence lead to the consequent building failure. Please build them without '--from-src' switch (which means build from docker hub images fetching) if that is your case.
+
 
 
 ## VPN server and local proxy configuration
@@ -236,8 +238,10 @@ Both "vlp build" and "vlp status --with-qrcode" print QR code as well as the sha
 All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
 
 
+
 ## Connect to the VPN server via L2TP:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
+
 
 
 ## Cleaning Before upgrading
