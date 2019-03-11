@@ -229,7 +229,7 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 
-## Connect to the VPN server via Shadowsocks from mobile devices:
+## Connect to the VPN server via Shadowsocks or V2Ray from mobile devices:
 Both "vlp build" and "vlp status --with-qrcode" print QR code as well as the shadowsocks URI. Scanning the QR code from Shadowsocks compatible mobile apps ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) will gives you a new connection entry named VLP-shadowsocks. Connect it and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
@@ -238,6 +238,22 @@ All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
 
 ## Connect to the VPN server via L2TP:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
+
+
+## Cleaning Before upgrading
+Image/container names may changed after upgrading. Please do the following before upgrading:
+1. purge VPN server(s) and local proxy container you previously created via 'vlp' and 'lproxy';
+2. Stop and remove existing vpnlaunchpad and lproxy containers;
+3. Remove existing vpnlaunchpad and lproxy images.
+
+Please follow the instructions here to do the cleaning:
+```
+$ ./vlp purge
+$ ./lproxy purge
+$ docker stop `docker ps -a|grep samuelhbne|awk '{print $1}'`
+$ docker rm `docker ps -a|grep samuelhbne|awk '{print $1}'`
+$ docker rmi `docker images |grep samuelhbne|awk '{print $3}'`
+```
 
 
 
