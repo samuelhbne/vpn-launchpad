@@ -262,7 +262,7 @@ $ docker rmi `docker images |grep samuelhbne|awk '{print $3}'`
 
 
 ## Running in dind (Docker in Docker) container
-It is possible to run vpn-launchpad in dind container if Ubuntu is not your option. The following instruction will start a dind container with necessary proxy port mapping, install package dependencies inside the container, create a non-root user, and start vlp/lproxy consiquently.
+It is possible to run vpn-launchpad in dind container if Ubuntu is not your option. The following instruction will start a dind container with necessary local proxy port mappings, install package dependencies inside the container, create a non-root user with docker service access, and start vlp/lproxy consiquently.
 ```
 $ docker run --privileged --name vlpdind -p 1080:1080 -p 8123:8123 -p 65353:65353 -d docker:stable-dind
 $ docker exec -it vlpdind sh
