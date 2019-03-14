@@ -48,7 +48,7 @@ done
 . $DIR/server-brook.env
 . $DIR/proxy-brook.env.out
 
-if [ -z "$HOST" ] || [ -z "$BRKPORT" ] || [ -z "$BRKPASS" ]; then
+if [ -z "$VHOST" ] || [ -z "$BRKPORT" ] || [ -z "$BRKPASS" ]; then
 	echo "Brook service not found."
 	echo "Abort."
 	exit 1
@@ -60,6 +60,6 @@ if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET client -l ${LSTNADDR}:1080 -i ${LSTNADDR} -s ${HOST}:${BRKPORT} -p "${BRKPASS}" >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET client -l ${LSTNADDR}:1080 -i ${LSTNADDR} -s ${VHOST}:${BRKPORT} -p "${BRKPASS}" >/dev/null
 echo "Done."
 echo

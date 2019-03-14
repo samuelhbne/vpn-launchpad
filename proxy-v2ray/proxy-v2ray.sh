@@ -49,7 +49,7 @@ done
 . $DIR/server-$SVCID.env
 . $DIR/proxy-$SVCID.env.out
 
-if [ -z "$HOST" ] || [ -z "$V2RAYPORT" ] || [ -z "$V2RAYUUID" ]; then
+if [ -z "$VHOST" ] || [ -z "$V2RAYPORT" ] || [ -z "$V2RAYUUID" ]; then
 	echo "V2ray service not found."
 	echo "Abort."
 	exit 1
@@ -61,6 +61,6 @@ if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${HOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -v ${V2RAYLEVEL} -a ${V2RAYAID} -s ${V2RSYSECURITY} -l ${LSTNADDR} -k 1080 >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${VHOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -v ${V2RAYLEVEL} -a ${V2RAYAID} -s ${V2RSYSECURITY} -l ${LSTNADDR} -k 1080 >/dev/null
 echo "Done."
 echo

@@ -12,7 +12,7 @@ while getopts ":a:k:l:h:p:s:u:v:" o; do
 			LSTNADDR=${OPTARG}
 			;;
 		h)
-			HOST=${OPTARG}
+			VHOST=${OPTARG}
 			;;
 		p)
 			PORT=${OPTARG}
@@ -30,7 +30,7 @@ while getopts ":a:k:l:h:p:s:u:v:" o; do
 			usage;
 	esac
 done
-if [ -z "${HOST}" ] || [ -z "${PORT}" ] || [ -z "${UUID}" ] || [ -z "${ALTERID}" ] || [ -z "${LEVEL}" ] || [ -z "${SECURITY}" ]; then
+if [ -z "${VHOST}" ] || [ -z "${PORT}" ] || [ -z "${UUID}" ] || [ -z "${ALTERID}" ] || [ -z "${LEVEL}" ] || [ -z "${SECURITY}" ]; then
 	usage
 fi
 
@@ -50,7 +50,7 @@ jq "(.inbounds[] | select( .protocol == \"socks\") | .listen) |= \"$LSTNADDR\"" 
 jq "(.inbounds[] | select( .protocol == \"socks\") | .port) |= \"$SOCKSPORT\"" vsv.json.1 >vsv.json.2
 jq "(.inbounds[] | select( .protocol == \"socks\") | .settings.ip) |= \"0.0.0.0\"" vsv.json.2>vsv.json.3
 jq "(.outbounds[] | select( .protocol == \"freedom\") | .protocol) |= \"vmess\"" vsv.json.3>vsv.json.4
-jq ".outbounds[0].settings |= . + { \"vnext\": [{\"address\": \"$HOST\", \"port\": $PORT, \"users\": [{\"id\": \"$UUID\", \"alterId\": $ALTERID, \"security\": \"$SECURITY\", \"level\": $LEVEL}]}] }" vsv.json.4>client.json
+jq ".outbounds[0].settings |= . + { \"vnext\": [{\"address\": \"$VHOST\", \"port\": $PORT, \"users\": [{\"id\": \"$UUID\", \"alterId\": $ALTERID, \"security\": \"$SECURITY\", \"level\": $LEVEL}]}] }" vsv.json.4>client.json
 
 /usr/bin/nohup /usr/bin/v2ray/v2ray -config=/tmp/client.json &
 /root/polipo/polipo -c /root/polipo/config

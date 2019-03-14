@@ -47,7 +47,7 @@ echo "Config local proxy daemon..."
 
 cat $RESULT|grep $INSTID|grep "$SVR\."|sed "s/$SVR.//g"|sed 's/|//g'|awk '{print $1"="$3}'>$VLPHOME/$CLN/$SVR.env
 cp -a $VLPHOME/$CLN/$CLN.env $VLPHOME/$CLN/$CLN.env.out
-sed -i.bak "s/HOST=.*/HOST=$VPSIP/g" $VLPHOME/$CLN/$CLN.env.out
+sed -i.bak "s/VHOST=.*/VHOST=$VPSIP/g" $VLPHOME/$CLN/$CLN.env.out
 rm -rf $VLPHOME/$CLN/$CLN.env.out.bak
 
 echo "Done."

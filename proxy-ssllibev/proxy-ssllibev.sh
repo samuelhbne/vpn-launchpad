@@ -41,7 +41,7 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-if [ -z "$HOST" ] || [ -z "$SSPORT" ] || [ -z "$SSPASS" ] || [ -z "$SSMTHD" ]; then
+if [ -z "$VHOST" ] || [ -z "$SSPORT" ] || [ -z "$SSPASS" ] || [ -z "$SSMTHD" ]; then
 	echo "Shadowsocks-libev service not found."
 	echo "Abort."
 	exit 1
@@ -53,6 +53,6 @@ if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -s ${HOST} -p ${SSPORT} -b ${LSTNADDR} -l 1080 -k "${SSPASS}" -m "${SSMTHD}" >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -s ${VHOST} -p ${SSPORT} -b ${LSTNADDR} -l 1080 -k "${SSPASS}" -m "${SSMTHD}" >/dev/null
 echo "Done."
 echo
