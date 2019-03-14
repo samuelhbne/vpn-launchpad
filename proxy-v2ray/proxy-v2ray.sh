@@ -6,6 +6,7 @@ DIR="$(cd $DIR; pwd)"
 ARCH=`uname -m`
 SVCID="v2ray"
 CTNNAME="proxy-$SVCID"
+SVRNAME="server-$SVCID"
 IMGNAME="samuelhbne/proxy-$SVCID"
 
 case $ARCH in
@@ -46,11 +47,11 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-. $DIR/server-$SVCID.env
-. $DIR/proxy-$SVCID.env.out
+. $DIR/$SVRNAME.env
+. $DIR/$CTNNAME.env
 
 if [ -z "$VHOST" ] || [ -z "$V2RAYPORT" ] || [ -z "$V2RAYUUID" ]; then
-	echo "V2ray service not found."
+	echo "Proxy config not found."
 	echo "Abort."
 	exit 1
 fi

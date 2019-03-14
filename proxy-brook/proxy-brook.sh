@@ -4,8 +4,10 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 ARCH=`uname -m`
-IMGNAME="samuelhbne/proxy-brook"
-CTNNAME="proxy-brook"
+SVCID="brook"
+CTNNAME="proxy-$SVCID"
+SVRNAME="server-$SVCID"
+IMGNAME="samuelhbne/proxy-$SVCID"
 
 case $ARCH in
 	armv6l|armv7l)
@@ -45,11 +47,11 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-. $DIR/server-brook.env
-. $DIR/proxy-brook.env.out
+. $DIR/$SVRNAME.env
+. $DIR/$CTNNAME.env
 
 if [ -z "$VHOST" ] || [ -z "$BRKPORT" ] || [ -z "$BRKPASS" ]; then
-	echo "Brook service not found."
+	echo "Proxy config not found."
 	echo "Abort."
 	exit 1
 fi

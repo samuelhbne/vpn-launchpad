@@ -4,11 +4,10 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 ARCH=`uname -m`
-IMGNAME="samuelhbne/proxy-ssllibev"
-CTNNAME="proxy-ssllibev"
-
-. $DIR/server-ssslibev.env
-. $DIR/proxy-ssllibev.env.out
+SVCID="ssllibev"
+CTNNAME="proxy-$SVCID"
+SVRNAME="server-ssslibev"
+IMGNAME="samuelhbne/proxy-$SVCID"
 
 case $ARCH in
 	armv6l|armv7l)
@@ -41,8 +40,11 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
+. $DIR/$SVRNAME.env
+. $DIR/$CTNNAME.env
+
 if [ -z "$VHOST" ] || [ -z "$SSPORT" ] || [ -z "$SSPASS" ] || [ -z "$SSMTHD" ]; then
-	echo "Shadowsocks-libev service not found."
+	echo "Proxy config not found."
 	echo "Abort."
 	exit 1
 fi
