@@ -16,3 +16,17 @@ $ docker run --name proxy-brook -p ${SOCKS_PORT}:1080 -p ${DNS_PORT}:53/udp -p $
 $ docker stop proxy-brook
 $ docker rm proxy-brook
 ```
+
+### Standalone proxy deployment
+```
+$ cat server-brook
+BRKPASS=BROOK_PASS
+BRKPORT=6060
+$ cat proxy-brook.env
+VHOST=12.34.56.78
+LSTNADDR="0.0.0.0"
+SOCKSPORT="1080"
+HTTPPORT="8123"
+DNSPORT="65353"
+$ ./proxy-brook.sh
+```

@@ -16,3 +16,11 @@ $ docker run --restart unless-stopped --name server-ssslibev -p ${SSPORT}:8388 -
 $ docker stop server-ssslibev
 $ docker rm server-ssslibev
 ```
+
+### Standalone server deployment
+```
+$ cat server-ssslibev.env
+SSPASS="SSSLIBEV-PASS"
+SSMTHD="aes-256-gcm"
+$ ./server-ssslibev.sh
+```

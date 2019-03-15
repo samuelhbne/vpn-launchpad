@@ -17,3 +17,15 @@ $ docker run --restart unless-stopped --name server-v2ray -p ${V2RAY_PORT}:10086
 $ docker stop server-v2ray
 $ docker rm server-v2ray
 ```
+
+### Standalone server deployment
+Instructions below run server-v2ray on any server with docker installed.
+```
+$ cat server-v2ray.env
+V2RAYUUID="e6daf07f-15f1-4785-8a7f-7aeeae446bdb"
+V2RAYPORT="10086"
+V2RAYLEVEL="1"
+V2RAYAID="64"
+$ ./server-v2ray.sh
+```
+

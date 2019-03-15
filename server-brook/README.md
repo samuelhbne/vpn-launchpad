@@ -15,3 +15,11 @@ $ docker run --restart unless-stopped --name server-brook -p ${BROOK_PORT}:6060 
 $ docker stop server-brook
 $ docker rm server-brook
 ```
+
+### Standalone server deployment
+```
+$ cat server-brook.env
+BRKPORT="6060"
+BRKPASS="BROOK_PASS"
+$ ./server-brook.sh
+```

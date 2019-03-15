@@ -16,3 +16,20 @@ $ docker run --name proxy-v2ray -p ${SOCKS_PORT}:1080 -p ${DNS_PORT}:53/udp -p $
 $ docker stop proxy-v2ray
 $ docker rm proxy-v2ray
 ```
+
+### Standalone proxy deployment
+```
+$ cat server-v2ray
+V2RAYAID=64
+V2RAYLEVEL=1
+V2RAYPORT=10086
+V2RAYUUID=e6daf07f-15f1-4785-8a7f-7aeeae446bdb
+$ cat proxy-v2ray.env
+VHOST=12.34.56.78
+LSTNADDR="0.0.0.0"
+SOCKSPORT="1080"
+HTTPPORT="8123"
+DNSPORT="65353"
+V2RAYSECURITY="auto"
+$ ./proxy-v2ray.sh
+```

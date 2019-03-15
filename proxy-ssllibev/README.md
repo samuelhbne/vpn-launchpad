@@ -16,3 +16,18 @@ $ docker run --name proxy-ssllibev -p ${SOCKS_PORT}:1080 -p ${DNS_PORT}:53/udp -
 $ docker stop proxy-ssllibev
 $ docker rm proxy-ssllibev
 ```
+
+### Standalone proxy deployment
+```
+$ cat server-ssslibev
+SSMTHD=aes-256-gcm
+SSPASS=SSSLIBEV-PASS
+SSPORT=28388
+$ cat proxy-ssllibev.env
+VHOST=12.34.56.78
+LSTNADDR="0.0.0.0"
+SOCKSPORT="1080"
+HTTPPORT="8123"
+DNSPORT="65353"
+$ ./proxy-ssllibev.sh
+```
