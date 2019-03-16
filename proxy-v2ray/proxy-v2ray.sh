@@ -6,6 +6,7 @@ DIR="$(cd $DIR; pwd)"
 ARCH=`uname -m`
 SVCID="v2ray"
 CTNNAME="proxy-$SVCID"
+SVRNAME="server-$SVCID"
 IMGNAME="samuelhbne/proxy-$SVCID"
 
 case $ARCH in
@@ -46,11 +47,11 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-. $DIR/server-$SVCID.env
-. $DIR/proxy-$SVCID.env.out
+. $DIR/$SVRNAME.env
+. $DIR/$CTNNAME.env
 
-if [ -z "$HOST" ] || [ -z "$V2RAYPORT" ] || [ -z "$V2RAYUUID" ]; then
-	echo "V2ray service not found."
+if [ -z "$VHOST" ] || [ -z "$V2RAYPORT" ] || [ -z "$V2RAYUUID" ]; then
+	echo "Proxy config not found."
 	echo "Abort."
 	exit 1
 fi
@@ -61,6 +62,6 @@ if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${HOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -v ${V2RAYLEVEL} -a ${V2RAYAID} -s ${V2RSYSECURITY} -l ${LSTNADDR} -k 1080 >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -h ${VHOST} -p ${V2RAYPORT} -u ${V2RAYUUID} -v ${V2RAYLEVEL} -a ${V2RAYAID} -s ${V2RSYSECURITY} -l ${LSTNADDR} -k 1080 >/dev/null
 echo "Done."
 echo

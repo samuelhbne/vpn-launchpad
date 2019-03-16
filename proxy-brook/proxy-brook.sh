@@ -4,8 +4,10 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 ARCH=`uname -m`
-IMGNAME="samuelhbne/proxy-brook"
-CTNNAME="proxy-brook"
+SVCID="brook"
+CTNNAME="proxy-$SVCID"
+SVRNAME="server-$SVCID"
+IMGNAME="samuelhbne/proxy-$SVCID"
 
 case $ARCH in
 	armv6l|armv7l)
@@ -45,11 +47,11 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-. $DIR/server-brook.env
-. $DIR/proxy-brook.env.out
+. $DIR/$SVRNAME.env
+. $DIR/$CTNNAME.env
 
-if [ -z "$HOST" ] || [ -z "$BRKPORT" ] || [ -z "$BRKPASS" ]; then
-	echo "Brook service not found."
+if [ -z "$VHOST" ] || [ -z "$BRKPORT" ] || [ -z "$BRKPASS" ]; then
+	echo "Proxy config not found."
 	echo "Abort."
 	exit 1
 fi
@@ -60,6 +62,6 @@ if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET client -l ${LSTNADDR}:1080 -i ${LSTNADDR} -s ${HOST}:${BRKPORT} -p "${BRKPASS}" >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET client -l ${LSTNADDR}:1080 -i ${LSTNADDR} -s ${VHOST}:${BRKPORT} -p "${BRKPASS}" >/dev/null
 echo "Done."
 echo

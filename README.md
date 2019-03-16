@@ -173,6 +173,8 @@ lproxy <command> [options] <brook|shadowsocks|v2ray>
 ```
 Note: Please build VPN server before local proxy building.
 
+Note: Component depency fetching from golang.org is necessary during the progress of building v2ray/brook with '--from-src' switch. However, golang.org might be blocked in cetain country hence lead to the consequent building failure. Please build them without '--from-src' switch (which means build from docker hub images fetching) if that is your case.
+
 
 
 ## VPN server and local proxy configuration
@@ -229,15 +231,52 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 
-## Connect to the VPN server via Shadowsocks from mobile devices:
+## Connect to the VPN server via Shadowsocks or V2Ray from mobile devices:
 Both "vlp build" and "vlp status --with-qrcode" print QR code as well as the shadowsocks URI. Scanning the QR code from Shadowsocks compatible mobile apps ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) will gives you a new connection entry named VLP-shadowsocks. Connect it and Enjoy please.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
 
 
+
 ## Connect to the VPN server via L2TP:
 <https://www.softether.org/4-docs/2-howto/9.L2TPIPsec_Setup_Guide_for_SoftEther_VPN_Server>
+
+
+
+## Cleaning Before upgrading
+Image/container names may changed after upgrading. Please do the following before upgrading:
+1. purge VPN server(s) and local proxy container you previously created via 'vlp' and 'lproxy';
+2. Stop and remove existing vpnlaunchpad and lproxy containers;
+3. Remove existing vpnlaunchpad and lproxy images.
+
+Please follow the instructions here to do the cleaning:
+```
+$ ./vlp purge
+$ ./lproxy purge
+$ docker stop `docker ps -a|grep samuelhbne|awk '{print $1}'`
+$ docker rm `docker ps -a|grep samuelhbne|awk '{print $1}'`
+$ docker rmi `docker images |grep samuelhbne|awk '{print $3}'`
+```
+
+
+
+## Running in dind (Docker in Docker) container
+It is possible to run vpn-launchpad in dind container if Ubuntu is not your option. The following instruction will start a dind container with necessary local proxy port mappings, install package dependencies inside the container, create a non-root user with docker service access, and start vlp/lproxy consiquently.
+```
+$ docker run --privileged --name vlpdind -p 1080:1080 -p 8123:8123 -p 65353:65353 -d docker:stable-dind
+$ docker exec -it vlpdind sh
+/ # apk add bash shadow git curl bind-tools whois
+/ # adduser -s /bin/bash -D vlp
+/ # usermod -aG root vlp
+/ # su - vlp
+72d645e47cb2:~$ git clone https://github.com/samuelhbne/vpn-launchpad
+72d645e47cb2:~$ cd vpn-launchpad/
+72d645e47cb2:~/vpn-launchpad$ ./vlp init
+72d645e47cb2:~/vpn-launchpad$ ./vlp build
+72d645e47cb2:~/vpn-launchpad$ ./lproxy build
+...
+```
 
 
 

@@ -14,6 +14,12 @@ VLPGROUP="vlp"
 IMGNAME="samuelhbne/vpnlaunchpad"
 CTNNAME="vpnlaunchpad"
 
+if [ "$DKUID" = "0" ]; then
+	echo "Non-root user required."
+	echo "Abort."
+	exit 255
+fi
+
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
 if [ "$DKVER" = "" ]; then
 	echo "Docker executable not found.."

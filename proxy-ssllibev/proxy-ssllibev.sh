@@ -4,11 +4,10 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 ARCH=`uname -m`
-IMGNAME="samuelhbne/proxy-ssllibev"
-CTNNAME="proxy-ssllibev"
-
-. $DIR/server-ssslibev.env
-. $DIR/proxy-ssllibev.env.out
+SVCID="ssllibev"
+CTNNAME="proxy-$SVCID"
+SVRNAME="server-ssslibev"
+IMGNAME="samuelhbne/proxy-$SVCID"
 
 case $ARCH in
 	armv6l|armv7l)
@@ -26,6 +25,13 @@ case $ARCH in
 		;;
 esac
 
+DOCKERVER=`docker --version|awk '{print $3}'`
+DKVERMAJOR=`echo $DOCKERVER|cut -d. -f1`
+DKVERMINOR=`echo $DOCKERVER|cut -d. -f2`
+if (("$DKVERMAJOR" < 17)) || ( (("$DKVERMAJOR" == 17)) && (("$DKVERMINOR" < 05 )) ); then
+	TARGET=$TARGET"1s"
+fi
+
 while [[ $# > 0 ]]; do
 	case $1 in
 		--from-src)
@@ -41,8 +47,11 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-if [ -z "$HOST" ] || [ -z "$SSPORT" ] || [ -z "$SSPASS" ] || [ -z "$SSMTHD" ]; then
-	echo "Shadowsocks-libev service not found."
+. $DIR/$SVRNAME.env
+. $DIR/$CTNNAME.env
+
+if [ -z "$VHOST" ] || [ -z "$SSPORT" ] || [ -z "$SSPASS" ] || [ -z "$SSMTHD" ]; then
+	echo "Proxy config not found."
 	echo "Abort."
 	exit 1
 fi
@@ -53,6 +62,6 @@ if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -s ${HOST} -p ${SSPORT} -b ${LSTNADDR} -l 1080 -k "${SSPASS}" -m "${SSMTHD}" >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -s ${VHOST} -p ${SSPORT} -b ${LSTNADDR} -l 1080 -k "${SSPASS}" -m "${SSMTHD}" >/dev/null
 echo "Done."
 echo
