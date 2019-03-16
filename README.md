@@ -144,7 +144,7 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 #### VPN server management
 ```
 vlp [--from-src] <command> [options]
-  --from-src            -- Build dependency container from source rather than hub.docker.com image downloading
+  --from-src            -- Build dependency container from source rather than hub.docker.com downloading
     init                -- Init AWS account credential.
     build               -- Build VPN server.
       --from-src        -- Build VPN server from source rather than docker image downloading
@@ -164,22 +164,22 @@ vlp [--from-src] <command> [options]
 ```
 lproxy <command> [options] <brook|shadowsocks|v2ray>
   build            -- Build local proxy container.
-    --from-src     -- Build local proxy container from source rather than hub.docker.com image downloading.
+    --from-src     -- Build local proxy container from source rather than hub.docker.com downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector
-      shadowsocks  -- Build local proxy container that connect to VPN server via ShadowSocks connector
-      v2ray        -- Build local proxy container that connect to VPN server via v2ray connector
+      shadowsocks  -- Build local proxy container that connect to VPN server via Shadowsocks connector
+      v2ray        -- Build local proxy container that connect to VPN server via V2Ray connector
   status           -- Check local proxy container status.
   purge            -- Destory local proxy container.
 ```
 Note: Please build VPN server before local proxy building.
 
-Note: Component depency fetching from golang.org is necessary during the progress of building v2ray/brook with '--from-src' switch. However, golang.org might be blocked in cetain country hence lead to the consequent building failure. Please build them without '--from-src' switch (which means build from docker hub images fetching) if that is your case.
+Note: Component depency fetching from golang.org is necessary during the progress of building v2ray/brook with '--from-src' switch. However, golang.org access might be blocked in cetain country hence lead to the consequent building failure. Please remove '--from-src' switch (which means build from docker hub images fetching) if that is your case.
 
 
 
 ## VPN server and local proxy configuration
 
-#### Password, encryption method and listening port for ShadowSocks VPN.
+#### Password, encryption method and listening port for Shadowsocks VPN.
 ```
 $ cat server-ssslibev/server-ssslibev.env
 SSPORT=" 8388"
@@ -262,7 +262,7 @@ $ docker rmi `docker images |grep samuelhbne|awk '{print $3}'`
 
 
 ## Running in dind (Docker in Docker) container
-It is possible to run vpn-launchpad in dind container if Ubuntu is not your option. The following instruction will start a dind container with necessary local proxy port mappings, install package dependencies inside the container, create a non-root user with docker service access, and start vlp/lproxy consiquently.
+It is possible to run vpn-launchpad in dind container if Ubuntu is not your option. The following instructions will start a dind container with necessary local proxy port mappings, install package dependencies inside the container, create a non-root user with docker service access, and start vlp/lproxy consiquently.
 ```
 $ docker run --privileged --name vlpdind -p 1080:1080 -p 8123:8123 -p 65353:65353 -d docker:stable-dind
 $ docker exec -it vlpdind sh
