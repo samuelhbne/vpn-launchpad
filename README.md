@@ -1,7 +1,7 @@
 # VPN Launchpad
 Builds VPN server on EC2 with Shadowsocks-libev and SoftEther L2TP support. Turns Raspberry Pi (1/2/3/zero) into an AWS based VPN server control centre.
 
-Works on Ubuntu (Xenial and above), Mac OSX(Yosemite and above) or Debian(Jessie and above) as well.
+Works in Ubuntu (Xenial and above), Debian(Buster and above) Mac OSX(Yosemite and above) or dind (Docker in docker) as well.
 
 
 
