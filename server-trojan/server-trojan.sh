@@ -37,9 +37,9 @@ echo "Update $DUCKDNSDOMAIN.duckdns.org IP address..."
 wget -qO- "https://duckdns.org/update/$DUCKDNSDOMAIN/$DUCKDNSTOKEN"
 echo
 
+echo "Obtain cert from letsencrypt..."
 docker run \
   --name=letsencrypt \
-  --cap-add=NET_ADMIN \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Europe/London \
@@ -47,15 +47,30 @@ docker run \
   -e SUBDOMAINS=$DUCKSUBDOMAINS, \
   -e VALIDATION=duckdns \
   -e DUCKDNSTOKEN=$DUCKDNSTOKEN \
-  -e STAGING=false \
+  -e STAGING=true \
   -p 8443:443 \
   -p 8080:80 \
   -v $DIR/config:/config \
-  --restart unless-stopped \
+  --rm \
   -d linuxserver/letsencrypt
 
-echo
-echo "Waitting 90s for letsencrypt cert obtaining..."
-sleep 90
+CERT="$DIR/config/etc/letsencrypt/archive/$DUCKDNSDOMAIN.duckdns.org/fullchain1.pem"
+KEY="$DIR/config/etc/letsencrypt/archive/$DUCKDNSDOMAIN.duckdns.org/privkey1.pem"
+LEFT=90
+while [ $LEFT -gt 0 ]; do
+	sleep 1
+	if [ -f $CERT ] && [ -f $KEY ]; then
+		echo "Cert obtained."
+		docker run --name server-trojan --restart unless-stopped \
+			-v $DIR/config:/config -p $TRJPORT:443 -d $IMGNAME:$TARGET \
+			-p $TRJPORT -w $TRJPASS -f $TRJFAKEDOMAIN -t $DUCKDNSTOKEN -d $DUCKDNSDOMAIN
+		exit 0
+		break;
+	fi
+	echo -en "\r$LEFT seconds left  "
+	((LEFT--))
+done
 
-docker run --name server-trojan --restart unless-stopped -v $DIR/config:/config -p $TRJPORT:443  -d $IMGNAME:$TARGET -p $TRJPORT -w $TRJPASS -f $TRJFAKEDOMAIN -t $DUCKDNSTOKEN -d $DUCKDNSDOMAIN
+echo
+echo "Cert obtain failed."
+exit 255
