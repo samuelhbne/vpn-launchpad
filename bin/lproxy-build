@@ -34,6 +34,11 @@ do
 			CLN="proxy-ssllibev"
 			break
 			;;
+		trojan)
+			SVR="server-trojan"
+			CLN="proxy-trojan"
+			break
+			;;
 		v2ray)
 			SVR="server-v2ray"
 			CLN="proxy-v2ray"

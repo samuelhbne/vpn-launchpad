@@ -1,0 +1,13 @@
+FROM arm64v8/alpine:3.9
+
+ARG VERSION='v1.12.3'
+
+ADD run.sh /run.sh
+
+RUN apk add build-base cmake boost-dev openssl-dev mariadb-connector-c-dev git jq bash \
+    && git clone --branch=${VERSION} https://github.com/trojan-gfw/trojan.git \
+    && cd trojan && cmake . && make -j $(nproc) && strip -s trojan \
+    && mkdir /config \
+    && chmod 755 /run.sh
+
+ENTRYPOINT ["/run.sh"]
