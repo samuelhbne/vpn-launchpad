@@ -47,7 +47,7 @@ docker run \
   -e SUBDOMAINS=$DUCKSUBDOMAINS, \
   -e VALIDATION=duckdns \
   -e DUCKDNSTOKEN=$DUCKDNSTOKEN \
-  -e STAGING=true \
+  -e STAGING=false \
   -p 8443:443 \
   -p 8080:80 \
   -v $DIR/config:/config \
