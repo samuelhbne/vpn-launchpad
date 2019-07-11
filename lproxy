@@ -24,7 +24,7 @@ case $act in
 		echo "    --from-src     -- Build local proxy container from source rather than docker image downloading."
 		echo "      brook        -- Build local proxy container that connect to VPN server via Brook connector"
 		echo "      shadowsocks  -- Build local proxy container that connect to VPN server via Shadowsocks connector"
-		echo "      trojan       -- uild local proxy container that connect to VPN server via Trojan connector"
+		echo "      trojan       -- Build local proxy container that connect to VPN server via Trojan connector"
 		echo "      v2ray        -- Build local proxy container that connect to VPN server via V2ray connector"
 		echo "  status           -- Check local proxy container status."
 		echo "  purge            -- Destory local proxy container."
