@@ -1,12 +1,12 @@
 # VPN Launchpad
-Builds VPN server on EC2 with Shadowsocks-libev and SoftEther L2TP support. Turns Raspberry Pi (1/2/3/zero) into an AWS based VPN server control centre.
+EC2 VPN server builder with multiple VPN support including SoftEther L2TP, Shadowsocks V2ray, Brook and Trojan.
 
-Works on Ubuntu (Xenial and above), Mac OSX(Yosemite and above) or Debian(Jessie and above) as well.
+Works in Ubuntu(Xenial and above), Debian(Buster and above), Mac OSX(Yosemite and above) or dind (Docker in docker) as well.
 
 
 
 ## How it works
-Command vlp creates EC2 instance with Shadowsocks and L2TP support installed out of box. Command lproxy creates proxy (SOCKS/HTTP/DNS) container running locally on the Raspberry Pi box, which tunneling all traffic through the VPN server on EC2. AWS account ID/key is a necessary.
+Command vlp creates EC2 instance with VPN services installed out of box. Command lproxy creates proxy (SOCKS/HTTP/DNS) container running locally on Raspberry Pi, which tunneling all traffic through the VPN server on EC2. AWS account ID/key are necessary.
 
 
 
@@ -144,42 +144,44 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 #### VPN server management
 ```
 vlp [--from-src] <command> [options]
-  --from-src            -- Build dependency container from source rather than hub.docker.com image downloading
-    init                -- Init AWS account credential.
+  --from-src            -- Build dependency container from source rather than docker image downloading
+    init                -- Init aws account credential.
     build               -- Build VPN server.
       --from-src        -- Build VPN server from source rather than docker image downloading
       --with-brook      -- Build VPN server with Brook services installed
       --with-l2tp       -- Build VPN server with L2TP services installed
+      --with-trojan     -- Build VPN server with Trojan services installed
       --with-v2ray      -- Build VPN server with V2Ray services installed
       --with-random     -- Build VPN server with VPN passwords randomisation.
       --without-random  -- Build VPN server without VPN passwords randomisation.
     status              -- Check VPN server status.
       --with-qrcode     -- Print Shadowsocks connection QR Code alongside VPN server status.
-    purge               -- Terminate VPN server instance.
+    purge               -- Destory VPN server instance.
     random              -- Randomise VPN passwords.
     ssh                 -- SSH login into VPN server instance.
 ```
 
 #### Local proxy management
 ```
-lproxy <command> [options] <brook|shadowsocks|v2ray>
+lproxy <command> [options] <brook|shadowsocks>
   build            -- Build local proxy container.
-    --from-src     -- Build local proxy container from source rather than hub.docker.com image downloading.
+    --from-src     -- Build local proxy container from source rather than docker image downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector
-      shadowsocks  -- Build local proxy container that connect to VPN server via ShadowSocks connector
-      v2ray        -- Build local proxy container that connect to VPN server via v2ray connector
+      shadowsocks  -- Build local proxy container that connect to VPN server via Shadowsocks connector
+      trojan       -- uild local proxy container that connect to VPN server via Trojan connector
+      v2ray        -- Build local proxy container that connect to VPN server via V2ray connector
   status           -- Check local proxy container status.
   purge            -- Destory local proxy container.
 ```
 Note: Please build VPN server before local proxy building.
 
-Note: Component depency fetching from golang.org is necessary during the progress of building v2ray/brook with '--from-src' switch. However, golang.org might be blocked in cetain country hence lead to the consequent building failure. Please build them without '--from-src' switch (which means build from docker hub images fetching) if that is your case.
+Note: Component depency fetching from golang.org is necessary during the progress of building v2ray/brook with '--from-src' switch. However, golang.org access might be blocked in cetain country hence lead to the consequent building failure. Please remove '--from-src' switch (which means build from docker hub images fetching) if that is your case.
 
 
 
 ## VPN server and local proxy configuration
 
-#### Password, encryption method and listening port for ShadowSocks VPN.
+#### Password, encryption method and listening port for Shadowsocks VPN.
 ```
 $ cat server-ssslibev/server-ssslibev.env
 SSPORT=" 8388"
@@ -262,7 +264,7 @@ $ docker rmi `docker images |grep samuelhbne|awk '{print $3}'`
 
 
 ## Running in dind (Docker in Docker) container
-It is possible to run vpn-launchpad in dind container if Ubuntu is not your option. The following instruction will start a dind container with necessary local proxy port mappings, install package dependencies inside the container, create a non-root user with docker service access, and start vlp/lproxy consiquently.
+It is possible to run vpn-launchpad in dind container if Ubuntu is not your option. The following instructions will start a dind container with necessary local proxy port mappings, install package dependencies inside the container, create a non-root user with docker service access, and start vlp/lproxy consiquently.
 ```
 $ docker run --privileged --name vlpdind -p 1080:1080 -p 8123:8123 -p 65353:65353 -d docker:stable-dind
 $ docker exec -it vlpdind sh
