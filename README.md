@@ -155,7 +155,7 @@ vlp [--from-src] <command> [options]
       --with-random     -- Build VPN server with VPN passwords randomisation.
       --without-random  -- Build VPN server without VPN passwords randomisation.
     status              -- Check VPN server status.
-      --with-qrcode     -- Print Shadowsocks connection QR Code alongside VPN server status.
+      --with-qrcode     -- Print Shadowsocks and V2Ray connection QR Code.
     purge               -- Destory VPN server instance.
     random              -- Randomise VPN passwords.
     ssh                 -- SSH login into VPN server instance.
@@ -168,7 +168,7 @@ lproxy <command> [options] <brook|shadowsocks>
     --from-src     -- Build local proxy container from source rather than docker image downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector
       shadowsocks  -- Build local proxy container that connect to VPN server via Shadowsocks connector
-      trojan       -- uild local proxy container that connect to VPN server via Trojan connector
+      trojan       -- Build local proxy container that connect to VPN server via Trojan connector
       v2ray        -- Build local proxy container that connect to VPN server via V2ray connector
   status           -- Check local proxy container status.
   purge            -- Destory local proxy container.

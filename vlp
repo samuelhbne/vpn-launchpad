@@ -144,7 +144,7 @@ case $subcmd in
 		echo "      --with-random     -- Build VPN server with VPN passwords randomisation."
 		echo "      --without-random  -- Build VPN server without VPN passwords randomisation."
 		echo "    status              -- Check VPN server status."
-		echo "      --with-qrcode     -- Print Shadowsocks connection QR Code alongside VPN server status."
+		echo "      --with-qrcode     -- Print Shadowsocks and V2Ray connection QR Code."
 		echo "    purge               -- Destory VPN server instance."
 		echo "    random              -- Randomise VPN passwords."
 		echo "    ssh                 -- SSH login into VPN server instance."
