@@ -155,7 +155,7 @@ vlp [--from-src] <command> [options]
       --with-random     -- Build VPN server with VPN passwords randomisation.
       --without-random  -- Build VPN server without VPN passwords randomisation.
     status              -- Check VPN server status.
-      --with-qrcode     -- Print Shadowsocks connection QR Code alongside VPN server status.
+      --with-qrcode     -- Print Shadowsocks and V2Ray connection QR Code.
     purge               -- Destory VPN server instance.
     random              -- Randomise VPN passwords.
     ssh                 -- SSH login into VPN server instance.
