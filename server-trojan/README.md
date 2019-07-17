@@ -54,8 +54,6 @@ $ docker run --restart unless-stopped --name server-trojan -v `pwd`/config:/conf
 
 ### How to stop and remove the running container
 ```
-$ docker stop letsencrypt; docker rm server-trojan
+$ docker stop letsencrypt; docker rm letsencrypt
 $ docker stop server-trojan; docker rm server-trojan
 ```
-
-
