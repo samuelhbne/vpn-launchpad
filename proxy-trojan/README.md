@@ -51,7 +51,7 @@ OrgId:          TWITT
 ```
 ##### NOTE:
     -   curl supposed to return the VPN server address as you configured above
-    -   dig supposed to return poison free IP recorders of twitter
+    -   dig supposed to return poison free IP recorders of twitter.com
     -   Depends on your region, whois may blocked hence failed the verification. Ignore that if so.
 
 ### How to stop and remove the running container
