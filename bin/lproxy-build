@@ -29,7 +29,7 @@ do
 			CLN="proxy-brook"
 			break
 			;;
-		shadowsocks|ss)
+		sslibev)
 			SVR="server-sslibev"
 			CLN="proxy-sslibev"
 			break
