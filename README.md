@@ -167,7 +167,7 @@ lproxy <command> [options] <brook|shadowsocks>
   build            -- Build local proxy container.
     --from-src     -- Build local proxy container from source rather than docker image downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector
-      shadowsocks  -- Build local proxy container that connect to VPN server via Shadowsocks connector
+      sslibev      -- Build local proxy container that connect to VPN server via Shadowsocks connector
       trojan       -- Build local proxy container that connect to VPN server via Trojan connector
       v2ray        -- Build local proxy container that connect to VPN server via V2ray connector
   status           -- Check local proxy container status.
