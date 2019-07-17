@@ -25,7 +25,7 @@ SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"
 
-$ ./proxy-v2ray.sh --from-src
+$ ./proxy-v2ray.sh
 ```
 
 ### How to start Trojan container manually
