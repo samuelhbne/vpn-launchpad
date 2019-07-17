@@ -189,6 +189,6 @@ if [ "$V2RAY" = "1" ]; then
 	SVC_DEPLOY "server-v2ray"
 fi
 
-SVC_DEPLOY "server-ssslibev"
+SVC_DEPLOY "server-sslibev"
 
 exit 0

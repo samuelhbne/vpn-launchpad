@@ -19,7 +19,7 @@ $ docker rm proxy-sslibev
 
 ### Standalone proxy deployment
 ```
-$ cat server-ssslibev
+$ cat server-sslibev
 SSMTHD=aes-256-gcm
 SSPASS=SSSLIBEV-PASS
 SSPORT=28388

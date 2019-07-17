@@ -183,7 +183,7 @@ Note: Component depency fetching from golang.org is necessary during the progres
 
 #### Password, encryption method and listening port for Shadowsocks VPN.
 ```
-$ cat server-ssslibev/server-ssslibev.env
+$ cat server-sslibev/server-sslibev.env
 SSPORT=" 8388"
 SSPASS="YOUR-PASS"
 SSMTHD="aes-256-gcm"

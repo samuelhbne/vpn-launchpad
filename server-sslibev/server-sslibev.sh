@@ -2,7 +2,7 @@
 
 DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
-IMGNAME="samuelhbne/server-ssslibev"
+IMGNAME="samuelhbne/server-sslibev"
 ARCH=`uname -m`
 
 case $ARCH in
@@ -31,6 +31,6 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-. $DIR/server-ssslibev.env
+. $DIR/server-sslibev.env
 
-docker run --restart unless-stopped --name server-ssslibev -p $SSPORT:8388 -p $SSPORT:8388/udp -d $IMGNAME:$TARGET -s 0.0.0.0 -s ::0 -p 8388 -k $SSPASS -m $SSMTHD -t 300 --fast-open -d 8.8.8.8,8.8.4.4 -u
+docker run --restart unless-stopped --name server-sslibev -p $SSPORT:8388 -p $SSPORT:8388/udp -d $IMGNAME:$TARGET -s 0.0.0.0 -s ::0 -p 8388 -k $SSPASS -m $SSMTHD -t 300 --fast-open -d 8.8.8.8,8.8.4.4 -u

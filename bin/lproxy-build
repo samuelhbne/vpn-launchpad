@@ -19,7 +19,7 @@ case $VPSIP in
 		;;
 esac
 
-SVR="server-ssslibev"
+SVR="server-sslibev"
 CLN="proxy-sslibev"
 for arg in "$@"
 do
@@ -30,7 +30,7 @@ do
 			break
 			;;
 		shadowsocks|ss)
-			SVR="server-ssslibev"
+			SVR="server-sslibev"
 			CLN="proxy-sslibev"
 			break
 			;;

@@ -44,7 +44,7 @@ echo
 
 SVRENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key:Key, Value:Value}'`
 
-SSENV=`echo "$SVRENV"|grep server-ssslibev.|sed 's/server-ssslibev.//g'`
+SSENV=`echo "$SVRENV"|grep server-sslibev.|sed 's/server-sslibev.//g'`
 if [ "$SSENV" != "" ]; then
 	SSMTHD=`echo "$SSENV"|grep SSMTHD|awk '{print $2}'`
 	SSPASS=`echo "$SSENV"|grep SSPASS|awk '{print $2}'`
