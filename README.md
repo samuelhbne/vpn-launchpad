@@ -83,7 +83,7 @@ dig +short @127.0.0.1 -p 65353 twitter.com
 104.244.42.1
 104.244.42.193
 Checking 104.244.42.1 IP owner ...
-docker exec -it proxy-ssllibev whois 104.244.42.1|grep OrgId
+docker exec -it proxy-sslibev whois 104.244.42.1|grep OrgId
 OrgId:          TWITT
 DNS server check passed.
 
@@ -208,7 +208,7 @@ Credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEt
 
 #### SOCKS/HTTP/DNS port for local proxy
 ```
-$ cat proxy-ssllibev/proxy-sslibev.env
+$ cat proxy-sslibev/proxy-sslibev.env
 SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"
