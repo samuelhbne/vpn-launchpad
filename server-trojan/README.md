@@ -17,7 +17,7 @@ DUCKDNSTOKEN="0f8d8cb0-fec5-4339-8026-ca051cc0ce4a"
 DUCKDNSDOMAIN="my-domain"
 DUCKSUBDOMAINS="wildcard"
 
-$ ./server-trojan.sh --from-src
+$ ./server-trojan.sh
 ```
 
 ### How to start server-trojan container manually
