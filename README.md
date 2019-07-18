@@ -1,7 +1,7 @@
 # VPN Launchpad
 EC2 VPN server builder with multiple VPN support including SoftEther L2TP, Shadowsocks V2ray, Brook and Trojan.
 
-Works in Ubuntu(Xenial and above), Debian(Buster and above), Mac OSX(Yosemite and above) or dind (Docker in docker) as well.
+Works in Ubuntu(Xenial and above), Mac OSX(Yosemite and above) and Debian(Buster and above) variants. Running in Windows with dind (Docker in docker) installed is possible but not yet verified.
 
 
 
