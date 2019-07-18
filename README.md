@@ -1,7 +1,7 @@
 # VPN Launchpad
 EC2 VPN server builder with multiple VPN support including SoftEther L2TP, Shadowsocks V2ray, Brook and Trojan.
 
-Works in Ubuntu(Xenial and above), Debian(Buster and above), Mac OSX(Yosemite and above) or dind (Docker in docker) as well.
+Works in Ubuntu(Xenial and above), Mac OSX(Yosemite and above) and Debian(Buster and above) variants. Running in Windows with dind (Docker in docker) installed is possible but not yet verified.
 
 
 
@@ -83,7 +83,7 @@ dig +short @127.0.0.1 -p 65353 twitter.com
 104.244.42.1
 104.244.42.193
 Checking 104.244.42.1 IP owner ...
-docker exec -it proxy-ssllibev whois 104.244.42.1|grep OrgId
+docker exec -it proxy-sslibev whois 104.244.42.1|grep OrgId
 OrgId:          TWITT
 DNS server check passed.
 
@@ -167,7 +167,7 @@ lproxy <command> [options] <brook|shadowsocks>
   build            -- Build local proxy container.
     --from-src     -- Build local proxy container from source rather than docker image downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector
-      shadowsocks  -- Build local proxy container that connect to VPN server via Shadowsocks connector
+      sslibev      -- Build local proxy container that connect to VPN server via Shadowsocks connector
       trojan       -- Build local proxy container that connect to VPN server via Trojan connector
       v2ray        -- Build local proxy container that connect to VPN server via V2ray connector
   status           -- Check local proxy container status.
@@ -183,7 +183,7 @@ Note: Component depency fetching from golang.org is necessary during the progres
 
 #### Password, encryption method and listening port for Shadowsocks VPN.
 ```
-$ cat server-ssslibev/server-ssslibev.env
+$ cat server-sslibev/server-sslibev.env
 SSPORT=" 8388"
 SSPASS="YOUR-PASS"
 SSMTHD="aes-256-gcm"
@@ -208,7 +208,7 @@ Credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEt
 
 #### SOCKS/HTTP/DNS port for local proxy
 ```
-$ cat proxy-ssllibev/proxy-sslibev.env
+$ cat proxy-sslibev/proxy-sslibev.env
 SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"

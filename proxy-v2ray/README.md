@@ -19,7 +19,7 @@ $ docker rm proxy-v2ray
 
 ### Standalone proxy deployment
 ```
-$ cat server-v2ray
+$ cat server-v2ray.env
 V2RAYAID=64
 V2RAYLEVEL=1
 V2RAYPORT=10086

@@ -40,9 +40,9 @@ sed -i "s/HPW=.*/HPW=`pwgen -cB1`/g" $VLPHOME/server-softether/server-softether.
 cat $VLPHOME/server-softether/server-softether.env
 echo
 
-sed -i "s/SSPORT=.*/SSPORT=`echo \"50000+$RANDOM%10000\"|bc`/g" $VLPHOME/server-ssslibev/server-ssslibev.env
-sed -i "s/SSPASS=.*/SSPASS=`pwgen -cB1`/g" $VLPHOME/server-ssslibev/server-ssslibev.env
-cat $VLPHOME/server-ssslibev/server-ssslibev.env
+sed -i "s/SSPORT=.*/SSPORT=`echo \"50000+$RANDOM%10000\"|bc`/g" $VLPHOME/server-sslibev/server-sslibev.env
+sed -i "s/SSPASS=.*/SSPASS=`pwgen -cB1`/g" $VLPHOME/server-sslibev/server-sslibev.env
+cat $VLPHOME/server-sslibev/server-sslibev.env
 echo
 
 echo "Done."

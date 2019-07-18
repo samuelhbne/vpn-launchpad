@@ -61,10 +61,10 @@ while [ $LEFT -gt 0 ]; do
 	if [ -f $CERT ] && [ -f $KEY ]; then
 		echo
 		echo "Cert obtained."
-		docker stop letsencrypt; docker rm letsencrypt
+		docker stop letsencrypt
 		docker run --name server-trojan --restart unless-stopped \
 			-v $DIR/config:/config -p $TRJPORT:443 -d $IMGNAME:$TARGET \
-			-p $TRJPORT -w $TRJPASS -f $TRJFAKEDOMAIN -t $DUCKDNSTOKEN -d $DUCKDNSDOMAIN
+			-p 443 -w $TRJPASS -f $TRJFAKEDOMAIN -t $DUCKDNSTOKEN -d $DUCKDNSDOMAIN
 		exit 0
 		break;
 	fi

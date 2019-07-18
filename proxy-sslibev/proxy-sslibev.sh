@@ -6,7 +6,7 @@ DIR="$(cd $DIR; pwd)"
 ARCH=`uname -m`
 SVCID="ssllibev"
 CTNNAME="proxy-$SVCID"
-SVRNAME="server-ssslibev"
+SVRNAME="server-sslibev"
 IMGNAME="samuelhbne/proxy-$SVCID"
 
 case $ARCH in
