@@ -234,7 +234,7 @@ $ sudo usermod -aG docker `whoami`; exit
 
 
 ## Connect to the VPN server via Shadowsocks/V2Ray/Trojan protocol from mobile devices:
-Both "vlp build" and "vlp status --with-qrcode" print QR code as well as the shadowsocks URI. Scanning the QR code from Shadowsocks compatible mobile apps ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases), [v2rayNG](https://play.google.com/store/apps/details?id=com.v2ray.ang) for Android etc.) will gives you a new connection entry named VLP-shadowsocks. Connect it and Enjoy please.
+Both "vlp build" and "vlp status --with-qrcode" spit QR codes (for Shadowsocks, V2Ray and Trojan) to facilitate the connection from mobile devices via QR supported app like [Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS, or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases), [v2rayNG](https://play.google.com/store/apps/details?id=com.v2ray.ang) and [Igniter](https://github.com/trojan-gfw/igniter/releases) (QR code scanning is unavailable so far) for Android. Simply scanning the QR code from these apps will create a new connection entry. Connect to it and Enjoy.
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr.png)
 
 All credits to [qrcode-terminal](https://www.npmjs.com/package/qrcode-terminal)
