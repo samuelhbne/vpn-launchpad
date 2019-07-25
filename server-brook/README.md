@@ -1,5 +1,5 @@
 # server-brook
-Yet another unofficial [Brook](https://github.com/txthinking/brook) server implementation.
+Yet another unofficial [Brook](https://github.com/txthinking/brook) server installation scripts.
 
 ### How to build the image
 ```
