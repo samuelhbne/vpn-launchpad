@@ -1,7 +1,7 @@
 # VPN Launchpad
 EC2 VPN server builder with multiple VPN support including SoftEther L2TP, Shadowsocks V2ray, Brook and Trojan.
 
-Works in Ubuntu(Xenial and above), Mac OSX(Yosemite and above) and Debian(Buster and above) variants. Running in Windows with dind (Docker in docker) installed is possible but not yet verified.
+Works in Ubuntu(Xenial and above), Mac OSX(Yosemite and above) and Debian(Buster and above) variants. Running in Windows with dind (Docker in docker) container is possible but not yet verified.
 
 
 
@@ -10,7 +10,7 @@ Command vlp creates EC2 instance with VPN services installed out of box. Command
 
 
 
-## Quick start on Raspbian / Ubuntu
+## Quick start on Ubuntu
 
 #### 1. Dependencies installation
 ```
@@ -18,6 +18,7 @@ $ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl whois
 $ sudo usermod -aG docker `whoami`; exit
 ```
 Note: It is necessary to log out current session and back to get docker group setting take effect.
+Note: Docker installation on Debian variants (including Raspbian) is currently broken. Please wait for the fix.
 
 #### 2. Initialize AWS credential and VPN server region
 ```
