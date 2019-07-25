@@ -1,5 +1,5 @@
 # server-sslibev
-Yet another unofficial [Shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev) server implementation.
+Yet another unofficial [Shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev) server installation scripts.
 
 ### How to build the image
 ```
