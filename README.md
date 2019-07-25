@@ -18,6 +18,7 @@ $ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl whois
 $ sudo usermod -aG docker `whoami`; exit
 ```
 Note: It is necessary to log out current session and back to get docker group setting take effect.
+
 Note: Docker installation on Debian variants (including Raspbian) is currently broken. Please wait for the fix.
 
 #### 2. Initialize AWS credential and VPN server region
