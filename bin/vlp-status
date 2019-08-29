@@ -82,7 +82,7 @@ if [ "$TROJANENV" != "" ]; then
 		echo "Incorrect TROJAN configuration. Incomplete VPN server installation?"
 		exit 2
 	fi
-	TROJAN_HOST="www.$TROJAN_HOST.duckdns.org"
+	TROJAN_HOST="$TROJAN_HOST.duckdns.org"
 	TRJURL="trojan://$TROJAN_PASS@$TROJAN_HOST:$TROJAN_PORT"
 	echo "Trojan-URL: $TRJURL"
 	echo
