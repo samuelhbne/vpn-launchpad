@@ -1,5 +1,5 @@
 # server-v2ray
-Yet another unofficial [v2ray](https://github.com/v2ray) server implementation.
+Yet another unofficial [v2ray](https://github.com/v2ray) server installation scripts.
 
 ### How to build the image
 ```

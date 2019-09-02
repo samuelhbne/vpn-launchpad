@@ -1,5 +1,5 @@
 # server-trojan
-Yet another unofficial [Trojan](https://github.com/trojan-gfw/trojan) server implementation.
+Yet another unofficial [Trojan](https://github.com/trojan-gfw/trojan) server installation scripts.
 
 ### How to build the image
 ```

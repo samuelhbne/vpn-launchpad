@@ -30,7 +30,7 @@ $ ./proxy-v2ray.sh
 
 ### How to start Trojan container manually
 ```
-$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h 12.34.56.78 -d www.my-domain.duckdns.org -p 443 -w TROJAN_PASSWORD
+$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h 12.34.56.78 -d my-domain.duckdns.org -p 443 -w TROJAN_PASSWORD
 ```
 
 ### How to verify if proxy tunnel is working properly

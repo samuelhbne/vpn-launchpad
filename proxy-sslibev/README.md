@@ -3,7 +3,7 @@ SOCKS/HTTP/DNS proxy that tunnelling traffic via remote Shadowsocks server.
 
 ### How to build the image
 ```
-$ docker build -t samuelhbne/proxy-sslibev:adm64 -f Dockerfile.amd64 .
+$ docker build -t samuelhbne/proxy-sslibev:amd64 -f Dockerfile.amd64 .
 ```
 
 ### How to start the container
