@@ -4,7 +4,7 @@ DIR=`dirname $0`
 DIR="$(cd $DIR; pwd)"
 
 ARCH=`uname -m`
-SVCID="ssllibev"
+SVCID="sslibev"
 CTNNAME="proxy-$SVCID"
 SVRNAME="server-sslibev"
 IMGNAME="samuelhbne/proxy-$SVCID"
