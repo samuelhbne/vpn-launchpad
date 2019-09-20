@@ -11,7 +11,15 @@ case $ARCH in
 		;;
 	aarch64)
 		# Amazon A1 instance
-		TARGET=arm64
+		TARGET=arm64/v8
+		;;
+	armv6l)
+		# Raspberry Pi 1 and Zero
+		TARGET=arm/v6
+		;;
+	armv7l)
+		# Raspberry Pi 2, 3 and 4
+		TARGET=arm/v7
 		;;
 	*)
 		echo "Unsupported arch"
