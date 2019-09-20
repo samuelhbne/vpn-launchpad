@@ -9,7 +9,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && cd trojan && cmake . && make -j $(nproc) && strip -s trojan
 
 
-FROM arm64v8/alpine:3.9
+FROM arm32v6/alpine:3.9
 
 COPY --from=builder /trojan  /trojan
 ADD run.sh /run.sh
