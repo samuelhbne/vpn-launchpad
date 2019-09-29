@@ -37,9 +37,7 @@ Note: './vlp init' need to download docker image(about 100MB) during the 1st tim
 
 #### 3. Build VPN server on AWS
 ```
-$ ./vlp build
-Randomise VPN passwords?(Y/n) 
-Randomising VPN passwords...
+$ ./vlp build --without-random --with-v2ray
 ...
 Shadowsocks-URI: ss://YWVzLTI1Ni1nY206U1NTTElCRVYtUEFTUw==@13.231.224.253:28388#VLP-shadowsocks
 ...
@@ -55,7 +53,7 @@ Scan the QR code generated above from Shadowsocks compatible mobile app ([Shadow
 #### 5. Build local proxy on Pi box (optional)
 Please jump to step 8 if PC/Mac browser connection is not your goal.
 ```
-$ ./lproxy build
+$ ./lproxy build v2ray
 ...
 Setting up local proxy daemon...
 Done.
@@ -127,13 +125,13 @@ Note: Terminating VPN server instance from AWS after surfing is always recommend
 1. Create an new AWS free account [here](https://aws.amazon.com/) if you don't have. I'm not affiliate.
 2. Login into [AWS IAM console](https://console.aws.amazon.com/iam/) with your account.
 3. Click "User" from left side then click "Add user" button on the top
-4. Choose the "User name" and tick "Programmatic access" box below
+4. Input the "User name" and tick "Programmatic access" box below
 5. Click "Next: Permissions" button
 6. Click "Create group" button
 7. Fill "Group name" with "vlpadmin" and tick "AdministratorAccess" selection box which on the top of the policy list
 8. Click "Create group" blue button at the bottom right of the page.
 9. Tick the "vlpadmin" selection box in "Add user to group" page
-10. Click "Next: Review" then click "Create user" button
+10. Click "Next: Tags", click "Next: Review" then click "Create user" button
 11. Click "Show" link
 12. Now you get the "Access key ID" and "Secret access key" that necessary for vpn-launchpad running
 
@@ -186,11 +184,14 @@ Note: Component depency fetching from golang.org is necessary during the progres
 #### Password, encryption method and listening port for Shadowsocks VPN.
 ```
 $ cat server-sslibev/server-sslibev.env
-SSPORT=" 8388"
-SSPASS="YOUR-PASS"
+SGTCP="28388"
+SGUDP="28388"
+SSPORT="28388"
+SSPASS="SSSLIBEV-PASS"
 SSMTHD="aes-256-gcm"
 $
 ```
+NOTE: Please ensure SGTCP/SGUDP and SSPORT are the same value to guarantee that AWS enabled the specific TCP/UDP port for incoming connection while server-sslibev service was listening.
 NOTE: Please run './vlp purge; ./vlp build' to get the new Shadowsocks server configuration applied.
 
 Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
@@ -277,8 +278,8 @@ $ docker exec -it vlpdind sh
 72d645e47cb2:~$ git clone https://github.com/samuelhbne/vpn-launchpad
 72d645e47cb2:~$ cd vpn-launchpad/
 72d645e47cb2:~/vpn-launchpad$ ./vlp init
-72d645e47cb2:~/vpn-launchpad$ ./vlp build
-72d645e47cb2:~/vpn-launchpad$ ./lproxy build
+72d645e47cb2:~/vpn-launchpad$ ./vlp build --without-random --with-v2ray
+72d645e47cb2:~/vpn-launchpad$ ./lproxy build v2ray
 ...
 ```
 

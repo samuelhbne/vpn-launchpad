@@ -13,6 +13,10 @@ case $ARCH in
 		# Amazon A1 instance
 		TARGET=arm64
 		;;
+	armv6l|armv7l)
+		# Raspberry Pi
+		TARGET=arm
+		;;
 	*)
 		echo "Unsupported arch"
 		exit 255
