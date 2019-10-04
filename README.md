@@ -19,7 +19,7 @@ $ sudo usermod -aG docker `whoami`; exit
 ```
 Note: It is necessary to log out current session and back to get docker group setting take effect.
 
-Note: Docker installation on Debian variants (including Raspbian) is currently broken. Please wait for the upstream fix.
+Note: For Raspberry Pi users, please update to Raspbian Buster before Docker installation. Docker version earlier than 18.09 are not supported any more.
 
 #### 2. Initialize AWS credential and VPN server region
 ```
