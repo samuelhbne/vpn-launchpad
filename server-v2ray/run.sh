@@ -26,7 +26,7 @@ if [ -z "${PORT}" ] || [ -z "${UUID}" ] || [ -z "${ALTERID}" ] || [ -z "${LEVEL}
 fi
 
 cd /tmp
-cp -a /usr/bin/v2ray/vpoint_vmess_freedom.json vvf.json
+cp /usr/bin/v2ray/vpoint_vmess_freedom.json vvf.json
 jq "(.inbounds[] | select( .protocol == \"vmess\") | .port) |= \"$PORT\"" vvf.json >vvf.json.1
 jq "(.inbounds[] | select( .protocol == \"vmess\") | .settings.clients[0].id) |= \"$UUID\"" vvf.json.1 >vvf.json.2
 jq "(.inbounds[] | select( .protocol == \"vmess\") | .settings.clients[0].level) |= $LEVEL" vvf.json.2 >vvf.json.3
