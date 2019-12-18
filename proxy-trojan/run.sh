@@ -1,18 +1,19 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 [-d <trojan domain>] [-p <port number>] [-w <password>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -d <trojan domain> -w <password> [-p <port number>]" 1>&2; exit 1; }
 while getopts ":d:h:p:w:" o; do
 	case "${o}" in
 		d)
-			DOMAIN=${OPTARG}
+			DOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
-		h)	HOST=${OPTARG}
+		h)
+			HOST="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		p)
-			PORT=${OPTARG}
+			PORT="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		w)
-			PASSWORD=${OPTARG}
+			PASSWORD="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		*)
 			usage;
@@ -22,14 +23,18 @@ if [ -z "${DOMAIN}" ] || [ -z "${PORT}" ] || [ -z "${PASSWORD}" ]; then
 	usage
 fi
 
+if [ -z "${PORT}" ]; then
+	PORT=443
+fi
+
 shift $((OPTIND-1))
 
 cat /trojan/examples/client.json-example  \
 	| jq " .\"local_addr\" |= \"0.0.0.0\" " \
 	| jq " .\"local_port\" |= 1080 " \
-	| jq " .\"remote_addr\" |= \"$DOMAIN\" " \
-	| jq " .\"remote_port\" |= \"$PORT\" " \
-	| jq " .\"password\"[0] |= \"$PASSWORD\" " \
+	| jq " .\"remote_addr\" |= \"${DOMAIN}\" " \
+	| jq " .\"remote_port\" |= \"${PORT}\" " \
+	| jq " .\"password\"[0] |= \"${PASSWORD}\" " \
 	>/config/client.json
 
 /usr/bin/nohup /trojan/trojan /config/client.json &

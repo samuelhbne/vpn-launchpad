@@ -1,6 +1,7 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 [-p <port numbert>] [-u <client uuid>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -u <client uuid> [-p <port numbert>] [-v <level>] [-a <alterid>]" 1>&2; exit 1; }
+
 while getopts ":a:p:u:v:" o; do
 	case "${o}" in
 		a)
@@ -21,8 +22,20 @@ while getopts ":a:p:u:v:" o; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${PORT}" ] || [ -z "${UUID}" ] || [ -z "${ALTERID}" ] || [ -z "${LEVEL}" ]; then
+if [ -z "${UUID}" ]; then
 	usage
+fi
+
+if [ -z "${PORT}" ]; then
+	PORT=10086
+fi
+
+if [ -z "${ALTERID}" ]; then
+	ALTERID=16
+fi
+
+if [ -z "${LEVEL}" ]; then
+	LEVEL=0
 fi
 
 cd /tmp
