@@ -4,19 +4,19 @@ usage() { echo "Usage: $0 [-d <duckdns domain name>] [-t <duckdns token>] [-f <f
 while getopts ":d:f:p:t:w:" o; do
 	case "${o}" in
 		d)
-			DUCKDOMAIN=${OPTARG}
+			DUCKDOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		f)
-			FAKEDOMAIN=${OPTARG}
+			FAKEDOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		p)
-			PORT=${OPTARG}
+			PORT="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		t)
-			DUCKTOKEN=${OPTARG}
+			DUCKTOKEN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		w)
-			PASSWORD=${OPTARG}
+			PASSWORD="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		*)
 		       	usage;
@@ -29,11 +29,11 @@ if [ -z "${PORT}" ] || [ -z "${PASSWORD}" ] || [ -z "${DUCKDOMAIN}" ] || [ -z "$
 fi
 
 cat /trojan/examples/server.json-example  \
-	| jq " .\"local_port\" |= $PORT " \
-	| jq " .\"remote_addr\" |= \"$FAKEDOMAIN\" " \
-	| jq " .\"password\"[0] |= \"$PASSWORD\" " \
-	| jq " .\"ssl\".\"cert\" |= \"/config/etc/letsencrypt/archive/$DUCKDOMAIN.duckdns.org/fullchain1.pem\" " \
-	| jq " .\"ssl\".\"key\" |= \"/config/etc/letsencrypt/archive/$DUCKDOMAIN.duckdns.org/privkey1.pem\" " \
+	| jq " .\"local_port\" |= ${PORT} " \
+	| jq " .\"remote_addr\" |= \"${FAKEDOMAIN}\" " \
+	| jq " .\"password\"[0] |= \"${PASSWORD}\" " \
+	| jq " .\"ssl\".\"cert\" |= \"/config/etc/letsencrypt/archive/${DUCKDOMAIN}.duckdns.org/fullchain1.pem\" " \
+	| jq " .\"ssl\".\"key\" |= \"/config/etc/letsencrypt/archive/${DUCKDOMAIN}.duckdns.org/privkey1.pem\" " \
 	>/config/server.json
 
 exec /trojan/trojan /config/server.json
