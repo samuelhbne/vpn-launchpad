@@ -19,7 +19,7 @@ case $act in
 		;;
 	*)
 		shift
-		echo "lproxy <command> [--from-src] <brook|shadowsocks>"
+		echo "lproxy <command> [--from-src]"
 		echo "  build            -- Build local proxy container."
 		echo "    --from-src     -- Build local proxy container from source rather than docker image downloading."
 		echo "      brook        -- Build local proxy container that connect to VPN server via Brook connector"

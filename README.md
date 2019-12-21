@@ -163,7 +163,7 @@ vlp [--from-src] <command> [options]
 
 #### Local proxy management
 ```
-lproxy <command> [--from-src] <brook|shadowsocks>
+lproxy <command> [--from-src]
   build            -- Build local proxy container.
     --from-src     -- Build local proxy container from source rather than docker image downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector
