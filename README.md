@@ -163,7 +163,7 @@ vlp [--from-src] <command> [options]
 
 #### Local proxy management
 ```
-lproxy <command> [--from-src]
+lproxy <command> [options]
   build            -- Build local proxy container.
     --from-src     -- Build local proxy container from source rather than docker image downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector
