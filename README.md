@@ -1,12 +1,12 @@
 # VPN Launchpad
-EC2 VPN server builder with multiple VPN support including SoftEther L2TP, Shadowsocks V2ray, Brook and Trojan.
+EC2 VPN server builder with multiple VPN support including L2TP, Shadowsocks, V2ray, Brook and Trojan.
 
-Works in Ubuntu(Xenial and above), Mac OSX(Yosemite and above) and Debian(Buster and above) variants. Running in Windows with dind (Docker in docker) container is possible but not yet verified.
+Works in Ubuntu(Xenial and above), Mac OSX(Yosemite and above) and Debian(Buster and above) variants including Raspbian. Running in Windows with dind (Docker in docker) container is possible, but not yet verified.
 
 
 
 ## How it works
-Command vlp creates EC2 instance with VPN services installed out of box. Command lproxy creates proxy (SOCKS/HTTP/DNS) container running locally on Raspberry Pi, which tunneling all traffic through the VPN server on EC2. AWS account ID/key are necessary.
+Command vlp creates EC2 instance with VPN services installed out of box. Command lproxy creates proxy (SOCKS/HTTP/DNS) container running locally on your PC, Mac or Raspberry Pi, which tunneling all traffic through the VPN server on EC2. AWS account ID/key are necessary.
 
 
 
@@ -19,7 +19,7 @@ $ sudo usermod -aG docker `whoami`; exit
 ```
 Note: It is necessary to log out current session and back to get docker group setting take effect.
 
-Note: For Raspberry Pi users, please update to Raspbian Buster before Docker installation. Docker version earlier than 18.09 are not supported any more.
+Note: For Raspberry Pi users, please update to Raspbian Buster before Docker installation as Docker version earlier than 18.09 is not supported any more.
 
 #### 2. Initialize AWS credential and VPN server region
 ```
@@ -163,7 +163,7 @@ vlp [--from-src] <command> [options]
 
 #### Local proxy management
 ```
-lproxy <command> [options] <brook|shadowsocks>
+lproxy <command> [options]
   build            -- Build local proxy container.
     --from-src     -- Build local proxy container from source rather than docker image downloading.
       brook        -- Build local proxy container that connect to VPN server via Brook connector

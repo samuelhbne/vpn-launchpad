@@ -1,4 +1,4 @@
-FROM arm32v6/alpine as builder
+FROM arm32v6/alpine:3.10 as builder
 
 RUN apk add --no-cache bash git build-base go \
 	musl-dev openssl jq curl bind-tools whois \
@@ -14,7 +14,7 @@ RUN GOPATH=/go go build -o /usr/bin/v2ray/v2ctl v2ray.com/core/infra/control/mai
 RUN cp -r /go/src/v2ray.com/core/release/config/* /usr/bin/v2ray/
 
 
-FROM arm32v6/alpine
+FROM arm32v6/alpine:3.10
 
 RUN apk update
 RUN apk upgrade

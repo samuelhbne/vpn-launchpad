@@ -19,7 +19,7 @@ $ docker rm server-v2ray
 ```
 
 ### Standalone server deployment
-Instructions below run server-v2ray on any server with docker installed.
+Instructions below will launch server-v2ray container on standalone server.
 ```
 $ cat server-v2ray.env
 V2RAYUUID="e6daf07f-15f1-4785-8a7f-7aeeae446bdb"
