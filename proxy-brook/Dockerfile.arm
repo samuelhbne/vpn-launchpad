@@ -1,10 +1,10 @@
-FROM arm32v6/alpine as builder
+FROM arm32v6/alpine:3.10 as builder
 
 RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy go autoconf automake build-base git
 RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
 RUN GOPATH=/go go get github.com/txthinking/brook/cli/brook
 
-FROM arm32v6/alpine
+FROM arm32v6/alpine:3.10
 
 RUN apk update
 RUN apk add bash curl bind-tools whois dnscrypt-proxy

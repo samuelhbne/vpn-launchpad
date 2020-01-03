@@ -1,4 +1,4 @@
-FROM arm32v6/alpine
+FROM arm32v6/alpine:3.10
 
 RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy
 RUN apk add --no-cache --virtual .build-deps \
