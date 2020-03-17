@@ -56,7 +56,7 @@ done
 
 echo "Querying latest $UBUNTUVER image in region $REGION ..."
 CANONICAL_OWNID="099720109477"
-AMISELECT=`aws --profile $PROFILE --output text ec2 describe-images --filters Name=owner-id,Values=$CANONICAL_OWNID,Name=architecture,Values=$INSTARCH,Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-$UBUNTUVER-* --query 'Images[*].[CreationDate,ImageId,Name,Description]'|sort -k1 -r|head -n1`
+AMISELECT=`aws --profile $PROFILE --output text ec2 describe-images --filters Name=owner-id,Values=$CANONICAL_OWNID,Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-$UBUNTUVER-* --query 'Images[*].[Architecture,CreationDate,ImageId,Name,Description]'|grep ^$INSTARCH|sort -k1 -r|head -n1`
 echo "$AMISELECT"|awk '{print "Image selected:",$2,$3}'
 AMIID=`echo "$AMISELECT"|awk '{print $2}'`
 if [ "$AMIID" = "" ]; then
