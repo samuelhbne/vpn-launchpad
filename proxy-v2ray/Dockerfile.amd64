@@ -1,6 +1,6 @@
 FROM alpine:3 as builder
 
-RUN apk add --no-cache bash git build-base go \
+RUN apk add --no-cache bash git build-base \
 	musl-dev openssl jq curl bind-tools whois \
 	dnscrypt-proxy autoconf automake wget \
 	ca-certificates \
@@ -10,7 +10,7 @@ RUN cd /tmp && git clone https://github.com/jech/polipo && cd polipo && make
 
 WORKDIR /go/src/v2ray.com/core
 RUN git clone --progress https://github.com/v2fly/v2ray-core.git . && \
-    bash ./release/user-package.sh nosource noconf codename=$(git describe --tags) buildname=docker-fly abpathtgz=/tmp/v2ray.tgz
+    bash ./release/user-package.sh nosource amd64 codename=$(git describe --tags) buildname=docker-fly abpathtgz=/tmp/v2ray.tgz
 
 
 FROM alpine:3
@@ -20,9 +20,6 @@ COPY --from=builder /tmp/polipo /root/polipo
 RUN mkdir -p /usr/bin/v2ray/
 COPY --from=builder /tmp/v2ray.tgz /tmp
 RUN tar xvfz /tmp/v2ray.tgz -C /usr/bin/v2ray
-
-RUN mkdir -p /etc/v2ray
-COPY --from=builder /go/src/v2ray.com/core/release/config /etc/v2ray/
 
 RUN apk update && apk add bash openssl jq curl bind-tools whois dnscrypt-proxy ca-certificates && update-ca-certificates
 
