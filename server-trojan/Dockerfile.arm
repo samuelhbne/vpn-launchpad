@@ -1,6 +1,6 @@
 FROM arm32v6/alpine:3.9 as builder
 
-ARG VERSION='v1.12.3'
+ARG VERSION='v1.15.1'
 
 RUN apk add --no-cache --virtual .build-deps \
 	build-base cmake boost-dev openssl-dev \

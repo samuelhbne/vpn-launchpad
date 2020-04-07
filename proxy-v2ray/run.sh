@@ -73,3 +73,4 @@ jq ".outbounds[0].settings |= . + { \"vnext\": [{\"address\": \"${VHOST}\", \"po
 /usr/bin/nohup /usr/bin/v2ray/v2ray -config=/tmp/client.json &
 /root/polipo/polipo -c /root/polipo/config
 exec /usr/bin/dnscrypt-proxy -config /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+

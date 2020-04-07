@@ -26,7 +26,7 @@ UBUNTUVER="bionic"
 STACKID="vlp-$UBUNTUVER"
 PROFILE="default"
 INSTYPE="t2.micro"
-INSTARCH="amd64"
+INSTARCH="x86_64"
 ```
 
 

@@ -54,14 +54,16 @@ while [[ $# > 0 ]]; do
 	esac
 done
 
-echo "Querying $UBUNTUVER image AMIID in $REGION ..."
-AMIID=`aws --profile $PROFILE --output text ec2 describe-images --filters Name=name,Values=ubuntu/images/hvm-ssd/* --query 'Images[*].[ImageId,CreationDate,Name]'|sort -k2 -r|grep $UBUNTUVER|grep $INSTARCH|head -n1|awk '{print $1}'`
+echo "Querying latest $UBUNTUVER image in region $REGION ..."
+CANONICAL_OWNID="099720109477"
+AMISELECT=`aws --profile $PROFILE --output text ec2 describe-images --filters Name=owner-id,Values=$CANONICAL_OWNID,Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-$UBUNTUVER-* --query 'Images[*].[Architecture,CreationDate,ImageId,Name,Description]'|grep ^$INSTARCH|sort -k2 -r|head -n1`
+echo "$AMISELECT"|awk '{print "Image selected:",$3,$4}'
+AMIID=`echo "$AMISELECT"|awk '{print $3}'`
 if [ "$AMIID" = "" ]; then
 	echo "$UBUNTUVER image not found."
 	echo "Abort."
 	exit 253
 fi
-echo "Latest $UBUNTUVER image AMIID in $REGION: $AMIID"
 echo "Done."
 echo
 
@@ -191,4 +193,5 @@ fi
 
 SVC_DEPLOY "server-sslibev"
 
+echo
 exit 0

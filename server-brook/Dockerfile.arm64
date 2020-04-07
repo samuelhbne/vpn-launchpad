@@ -1,4 +1,4 @@
-FROM arm64v8/alpine
+FROM arm64v8/alpine:3.10
 MAINTAINER Samuel Huang "samuelh2006@gmail.com"
 
 RUN apk add git build-base go
