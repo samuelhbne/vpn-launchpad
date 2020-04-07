@@ -1,4 +1,4 @@
-FROM alpine:3 as builder
+FROM golang:1.13-alpine as builder
 
 RUN apk add --no-cache bash git build-base \
 	musl-dev openssl jq curl bind-tools whois \
@@ -13,7 +13,7 @@ RUN git clone --progress https://github.com/v2fly/v2ray-core.git . && \
     bash ./release/user-package.sh nosource amd64 codename=$(git describe --tags) buildname=v2ray-vlp abpathtgz=/tmp/v2ray.tgz
 
 
-FROM alpine:3
+FROM golang:1.13-alpine
 
 COPY --from=builder /tmp/polipo /root/polipo
 
