@@ -1,6 +1,6 @@
-FROM arm32v6/alpine:3.9 as builder
+FROM arm32v6/alpine:3.11 as builder
 
-ARG VERSION='v1.15.1'
+ARG VERSION='v1.16.0'
 
 RUN apk add --no-cache --virtual .build-deps \
 	build-base cmake boost-dev openssl-dev \
@@ -9,7 +9,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && cd trojan && cmake . && make -j $(nproc) && strip -s trojan
 
 
-FROM arm32v6/alpine:3.9
+FROM arm32v6/alpine:3.11
 
 COPY --from=builder /trojan  /trojan
 ADD run.sh /run.sh
