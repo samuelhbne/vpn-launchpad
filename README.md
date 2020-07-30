@@ -14,6 +14,7 @@ Command vlp creates EC2 instance with VPN services installed out of box. Command
 
 ```bash
 $ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl whois
+...
 $ sudo usermod -aG docker `whoami`; exit
 ```
 
@@ -206,6 +207,7 @@ $
 ```
 
 NOTE: Please ensure SGTCP/SGUDP and SSPORT are the same value to guarantee that AWS enabled the specific TCP/UDP port for incoming connection which server-sslibev service listened.
+
 NOTE: Please run './vlp purge; ./vlp build' to get the new Shadowsocks server configuration applied.
 
 Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
@@ -223,6 +225,7 @@ $
 ```
 
 NOTE: Please ensure SGTCP/SGUDP and V2RAYPORT are the same value to guarantee that AWS enabled the specific TCP/UDP port for incoming connection which server-v2ray service listened.
+
 NOTE: Please run './vlp purge; ./vlp build' to get the new V2Ray server configuration applied.
 
 Credits to [V2Ray](https://github.com/V2Ray/v2ray-core)
@@ -242,8 +245,11 @@ $
 ```
 
 NOTE: You need to register a free domain name on duckdns.org first.
+
 NOTE: Please replace DUCKDNSTOKEN with the token obtained from the top of your duckdns.org home page after login.
-NOTE: Please replace DUCKDNSDOMAIN with the sub-domain name you registered.
+
+NOTE: Please replace DUCKDNSDOMAIN with the domain name you registered on duckdns.org.
+
 NOTE: Please run './vlp purge; ./vlp build' to get the new Trojan server configuration applied.
 
 Credits to [Trojan](https://github.com/trojan-gfw/trojan)
