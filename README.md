@@ -12,7 +12,7 @@ Command vlp creates EC2 instance with VPN services installed out of box. Command
 
 ### 1. Dependencies installation
 
-```bash
+```console
 $ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl whois
 ...
 $ sudo usermod -aG docker `whoami`; exit
@@ -24,7 +24,7 @@ Note: For Raspberry Pi users, please update to Raspbian Buster before Docker ins
 
 ### 2. Initialize AWS credential and VPN server region
 
-```bash
+```console
 $ git clone https://github.com/samuelhbne/vpn-launchpad.git
 $ cd vpn-launchpad
 $ ./vlp init
@@ -40,7 +40,7 @@ Note: './vlp init' need to download docker image(about 100MB) during the 1st tim
 
 ### 3. Build VPN server on AWS
 
-```bash
+```console
 $ ./vlp build --without-random --with-v2ray
 ...
 Shadowsocks-URI: ss://YWVzLTI1Ni1nY206U1NTTElCRVYtUEFTUw==@13.231.224.253:28388#VLP-shadowsocks
@@ -60,7 +60,7 @@ Scan the QR code generated above from Shadowsocks compatible mobile app ([Shadow
 
 Please jump to step 8 if PC/Mac browser connection is not your goal.
 
-```bash
+```console
 $ ./lproxy build v2ray
 ...
 Setting up local proxy daemon...
@@ -107,7 +107,7 @@ Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/
 
 ### 7. Stop and remove local proxy container from Pi box after surfing (optional)
 
-```bash
+```console
 $ ./lproxy purge
 Local proxy found. Purging...
 Done.
@@ -116,7 +116,7 @@ $
 
 ### 8. Terminate VPN server instance from AWS after surfing
 
-```bash
+```console
 $ ./vlp purge
 ...
 Waiting Instance shutdown...
@@ -153,7 +153,7 @@ Follow the [official AWS doc page](http://docs.aws.amazon.com/cli/latest/usergui
 
 ### VPN server management
 
-```bash
+```console
 $ ./vlp
 vlp [--from-src] <command> [options]
   --from-src            -- Build dependency container from source rather than docker image downloading
@@ -175,7 +175,7 @@ vlp [--from-src] <command> [options]
 
 ### Local proxy management
 
-```bash
+```console
 $ ./lproxy
 lproxy <command> [options]
   build            -- Build local proxy container.
@@ -196,7 +196,7 @@ Note: Component depency fetching from golang.org is necessary during the progres
 
 ### Password, encryption method and listening port configuration for Shadowsocks server
 
-```bash
+```console
 $ cat server-sslibev/server-sslibev.env
 SGTCP="28388"
 SGUDP="28388"
@@ -214,7 +214,7 @@ Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
 ### UUID, V2RAYAID, V2RAYLEVEL configuration for V2Ray server
 
-```bash
+```console
 $ cat server-v2ray/server-v2ray.env
 SGTCP="10086"
 V2RAYPORT="10086"
@@ -232,7 +232,7 @@ Credits to [V2Ray](https://github.com/V2Ray/v2ray-core)
 
 ### Fake domain, Duckdns domain, Duckdns token, Trojan password configuration for Trojan server
 
-```bash
+```console
 $ cat server-trojan/server-trojan.env
 SGTCP="443:8443"
 TRJPORT="443"
@@ -256,7 +256,7 @@ Credits to [Trojan](https://github.com/trojan-gfw/trojan)
 
 ### Username, password and pre-shared secret configuration for Softether L2TP server
 
-```bash
+```console
 $ cat server-softether/server-softether.env
 ...
 PSK=YOUR-SHARED-SECRET
@@ -273,7 +273,7 @@ Credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEt
 
 ### SOCKS/HTTP/DNS port for local proxy
 
-```bash
+```console
 $ cat proxy-sslibev/proxy-sslibev.env
 LSTNADDR="0.0.0.0"
 SOCKSPORT="1080"
@@ -292,7 +292,7 @@ Docker installation is necessary for running vlp and lproxy. curl and dig will b
 
 ### Docker and other dependencies installation for Raspbian / Ubuntu
 
-```bash
+```console
 $ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl whois
 ...
 $ sudo usermod -aG docker `whoami`; exit
@@ -323,7 +323,7 @@ Image/container names may changed after upgrading. Please do the following befor
 
 Please follow the instructions here to do the cleaning:
 
-```bash
+```console
 $ ./vlp purge
 ...
 $ ./lproxy purge
@@ -337,7 +337,7 @@ $ docker rmi `docker images |grep samuelhbne|awk '{print $3}'`
 
 It is possible to run vpn-launchpad in dind container if Ubuntu is not your option. The following instructions will start a dind container with necessary local proxy port mappings, install package dependencies inside the container, create a non-root user with docker service access, and start vlp/lproxy consiquently.
 
-```bash
+```console
 $ docker run --privileged --name vlpdind -p 1080:1080 -p 8123:8123 -p 65353:65353 -d docker:stable-dind
 $ docker exec -it vlpdind sh
 / # apk add bash shadow git curl bind-tools whois
