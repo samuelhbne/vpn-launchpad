@@ -1,13 +1,14 @@
 #!/bin/bash
 
-PXYIP="127.0.0.1"
-CTNNAME=`docker ps|grep samuelhbne/proxy-| awk '{print $NF}'`
 DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
 if [ "$DKVER" = "" ]; then
 	echo "Docker executable not found."
 	echo "Abort."
 	exit 255
 fi
+
+PXYIP="127.0.0.1"
+CTNNAME=`docker ps|grep samuelhbne/proxy-| awk '{print $NF}'`
 
 if [ "$CTNNAME" = "" ] || [ `docker ps| grep $CTNNAME|wc -l` -eq 0 ]; then
 	echo "Local proxy is not running."
@@ -62,8 +63,8 @@ fi
 echo
 
 echo "Checking DNS server on $PXYIP:$DNSPORT UDP ..."
-echo "dig +short @$PXYIP -p $DNSPORT twitter.com"
-TWITTIP=`dig +short @$PXYIP -p $DNSPORT twitter.com`
+echo "docker exec $CTNNAME dig +short @$PXYIP -p $DNSPORT twitter.com"
+TWITTIP=`docker exec $CTNNAME dig +short @$PXYIP -p $DNSPORT twitter.com`
 echo "$TWITTIP"
 
 TWITTIP=`echo "$TWITTIP"|head -n1`
@@ -71,8 +72,8 @@ if [ "$TWITTIP" = "" ]; then
 	echo "Failed"
 else
 	echo "Checking $TWITTIP IP owner ..."
-	echo "whois $TWITTIP|grep OrgId"
-	ORGID=`whois $TWITTIP|grep OrgId`
+	echo "docker exec $CTNNAME proxychains whois $TWITTIP|grep OrgId"
+	ORGID=`docker exec $CTNNAME proxychains whois $TWITTIP|grep OrgId`
 	echo "$ORGID"
 	ORGID=`echo "$ORGID"|awk '{print $2}'|tr -d '\r\n'`
 	if [ "$ORGID" = "TWITT" ]; then

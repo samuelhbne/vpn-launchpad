@@ -21,7 +21,9 @@ RUN mkdir -p /usr/bin/v2ray/
 COPY --from=builder /tmp/v2ray.tgz /tmp
 RUN tar xvfz /tmp/v2ray.tgz -C /usr/bin/v2ray
 
-RUN apk update && apk add bash openssl jq curl bind-tools whois dnscrypt-proxy ca-certificates && update-ca-certificates
+RUN apk update && apk add bash openssl jq curl bind-tools whois \
+	dnscrypt-proxy proxychains-ng ca-certificates \
+	&& update-ca-certificates
 
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
@@ -34,6 +36,7 @@ ENV DNSPORT="53"
 RUN sed -i "s/^listen_addresses = .*/listen_addresses = \[\'0.0.0.0:$DNSPORT\'\]/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^dnscrypt_servers = .*/dnscrypt_servers = false/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^doh_servers = .*/doh_servers = true/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+RUN sed -i "s/^socks4.*/socks5\t127.0.0.1 1080/g" /etc/proxychains/proxychains.conf
 
 RUN echo "socksParentProxy=localhost:$SOCKSPORT" >>/root/polipo/config
 RUN echo "proxyAddress=$LSTNADDR" >>/root/polipo/config

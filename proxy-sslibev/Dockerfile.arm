@@ -1,6 +1,6 @@
-FROM arm32v6/alpine:3.10
+FROM arm32v6/alpine:3.11
 
-RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy
+RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy proxychains-ng
 RUN apk add --no-cache --virtual .build-deps \
       autoconf \
       automake \
@@ -44,6 +44,7 @@ ENV DNSPORT="53"
 RUN sed -i "s/^listen_addresses = .*/listen_addresses = \[\'0.0.0.0:$DNSPORT\'\]/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^dnscrypt_servers = .*/dnscrypt_servers = false/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^doh_servers = .*/doh_servers = true/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+RUN sed -i "s/^socks4.*/socks5\t127.0.0.1 1080/g" /etc/proxychains/proxychains.conf
 
 RUN echo "socksParentProxy=localhost:$SOCKSPORT" >>/root/polipo/config
 RUN echo "proxyAddress=$LSTNADDR" >>/root/polipo/config
