@@ -63,8 +63,8 @@ fi
 echo
 
 echo "Checking DNS server on $PXYIP:$DNSPORT UDP ..."
-echo "docker exec $CTNNAME dig +short @$PXYIP -p 53 twitter.com"
-TWITTIP=`docker exec $CTNNAME dig +short @$PXYIP -p 53 twitter.com`
+echo "dig +short @$PXYIP -p $DNSPORT twitter.com"
+TWITTIP=`dig +short @$PXYIP -p $DNSPORT twitter.com`
 echo "$TWITTIP"
 
 TWITTIP=`echo "$TWITTIP"|head -n1`
