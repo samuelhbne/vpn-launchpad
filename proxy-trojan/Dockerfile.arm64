@@ -3,9 +3,9 @@ FROM arm64v8/alpine:3.11 as builder
 ARG VERSION='v1.16.0'
 
 RUN apk add --no-cache --virtual .build-deps \
-        git jq bind-tools whois ca-certificates \
+	git jq bind-tools whois ca-certificates \
 	build-base boost-dev cmake bash curl \
-        mariadb-connector-c-dev openssl-dev \
+	mariadb-connector-c-dev openssl-dev \
 	dnscrypt-proxy autoconf automake \
 	&& update-ca-certificates
 
@@ -18,11 +18,14 @@ FROM arm64v8/alpine:3.11
 
 RUN apk add bash openssl jq curl bind-tools whois \
 	dnscrypt-proxy ca-certificates proxychains-ng \
-        boost-program_options \
-        mariadb-connector-c \
-        boost-system \
+	boost-program_options \
+	mariadb-connector-c \
+	boost-system \
 	libstdc++ \
+	npm \
 	&& update-ca-certificates
+RUN npm config set unsafe-perm true
+RUN npm install -g qrcode-terminal
 RUN rm -rf /var/cache/apk/*
 
 RUN mkdir -p /config
@@ -30,6 +33,7 @@ COPY --from=builder /trojan  /trojan
 COPY --from=builder /root/polipo /root/polipo
 
 ADD run.sh /run.sh
+ADD status.sh /status.sh
 RUN chmod 755 /*.sh
 
 ENV LSTNADDR="0.0.0.0"
