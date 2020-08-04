@@ -18,27 +18,12 @@ else
 	echo
 fi
 
-case $CTNNAME in
-	proxy-sslibev)
-		VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 1)}}' $CTNNAME`
-		;;
-	proxy-brook)
-		VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 6)}}' $CTNNAME|cut -d':' -f1`
-		;;
-	proxy-trojan)
-		VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 1)}}' $CTNNAME`
-		;;
-	proxy-v2ray)
-		VPSADDR=`docker inspect -f '{{(index (index .Config "Cmd") 1)}}' $CTNNAME`
-		;;
-esac
-
 SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' $CTNNAME`
 HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' $CTNNAME`
 DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' $CTNNAME`
+VPSADDR=`docker exec -t $CTNNAME /status.sh|grep VPS-Server|cut -d ' ' -f2|tr -d '[:space:]'`
 
-echo "VPN sever address: $VPSADDR"
-echo
+docker exec -t $CTNNAME /status.sh
 
 echo "Checking SOCKS5 proxy on $PXYIP:$SOCKSPORT TCP ..."
 echo "curl -sx socks5h://$PXYIP:$SOCKSPORT http://ifconfig.co"
