@@ -23,9 +23,13 @@ RUN tar xvfz /tmp/v2ray.tgz -C /usr/bin/v2ray
 
 RUN apk update && apk add bash openssl jq curl bind-tools whois \
 	dnscrypt-proxy proxychains-ng ca-certificates \
+	npm \
 	&& update-ca-certificates
+RUN npm config set unsafe-perm true
+RUN npm install -g qrcode-terminal
 
 ADD run.sh /run.sh
+ADD status.sh /status.sh
 RUN chmod 755 /*.sh
 
 ENV LSTNADDR="0.0.0.0"
