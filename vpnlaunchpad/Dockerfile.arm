@@ -1,6 +1,4 @@
-FROM arm32v6/alpine:3.10
-
-MAINTAINER Samuel Huang "samuelh2006@gmail.com"
+FROM arm32v6/alpine:3.11
 
 ENV DKUID 1000
 ENV DKGID 1000
