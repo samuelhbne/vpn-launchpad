@@ -44,17 +44,38 @@ echo
 
 SVRENV=`aws --profile $PROFILE --output text ec2 describe-tags --filters "Name=resource-id,Values=$INSTID" --query 'Tags[*].{Key:Key, Value:Value}'`
 
+BRKENV=`echo "$SVRENV"|grep server-brook.|sed 's/server-brook.//g'`
+if [ "$BRKENV" != "" ]; then
+	BRKPORT=`echo "$BRKENV"|grep BRKPORT|awk '{print $2}'`
+	BRKPASS=`echo "$BRKENV"|grep BRKPASS|awk '{print $2}'`
+	if [ "$BRKPORT" = "" ] || [ "$BRKPASS" = "" ]; then
+		echo "Incorrect Brook configuration. Incomplete VPN server installation?"
+		exit 2
+	fi
+	BRKINFO=`url -p "$IPADDR:$BRKPORT $BRKPASS"`
+	echo "Brook-URL: brook://$BRKINFO"
+	if [ "$QRCODE" = "1" ]; then
+		qrcode-terminal "brook://$BRKINFO"
+		echo "Scan QR code above from Brook compatible App to connect your mobile device."
+	fi
+	echo
+fi
+
 SSENV=`echo "$SVRENV"|grep server-sslibev.|sed 's/server-sslibev.//g'`
 if [ "$SSENV" != "" ]; then
 	SSMTHD=`echo "$SSENV"|grep SSMTHD|awk '{print $2}'`
 	SSPASS=`echo "$SSENV"|grep SSPASS|awk '{print $2}'`
 	SSPORT=`echo "$SSENV"|grep SSPORT|awk '{print $2}'`
 	if [ "$SSMTHD" = "" ] || [ "$SSPASS" = "" ] || [ "$SSPORT" = "" ]; then
-		echo "Shadowsocks configuration not found. Incomplete VPN server installation?"
+		echo "Incorrect Shadowsocks configuration. Incomplete VPN server installation?"
 		exit 2
 	fi
 	SSUINFO=`echo "$SSMTHD:$SSPASS"|tr -d '\n'|base64|tr -d '\n'`
 	echo "Shadowsocks-URL: ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
+	if [ "$QRCODE" = "1" ]; then
+		qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
+		echo "Scan QR code above from Shadowsocks compatible App to connect your mobile device."
+	fi
 	echo
 fi
 
@@ -70,6 +91,10 @@ if [ "$V2RAYENV" != "" ]; then
 	V2RAYINFO=`echo "{'add':'$IPADDR','aid':'$V2RAYAID','id':'$V2RAYUUID','net':'tcp','port':'$V2RAYPORT','ps':'VLP-V2RAY'}"`
 	V2RAYINFO=`echo $V2RAYINFO|base64|tr -d '\n'`
 	echo "V2Ray-vmess-URI: vmess://$V2RAYINFO"
+	if [ "$QRCODE" = "1" ]; then
+		qrcode-terminal "vmess://$V2RAYINFO"
+		echo "Scan QR code above from V2RayNG compatible App to connect your mobile device."
+	fi
 	echo
 fi
 
@@ -85,33 +110,11 @@ if [ "$TROJANENV" != "" ]; then
 	TROJAN_HOST="$TROJAN_HOST.duckdns.org"
 	TRJURL="trojan://$TROJAN_PASS@$TROJAN_HOST:$TROJAN_PORT"
 	echo "Trojan-URL: $TRJURL"
-	echo
-fi
-
-if [ "$QRCODE" = "1" ]; then
-	if [ "$SSENV" != "" ]; then
-		qrcode-terminal "ss://$SSUINFO@$IPADDR:$SSPORT#VLP-shadowsocks"
-		echo
-		echo "Scan QR code above from Shadowsocks compatible App to connect your mobile device."
-		echo
-		echo
-	fi
-
-	if [ "$V2RAYINFO" != "" ]; then
-		qrcode-terminal "vmess://$V2RAYINFO"
-		echo
-		echo "Scan QR code above from V2RayNG compatible App to connect your mobile device."
-		echo
-		echo
-	fi
-
-	if [ "$TRJURL" != "" ]; then
+	if [ "$QRCODE" = "1" ]; then
 		qrcode-terminal "$TRJURL"
-		echo
 		echo "Scan QR code above from Trojan compatible mobile App to connect your mobile device."
-		echo
-		echo
 	fi
+	echo
 fi
 
 echo "Done."
