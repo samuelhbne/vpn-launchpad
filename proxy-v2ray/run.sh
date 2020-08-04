@@ -1,6 +1,6 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 -h <v2ray hostname/address> -u <v2ray client uuid> [-p <v2ray port numbert>] [-a <v2ray alterid>] [-v <v2ray level>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -h <v2ray hostname/address> -u <v2ray uuid> [-p <v2ray port number>] [-a <v2ray alterid>] [-v <v2ray level>]" 1>&2; exit 1; }
 
 while getopts ":a:k:l:h:p:s:u:v:" o; do
 	case "${o}" in
@@ -56,7 +56,7 @@ if [ -z "${LEVEL}" ]; then
 	LEVEL=0
 fi
 
-if [ -z "${LEVEL}" ]; then
+if [ -z "${SECURITY}" ]; then
 	SECURITY="auto"
 fi
 
