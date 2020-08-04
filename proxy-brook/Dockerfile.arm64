@@ -7,12 +7,15 @@ RUN GOPATH=/go go get github.com/txthinking/brook/cli/brook
 FROM arm64v8/alpine:3.11
 
 RUN apk update
-RUN apk add bash curl bind-tools whois dnscrypt-proxy proxychains-ng
+RUN apk add bash curl bind-tools whois dnscrypt-proxy proxychains-ng npm
+
+RUN npm install -g url-cli
 
 COPY --from=builder /go/bin /go/bin
 COPY --from=builder /root/polipo /root/polipo
 
 ADD run.sh /run.sh
+ADD status.sh /status.sh
 RUN chmod 755 /*.sh
 
 ENV LSTNADDR="0.0.0.0"
