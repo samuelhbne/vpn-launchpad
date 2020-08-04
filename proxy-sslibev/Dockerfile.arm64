@@ -1,6 +1,6 @@
 FROM arm64v8/alpine:3.11
 
-RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy proxychains-ng
+RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy proxychains-ng npm
 RUN apk add --no-cache --virtual .build-deps \
       autoconf \
       automake \
@@ -33,7 +33,11 @@ RUN set -ex \
 RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
 RUN apk del .build-deps
 
+RUN npm config set unsafe-perm true
+RUN npm install -g qrcode-terminal
+
 ADD run.sh /run.sh
+ADD status.sh /status.sh
 RUN chmod 755 /*.sh
 
 ENV LSTNADDR="0.0.0.0"
