@@ -65,6 +65,13 @@ $ docker exec -it proxychains whois 104.244.42.193|grep OrgId
 OrgId:          TWITT
 ```
 
+### NOTE
+
+- curl should return the VPN server address given above if SOCKS5/HTTP proxy work properly.
+- dig should return poison free IP recorders of twitter.com if DNS server works properly.
+- Whois should return "OrgId: TWITT". That means the IP recorder returned from dig query is untaminated.
+- Whois was actually running inside the proxy container through proxychains to avoid potential access blocking.
+
 ## How to get the Trojan QR code for mobile connection
 
 ```shell
@@ -74,13 +81,6 @@ Trojan-URL: trojan://my-secret@my-domain.duckdns.org:443
 ```
 
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr-trojan.png)
-
-### NOTE
-
-- curl should return the VPN server address given above if SOCKS5/HTTP proxy work properly.
-- dig should return poison free IP recorders of twitter.com if DNS server works properly.
-- Whois should return "OrgId: TWITT". That means the IP recorder returned from dig query is untaminated.
-- Whois was actually running inside the proxy container through proxychains to avoid potential access blocking.
 
 ## How to stop and remove the running container
 
