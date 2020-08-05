@@ -1,10 +1,12 @@
 # proxy-trojan
 
-SOCKS/HTTP/DNS proxy that tunnelling traffic via remote Trojan server.
+A SOCKS5/HTTP/DNS proxy that tunnelling traffic through existing Trojan VPN server.
 
 ## How to build the image
 
 ```shell
+$ git clone https://github.com/samuelhbne/vpn-launchpad.git
+$ cd vpn-launchpad/proxy-trojan
 $ docker build -t samuelhbne/proxy-trojan:amd64 -f Dockerfile.amd64 .
 ...
 ```
@@ -15,7 +17,7 @@ $ docker build -t samuelhbne/proxy-trojan:amd64 -f Dockerfile.amd64 .
 $ docker run --rm -it samuelhbne/proxy-trojan:amd64
 Usage: /run.sh -h <trojan-host> -w <password> [-p <port-number>]
 
-$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h my-domain.duckdns.org -p 443 -w TROJAN_PASSWORD
+$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h my-domain.duckdns.org -w my-secret -p 443
 ...
 ```
 
@@ -62,6 +64,16 @@ $ docker exec -it proxychains whois 104.244.42.193|grep OrgId
 [proxychains] Strict chain  ...  127.0.0.1:1080  ...  whois.arin.net:43  ...  OK
 OrgId:          TWITT
 ```
+
+## How to get the Trojan QR code for mobile connection
+
+```shell
+$ docker exec -it proxy-trojan /status.sh
+VPS-Server: 12.34.56.78
+Trojan-URL: trojan://my-secret@my-domain.duckdns.org:443
+```
+
+![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr-trojan.png)
 
 ### NOTE
 
