@@ -21,29 +21,6 @@ $ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d sa
 ...
 ```
 
-## How to Start Trojan proxy with saved configuration via help script (Recommended)
-
-```shell
-$ cat server-trojan.env
-SGTCP="443"
-TRJPORT="443"
-TRJPASS="my-secret"
-TRJFAKEDOMAIN="www.microsoft.com"
-DUCKDNSTOKEN="0f8d8cb0-fec5-4339-8026-ca051cc0ce4a"
-DUCKDNSDOMAIN="my-domain"
-DUCKSUBDOMAINS="wildcard"
-VHOST="my-domain.duckdns.org"
-
-$ cat proxy-trojan.env
-LSTNADDR="0.0.0.0"
-SOCKSPORT="1080"
-HTTPPORT="8123"
-DNSPORT="65353"
-
-$ ./proxy-trojan.sh
-...
-```
-
 ## How to verify if proxy tunnel is working properly
 
 ```shell
