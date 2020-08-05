@@ -11,7 +11,7 @@ $ docker build -t samuelhbne/proxy-trojan:amd64 -f Dockerfile.amd64 .
 ...
 ```
 
-## How to start Trojan container manually
+## How to start proxy-trojan container
 
 ```shell
 $ docker run --rm -it samuelhbne/proxy-trojan:amd64
