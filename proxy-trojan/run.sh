@@ -2,7 +2,7 @@
 
 usage() { echo "Usage: $0 -h <trojan-host> -w <password> [-p <port-number>]" 1>&2; exit 1; }
 
-while getopts ":d:h:p:w:" o; do
+while getopts ":h:p:w:" o; do
 	case "${o}" in
 		h)
 			TJHOST="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
