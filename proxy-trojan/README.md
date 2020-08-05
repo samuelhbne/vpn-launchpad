@@ -34,7 +34,7 @@ $ dig +short @127.0.0.1 -p 65353 twitter.com
 104.244.42.193
 104.244.42.129
 
-$ docker exec -it proxychains whois 104.244.42.193|grep OrgId
+$ docker exec -it proxy-trojan proxychains whois 104.244.42.193|grep OrgId
 [proxychains] config file found: /etc/proxychains/proxychains.conf
 [proxychains] preloading /usr/lib/libproxychains4.so
 [proxychains] DLL init: proxychains-ng 4.14
@@ -44,8 +44,8 @@ OrgId:          TWITT
 
 ### NOTE
 
-- curl should return the VPN server address given above if SOCKS5/HTTP proxy work properly.
-- dig should return poison free IP recorders of twitter.com if DNS server works properly.
+- curl should return the VPN server address given above if SOCKS5/HTTP proxy works properly.
+- dig should return resolved IP recorders of twitter.com if DNS server works properly.
 - Whois should return "OrgId: TWITT". That means the IP recorder returned from dig query is untaminated.
 - Whois was actually running inside the proxy container through proxychains to avoid potential access blocking.
 
