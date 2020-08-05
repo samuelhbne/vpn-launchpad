@@ -1,14 +1,17 @@
 # proxy-trojan
+
 SOCKS/HTTP/DNS proxy that tunnelling traffic via remote Trojan server.
 
-### How to build the image
-```
+## How to build the image
+
+```shell
 $ docker build -t samuelhbne/proxy-trojan:amd64 -f Dockerfile.amd64 .
+...
 ```
 
-### How to Start Trojan proxy with help script (Recommended)
+## How to Start Trojan proxy with help script (Recommended)
 
-```
+```shell
 $ cat server-trojan.env
 SGTCP="443"
 TRJPORT="443"
@@ -25,17 +28,20 @@ SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"
 
-$ ./proxy-v2ray.sh
+$ ./proxy-trojan.sh
+...
 ```
 
-### How to start Trojan container manually
-```
-$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h my-domain.duckdns.org -d my-domain.duckdns.org -p 443 -w TROJAN_PASSWORD
+## How to start Trojan container manually
+
+```shell
+$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h my-domain.duckdns.org -p 443 -w TROJAN_PASSWORD
+...
 ```
 
-### How to verify if proxy tunnel is working properly
+## How to verify if proxy tunnel is working properly
 
-```
+```shell
 $ curl -sx socks5h://127.0.0.1:1080 http://ifconfig.co
 12.34.56.78
 
@@ -46,16 +52,21 @@ $ dig +short @127.0.0.1 -p 65353 twitter.com
 104.244.42.193
 104.244.42.129
 
-$ whois 104.244.42.193|grep OrgId
+$ docker exec -it proxychains whois 104.244.42.193|grep OrgId
 OrgId:          TWITT
 ```
-##### NOTE:
-    -   curl supposed to return the VPN server address as you configured above
-    -   dig supposed to return poison free IP recorders of twitter.com
-    -   Depends on your region, whois may blocked hence failed the verification. Ignore that if so.
 
-### How to stop and remove the running container
-```
+### NOTE
+
+- curl should return the VPN server address as you configured above if all good.
+- dig should return poison free IP recorders of twitter.com if all good.
+- Whois should return "OrgId: TWITT" if all good. That means the IP recorder returned from dig query is untaminated.
+- Whois was actually running inside the proxy container and proxyfied via proxychains to avoid potential access blocking.
+
+## How to stop and remove the running container
+
+```shell
 $ docker stop proxy-trojan
+...
 $ docker rm proxy-trojan
 ```
