@@ -8,7 +8,7 @@ Works in Ubuntu(Xenial and above), Mac OSX(Yosemite and above) and Debian(Buster
 
 Command vlp creates EC2 instance with VPN services installed out of box. Command lproxy creates proxy (SOCKS/HTTP/DNS) container running locally on your PC, Mac or Raspberry Pi, which tunneling all traffic through the VPN server on EC2. AWS account ID/key are necessary.
 
-## Quick start on Ubuntu
+## Quick start on Ubuntu / Debian(Buster) / Raspbian
 
 ### 1. Dependencies installation
 
@@ -56,7 +56,7 @@ $
 
 Scan the QR code generated above from Shadowsocks compatible mobile app ([Shadowrocket](https://itunes.apple.com/au/app/shadowrocket/id932747118) for iOS or [Shadowsocks](https://github.com/shadowsocks/shadowsocks-android/releases) for Android etc.) to connect your mobile phone/tablet and enjoy.
 
-### 5. Build local proxy on Pi box (optional)
+### 5. Build local proxy on Ubuntu / Debian(Buster) / Raspbian [optional]
 
 Please jump to step 8 if PC/Mac browser connection is not your goal.
 
@@ -101,11 +101,11 @@ $
 
 Note: './lproxy build' need to download docker image(about 90MB) during the 1st time execution. However hub.docker.com might be 'throttled' mysteriously in certain country. Please try './lproxy build --from-src' instead to build the docker image from source in case './lproxy build' stuck on downloading over 10 minutes without progress.
 
-### 6. Browser configuration (optional)
+### 6. Browser configuration [optional]
 
 Now modify connnection settings for [Firefox](https://support.mozilla.org/en-US/kb/connection-settings-firefox), [Safari](https://support.apple.com/en-au/guide/safari/set-up-a-proxy-server-ibrw1053/mac) or [Chrome](https://www.expressvpn.com/support/troubleshooting/google-chrome-no-proxy/) according to the proxy port settings given above.
 
-### 7. Stop and remove local proxy container from Pi box after surfing (optional)
+### 7. Stop and remove local proxy container from Pi box after surfing [optional]
 
 ```console
 $ ./lproxy purge
@@ -290,7 +290,7 @@ Credits to [shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
 Docker installation is necessary for running vlp and lproxy. curl and dig will be used by 'lproxy status' for connection test and diagnosis but not compulsory.
 
-### Docker and other dependencies installation for Raspbian / Ubuntu
+### Dependencies installation for Ubuntu / Debian(Buster) / Raspbian
 
 ```console
 $ sudo apt-get update; sudo apt-get install docker.io git dnsutils curl whois
