@@ -46,7 +46,7 @@ OrgId:          TWITT
 
 - curl should return the VPN server address given above if SOCKS5/HTTP proxy works properly.
 - dig should return resolved IP recorders of twitter.com if DNS server works properly.
-- Whois should return "OrgId: TWITT". That means the IP recorder returned from dig query is untaminated.
+- Whois should return "OrgId: TWITT". That means the IP address returned from dig query belongs to twitter.com indeed, hence untaminated.
 - Whois was actually running inside the proxy container through proxychains to avoid potential access blocking.
 
 ## How to get the Trojan QR code for mobile connection
