@@ -1,16 +1,13 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 -d <duckdns domain name> -t <duckdns token> -f <fake domain> -w <password> [-p <port numbert>]" 1>&2; exit 1; }
-while getopts ":d:f:p:t:w:" o; do
+usage() { echo "Usage: $0 -d <duckdns-domain-name> -t <duckdns-token> -w <password> [-f <fake-domain-name>]" 1>&2; exit 1; }
+while getopts ":d:f:t:w:" o; do
 	case "${o}" in
 		d)
 			DUCKDOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		f)
 			FAKEDOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
-			;;
-		p)
-			PORT="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		t)
 			DUCKTOKEN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
@@ -23,13 +20,16 @@ while getopts ":d:f:p:t:w:" o; do
 	esac
 done
 
-if [ -z "${PASSWORD}" ] || [ -z "${DUCKDOMAIN}" ] || [ -z "${DUCKTOKEN}" ] || [ -z "${FAKEDOMAIN}" ]; then
+if [ -z "${PASSWORD}" ] || [ -z "${DUCKDOMAIN}" ] || [ -z "${DUCKTOKEN}" ]; then
 	usage
+	exit 2
 fi
 
-if [ -z "${PORT}" ]; then
-	PORT=443
+if [ -z "${FAKEDOMAIN}" ]; then
+	FAKEDOMAIN="www.microsoft.com"
 fi
+
+PORT=443
 
 shift $((OPTIND-1))
 

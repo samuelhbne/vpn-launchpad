@@ -68,7 +68,7 @@ while [ $LEFT -gt 0 ]; do
 		#docker stop letsencrypt
 		docker run --name server-trojan --restart unless-stopped \
 			-v $DIR/config:/config -p $TRJPORT:443 -d $IMGNAME:$TARGET \
-			-p 443 -w $TRJPASS -f $TRJFAKEDOMAIN -t $DUCKDNSTOKEN -d $DUCKDNSDOMAIN
+			-d $DUCKDNSDOMAIN -w $TRJPASS -f $TRJFAKEDOMAIN -t $DUCKDNSTOKEN
 		exit 0
 		break;
 	fi
