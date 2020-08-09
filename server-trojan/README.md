@@ -20,7 +20,7 @@ The following instructions will:
 - Start server-trojan container
 
 ```shell
-$ get -qO- "https://duckdns.org/update/my-domain/0f8d8cb0-fec5-4339-8026-ca051cc0ce4a"
+$ wget -qO- "https://duckdns.org/update/my-domain/0f8d8cb0-fec5-4339-8026-ca051cc0ce4a"
 
 $ docker run \
   --name=letsencrypt \
