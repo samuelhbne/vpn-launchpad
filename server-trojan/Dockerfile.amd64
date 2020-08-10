@@ -6,16 +6,19 @@ RUN apk add --no-cache --virtual .build-deps \
 	build-base cmake boost-dev openssl-dev \
 	mariadb-connector-c-dev git \
     && git clone --branch=${VERSION} https://github.com/trojan-gfw/trojan.git \
-    && cd trojan && cmake . && make -j $(nproc) && strip -s trojan
+    && cd trojan && cmake . && make -j $(nproc) && strip -s trojan \
+    && git clone https://github.com/acmesh-official/acme.sh.git
 
 
 FROM alpine:3.11
 
 COPY --from=builder /trojan  /trojan
+COPY --from=builder /acme.sh  /acme.sh
 ADD run.sh /run.sh
 
 RUN apk add boost-system boost-program_options \
 	mariadb-connector-c libstdc++ bash jq \
+    socat curl openssl \
     && mkdir /config \
     && chmod 755 /run.sh
 
