@@ -1,7 +1,7 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 -d <domain-name> -w <password> [-r] [-f <fake-domain-name>]" 1>&2; exit 1; }
-while getopts ":d:f:w:" o; do
+usage() { echo "Usage: $0 -d <domain-name> -w <password> [-f <fake-domain-name>] [-r]" 1>&2; exit 1; }
+while getopts ":d:f:r:w:" o; do
 	case "${o}" in
 		d)
 			DOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
