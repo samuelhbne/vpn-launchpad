@@ -1,7 +1,7 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 -d <domain-name> -w <password> [-f <fake-domain-name>] [-r]" 1>&2; exit 1; }
-while getopts ":d:f:r:w:" o; do
+usage() { echo "Usage: $0 -d <domain-name> -w <password> [-f <fake-domain-name>]" 1>&2; exit 1; }
+while getopts ":d:f:w:" o; do
 	case "${o}" in
 		d)
 			DOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
@@ -11,9 +11,6 @@ while getopts ":d:f:r:w:" o; do
 			;;
 		w)
 			PASSWORD="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
-			;;
-		r)
-			RENEW=true
 			;;
 		*)
 		       	usage;
@@ -33,8 +30,8 @@ PORT=443
 
 shift $((OPTIND-1))
 
-if [ ! -f "/root/.acme.sh/${DOMAIN}/fullchain.cer" ] || [ "$RENEW" = true ]; then
-	/root/.acme.sh/acme.sh --issue --standalone --force -d ${DOMAIN}
+if [ ! -f "/root/.acme.sh/${DOMAIN}/fullchain.cer" ]; then
+	/root/.acme.sh/acme.sh --issue --standalone -d ${DOMAIN}
 	if [ ! -f "/root/.acme.sh/${DOMAIN}/fullchain.cer" ]; then
 		echo "Obtian cert for ${DOMAIN} failed. Check log please."
 		exit 3
