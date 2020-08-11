@@ -46,6 +46,8 @@ case $DNSUPDATE in
 			exit 253
 		fi
 		TRJDOMAIN="${DUCKDNSDOMAIN}.duckdns.org"
+		echo "Domain-name $TRJDOMAIN updated."
+		echo
 		;;
 	*)
 		echo "Unsupported DNS update service."
@@ -53,11 +55,20 @@ case $DNSUPDATE in
 		;;
 esac
 
-echo
-
+echo "Starting server-trojan ..."
 docker run --name server-trojan	-p 80:80 -p $TRJPORT:443 -d $IMGNAME:$TARGET \
 	-d ${TRJDOMAIN} -w $TRJPASS -f $TRJFAKEDOMAIN
+echo
 
-echo "Waiting cert obtaining..."
-sleep 10
-docker logs server-trojan
+sleep 5
+
+CNT=`docker ps|grep server-trojan -c`
+
+if [ $CNT > 0 ]; then
+	echo "server-trojan started."
+	echo "Done"
+	exit 0
+else
+	echo "Starting server-trojan failed. Check detail with 'docker logs server-trojan'"
+	exit 252
+fi
