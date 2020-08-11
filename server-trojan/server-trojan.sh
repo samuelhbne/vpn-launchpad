@@ -55,8 +55,7 @@ esac
 
 echo
 
-docker run --name server-trojan --restart unless-stopped \
-	-p 80:80 -p $TRJPORT:443 -d $IMGNAME:$TARGET \
+docker run --name server-trojan	-p 80:80 -p $TRJPORT:443 -d $IMGNAME:$TARGET \
 	-d ${TRJDOMAIN} -w $TRJPASS -f $TRJFAKEDOMAIN
 
 echo "Waiting cert obtaining..."
