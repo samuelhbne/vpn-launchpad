@@ -37,48 +37,28 @@ done
 
 . $DIR/server-trojan.env
 
-echo "Update $DUCKDNSDOMAIN.duckdns.org IP address..."
-wget -qO- "https://duckdns.org/update/$DUCKDNSDOMAIN/$DUCKDNSTOKEN"
+case $DNSUPDATE in
+	duckdns)
+		echo "Update $DUCKDNSDOMAIN.duckdns.org IP address..."
+		RESULT=`wget -O- "https://duckdns.org/update/$DUCKDNSDOMAIN/$DUCKDNSTOKEN"`
+		if [ "$RESULT" != "OK" ]; then
+			echo "DNS update failed."
+			exit 253
+		fi
+		TRJDOMAIN="${DUCKDNSDOMAIN}.duckdns.org"
+		;;
+	*)
+		echo "Unsupported DNS update service."
+		exit 254
+		;;
+esac
+
 echo
 
-echo "Obtain cert from letsencrypt..."
-docker run \
-  --name=letsencrypt \
-  -e PUID=1000 \
-  -e PGID=1000 \
-  -e TZ=Europe/London \
-  -e URL="$DUCKDNSDOMAIN.duckdns.org" \
-  -e SUBDOMAINS=$DUCKSUBDOMAINS, \
-  -e VALIDATION=duckdns \
-  -e DUCKDNSTOKEN=$DUCKDNSTOKEN \
-  -e STAGING=false \
-  -p 8443:443 \
-  -p 8080:80 \
-  -v $DIR/config:/config \
-  -d linuxserver/letsencrypt
+docker run --name server-trojan --restart unless-stopped \
+	-p $TRJPORT:443 -d $IMGNAME:$TARGET \
+	-d ${TRJDOMAIN} -w $TRJPASS -f $TRJFAKEDOMAIN
 
-CERT="$DIR/config/etc/letsencrypt/archive/$DUCKDNSDOMAIN.duckdns.org/fullchain1.pem"
-KEY="$DIR/config/etc/letsencrypt/archive/$DUCKDNSDOMAIN.duckdns.org/privkey1.pem"
-LEFT=300
-while [ $LEFT -gt 0 ]; do
-	sleep 1
-	if [ -f $CERT ] && [ -f $KEY ]; then
-		echo
-		echo "Cert obtained."
-		#docker stop letsencrypt
-		docker run --name server-trojan --restart unless-stopped \
-			-v $DIR/config:/config -p $TRJPORT:443 -d $IMGNAME:$TARGET \
-			-d $DUCKDNSDOMAIN -w $TRJPASS -f $TRJFAKEDOMAIN -t $DUCKDNSTOKEN
-		exit 0
-		break;
-	fi
-	echo -en "\r$LEFT sec left:\t"`docker logs letsencrypt 2>&1|tail -n1`"\t\t\t\t"
-	((LEFT--))
-done
-
-docker logs letsencrypt
-echo
-echo "Cert obtaining failed."
-echo "Please check letsencrypt log above for details."
-echo "Abort server-trojan provisioning."
-exit 255
+echo "Waiting cert obtaining"
+sleep 10
+docker logs server-trojan
