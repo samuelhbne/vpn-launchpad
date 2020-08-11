@@ -1,6 +1,6 @@
-FROM alpine:3.10
+FROM alpine:3.11
 
-RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy
+RUN apk add --no-cache bash curl bind-tools whois dnscrypt-proxy proxychains-ng npm
 RUN apk add --no-cache --virtual .build-deps \
       autoconf \
       automake \
@@ -33,7 +33,11 @@ RUN set -ex \
 RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
 RUN apk del .build-deps
 
+RUN npm config set unsafe-perm true
+RUN npm install -g qrcode-terminal
+
 ADD run.sh /run.sh
+ADD status.sh /status.sh
 RUN chmod 755 /*.sh
 
 ENV LSTNADDR="0.0.0.0"
@@ -44,6 +48,7 @@ ENV DNSPORT="53"
 RUN sed -i "s/^listen_addresses = .*/listen_addresses = \[\'0.0.0.0:$DNSPORT\'\]/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^dnscrypt_servers = .*/dnscrypt_servers = false/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "s/^doh_servers = .*/doh_servers = true/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+RUN sed -i "s/^socks4.*/socks5\t127.0.0.1 1080/g" /etc/proxychains/proxychains.conf
 
 RUN echo "socksParentProxy=localhost:$SOCKSPORT" >>/root/polipo/config
 RUN echo "proxyAddress=$LSTNADDR" >>/root/polipo/config

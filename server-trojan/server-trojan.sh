@@ -37,48 +37,38 @@ done
 
 . $DIR/server-trojan.env
 
-echo "Update $DUCKDNSDOMAIN.duckdns.org IP address..."
-wget -qO- "https://duckdns.org/update/$DUCKDNSDOMAIN/$DUCKDNSTOKEN"
-echo
-
-echo "Obtain cert from letsencrypt..."
-docker run \
-  --name=letsencrypt \
-  -e PUID=1000 \
-  -e PGID=1000 \
-  -e TZ=Europe/London \
-  -e URL="$DUCKDNSDOMAIN.duckdns.org" \
-  -e SUBDOMAINS=$DUCKSUBDOMAINS, \
-  -e VALIDATION=duckdns \
-  -e DUCKDNSTOKEN=$DUCKDNSTOKEN \
-  -e STAGING=false \
-  -p 8443:443 \
-  -p 8080:80 \
-  -v $DIR/config:/config \
-  -d linuxserver/letsencrypt
-
-CERT="$DIR/config/etc/letsencrypt/archive/$DUCKDNSDOMAIN.duckdns.org/fullchain1.pem"
-KEY="$DIR/config/etc/letsencrypt/archive/$DUCKDNSDOMAIN.duckdns.org/privkey1.pem"
-LEFT=300
-while [ $LEFT -gt 0 ]; do
-	sleep 1
-	if [ -f $CERT ] && [ -f $KEY ]; then
+case $DNSUPDATE in
+	duckdns)
+		echo "Update $DUCKDNSDOMAIN.duckdns.org IP address..."
+		RESULT=`wget --progress=dot:noscroll -O- "https://duckdns.org/update/$DUCKDNSDOMAIN/$DUCKDNSTOKEN"`
+		if [ "$RESULT" != "OK" ]; then
+			echo "DNS update failed."
+			exit 253
+		fi
+		TRJDOMAIN="${DUCKDNSDOMAIN}.duckdns.org"
+		echo "Domain-name $TRJDOMAIN updated."
 		echo
-		echo "Cert obtained."
-		#docker stop letsencrypt
-		docker run --name server-trojan --restart unless-stopped \
-			-v $DIR/config:/config -p $TRJPORT:443 -d $IMGNAME:$TARGET \
-			-p 443 -w $TRJPASS -f $TRJFAKEDOMAIN -t $DUCKDNSTOKEN -d $DUCKDNSDOMAIN
-		exit 0
-		break;
-	fi
-	echo -en "\r$LEFT sec left:\t"`docker logs letsencrypt 2>&1|tail -n1`"\t\t\t\t"
-	((LEFT--))
-done
+		;;
+	*)
+		echo "Unsupported DNS update service."
+		exit 254
+		;;
+esac
 
-docker logs letsencrypt
+echo "Starting server-trojan ..."
+docker run --name server-trojan	-p 80:80 -p $TRJPORT:443 -d $IMGNAME:$TARGET \
+	-d ${TRJDOMAIN} -w $TRJPASS -f $TRJFAKEDOMAIN
 echo
-echo "Cert obtaining failed."
-echo "Please check letsencrypt log above for details."
-echo "Abort server-trojan provisioning."
-exit 255
+
+sleep 5
+
+CNT=`docker ps|grep server-trojan -c`
+
+if [ $CNT > 0 ]; then
+	echo "server-trojan started."
+	echo "Done"
+	exit 0
+else
+	echo "Starting server-trojan failed. Check detail with 'docker logs server-trojan'"
+	exit 252
+fi

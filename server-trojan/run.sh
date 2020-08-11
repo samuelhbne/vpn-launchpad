@@ -1,19 +1,13 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 -d <duckdns domain name> -t <duckdns token> -f <fake domain> -w <password> [-p <port numbert>]" 1>&2; exit 1; }
-while getopts ":d:f:p:t:w:" o; do
+usage() { echo "Usage: $0 -d <domain-name> -w <password> [-f <fake-domain-name>]" 1>&2; exit 1; }
+while getopts ":d:f:w:" o; do
 	case "${o}" in
 		d)
-			DUCKDOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+			DOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		f)
 			FAKEDOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
-			;;
-		p)
-			PORT="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
-			;;
-		t)
-			DUCKTOKEN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
 			;;
 		w)
 			PASSWORD="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
@@ -23,22 +17,33 @@ while getopts ":d:f:p:t:w:" o; do
 	esac
 done
 
-if [ -z "${PASSWORD}" ] || [ -z "${DUCKDOMAIN}" ] || [ -z "${DUCKTOKEN}" ] || [ -z "${FAKEDOMAIN}" ]; then
+if [ -z "${PASSWORD}" ] || [ -z "${DOMAIN}" ]; then
 	usage
+	exit 2
 fi
 
-if [ -z "${PORT}" ]; then
-	PORT=443
+if [ -z "${FAKEDOMAIN}" ]; then
+	FAKEDOMAIN="www.microsoft.com"
 fi
+
+PORT=443
 
 shift $((OPTIND-1))
+
+if [ ! -f "/root/.acme.sh/${DOMAIN}/fullchain.cer" ]; then
+	/root/.acme.sh/acme.sh --issue --standalone -d ${DOMAIN}
+	if [ ! -f "/root/.acme.sh/${DOMAIN}/fullchain.cer" ]; then
+		echo "Obtian cert for ${DOMAIN} failed. Check log please."
+		exit 3
+	fi
+fi
 
 cat /trojan/examples/server.json-example  \
 	| jq " .\"local_port\" |= ${PORT} " \
 	| jq " .\"remote_addr\" |= \"${FAKEDOMAIN}\" " \
 	| jq " .\"password\"[0] |= \"${PASSWORD}\" " \
-	| jq " .\"ssl\".\"cert\" |= \"/config/etc/letsencrypt/archive/${DUCKDOMAIN}.duckdns.org/fullchain1.pem\" " \
-	| jq " .\"ssl\".\"key\" |= \"/config/etc/letsencrypt/archive/${DUCKDOMAIN}.duckdns.org/privkey1.pem\" " \
+	| jq " .\"ssl\".\"cert\" |= \"/root/.acme.sh/${DOMAIN}/fullchain.cer\" " \
+	| jq " .\"ssl\".\"key\" |= \"/root/.acme.sh/${DOMAIN}/${DOMAIN}.key\" " \
 	>/config/server.json
 
 exec /trojan/trojan /config/server.json
