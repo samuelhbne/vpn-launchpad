@@ -26,6 +26,7 @@ echo "VPN-SERVER: None"
 echo "Done."
 echo
 
+DEPLOY=0
 while [[ $# > 0 ]]; do
 	case $1 in
 		--from-src)
@@ -33,19 +34,28 @@ while [[ $# > 0 ]]; do
 			shift
 			;;
 		--with-brook)
-			BROOK=1
+			BROOK=true
+			((DEPLOY++))
 			shift
 			;;
 		--with-l2tp)
-			L2TP=1
+			L2TP=true
+			((DEPLOY++))
+			shift
+			;;
+		--with-sslibev)
+			SSLIBEV=true
+			((DEPLOY++))
 			shift
 			;;
 		--with-trojan)
-			TROJAN=1
+			TROJAN=true
+			((DEPLOY++))
 			shift
 			;;
 		--with-v2ray)
-			V2RAY=1
+			V2RAY=true
+			((DEPLOY++))
 			shift
 			;;
 		*)
@@ -57,7 +67,7 @@ done
 echo "Querying latest $UBUNTUVER image in region $REGION ..."
 CANONICAL_OWNID="099720109477"
 AMISELECT=`aws --profile $PROFILE --output text ec2 describe-images --filters "Name=owner-id,Values=$CANONICAL_OWNID" "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-$UBUNTUVER-*" --query "Images[*].[Architecture,CreationDate,ImageId,Name,Description]"|grep ^$INSTARCH|sort -k2 -r|head -n1`
-echo "$AMISELECT"|awk '{print "Image selected:",$3,$4}'
+echo "$AMISELECT"|awk '{print $3,$4}'
 AMIID=`echo "$AMISELECT"|awk '{print $3}'`
 if [ "$AMIID" = "" ]; then
 	echo "$UBUNTUVER image not found."
@@ -69,6 +79,7 @@ echo
 
 echo "Creating Security Group of $STACKID..."
 SGID=`aws --profile $PROFILE --output text ec2 create-security-group --group-name $STACKID-sg --description "Security group for $STACKID. Created by vpn-launchpad."`
+echo "$STACKID-sg"
 echo "Done."
 echo
 
@@ -95,38 +106,42 @@ if [ ! -d "$VLPCFG" ]; then
 fi
 aws --profile $PROFILE --output text ec2 create-key-pair --key-name $STACKID-key --query 'KeyMaterial'> $VLPKEY
 chmod 600 $VLPKEY
+echo "Saving private key: $VLPKEY"
 echo "Done."
 echo
 
 echo "Creating instance of $STACKID..."
 INSTID=`aws --profile $PROFILE --output text ec2 run-instances --image-id $AMIID --security-group-ids $SGID --count 1 --instance-type $INSTYPE --key-name $STACKID-key --query 'Instances[0].InstanceId'`
 if [ "$INSTID" = "" ]; then
-        echo "Instance building failed. Please purge the incomplete building first before redo building."
+    echo "Instance building failed. Please purge the incomplete building first before redo building."
 	echo "Abort."
 	echo
-        exit 252
+    exit 252
 fi
+echo $INSTID
 echo "Done."
 echo
 
 echo "Waiting for the instance up of $STACKID..."
 while true; do
-  sleep 10
-  IPPUB=`aws --profile $PROFILE ec2 describe-instances --instance-ids $INSTID --query 'Reservations[0].Instances[0].PublicIpAddress'`
-  if [ "$IPPUB" != "" ]; then
-    break;
-  fi
+	sleep 10
+	IPPUB=`aws --profile $PROFILE ec2 describe-instances --instance-ids $INSTID --query 'Reservations[0].Instances[0].PublicIpAddress'`
+	if [ "$IPPUB" != "" ]; then
+		break;
+	fi
 done
 echo "Done."
 echo
 
 echo "Taging instance of $STACKID..."
+echo "aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags \"Key=Name,Value=$STACKID\""
 aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=Name,Value=$STACKID"
 echo "Done."
 echo
 
 echo "Querying instance IP address..."
 IPPUB=`aws --profile $PROFILE --output text ec2 describe-instances --instance-ids $INSTID --query 'Reservations[0].Instances[0].PublicIpAddress'`
+echo $IPPUB
 echo "Done."
 echo
 
@@ -156,7 +171,9 @@ echo
 
 SVC_DEPLOY () {
 	echo "$1 provisioning..."
+	echo "scp -i $VLPKEY -r $VLPHOME/$1 ubuntu@$IPPUB:"
 	scp -i $VLPKEY -r $VLPHOME/$1 ubuntu@$IPPUB:
+	echo "ssh -i $VLPKEY ubuntu@$IPPUB \"$1/$1.sh $SVROPT\""
 	ssh -i $VLPKEY ubuntu@$IPPUB "$1/$1.sh $SVROPT"
 	echo "Update Instance Tags..."
 	while read p; do
@@ -165,7 +182,7 @@ SVC_DEPLOY () {
 		if [ "$KEY" = "" ]; then
 			continue
 		fi
-		echo 
+		echo "aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags \"Key=$1.$KEY,Value=$VAL\""
 		aws --profile $PROFILE ec2 create-tags --resources $INSTID --tags "Key=$1.$KEY,Value=$VAL"
 	done <$VLPHOME/$1/$1.env
 	echo "Firewall rules $1..."
@@ -175,23 +192,29 @@ SVC_DEPLOY () {
 	echo
 }
 
-if [ "$BROOK" = "1" ]; then
+if [ "$DEPLOY" = 0 ]; then
+	SSLIBEV=true
+fi
+
+if [ "$BROOK" = true ]; then
 	SVC_DEPLOY "server-brook"
 fi
 
-if [ "$L2TP" = "1" ]; then
+if [ "$L2TP" = true ]; then
 	SVC_DEPLOY "server-softether"
 fi
 
-if [ "$TROJAN" = "1" ]; then
+if [ "$SSLIBEV" = true ]; then
+	SVC_DEPLOY "server-sslibev"
+fi
+
+if [ "$TROJAN" = true ]; then
 	SVC_DEPLOY "server-trojan"
 fi
 
-if [ "$V2RAY" = "1" ]; then
+if [ "$V2RAY" = true ]; then
 	SVC_DEPLOY "server-v2ray"
 fi
-
-SVC_DEPLOY "server-sslibev"
 
 echo
 exit 0
