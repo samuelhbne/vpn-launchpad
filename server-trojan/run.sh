@@ -30,13 +30,16 @@ PORT=443
 
 shift $((OPTIND-1))
 
-if [ ! -f "/root/.acme.sh/${DOMAIN}/fullchain.cer" ]; then
+TRY=0
+while [ ! -f "/root/.acme.sh/${DOMAIN}/fullchain.cer" ]
+do
 	/root/.acme.sh/acme.sh --issue --standalone -d ${DOMAIN}
-	if [ ! -f "/root/.acme.sh/${DOMAIN}/fullchain.cer" ]; then
+	((TRY++))
+	if [ $TRY >= 3 ]; then
 		echo "Obtian cert for ${DOMAIN} failed. Check log please."
 		exit 3
 	fi
-fi
+done
 
 cat /trojan/examples/server.json-example  \
 	| jq " .\"local_port\" |= ${PORT} " \
