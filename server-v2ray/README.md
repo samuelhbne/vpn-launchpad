@@ -1,31 +1,40 @@
 # server-v2ray
+
 Yet another unofficial [v2ray](https://github.com/v2ray) server installation scripts.
 
-### How to build the image
-```
+## How to build the image
+
+```shell
+$ git clone https://github.com/samuelhbne/vpn-launchpad.git
+$ cd vpn-launchpad/server-v2ray
 $ docker build -t samuelhbne/server-v2ray:amd64 -f Dockerfile.amd64 .
+...
 ```
 
-### How to start the container
-```
-$ docker run --restart unless-stopped --name server-v2ray -p ${V2RAY_PORT}:10086 -d samuelhbne/server-v2ray:amd64 -p 10086 -u ${V2RAY_UUID} -v ${V2RAY_LEVEL} -a ${V2RAY_ALTERID}
+### NOTE1
 
+- Please replace Dockerfile.amd64 with the Dockerfile.ARCH match your server accordingly. For example: Dockerfile.arm for 32bit Raspbian, Dockerfile.arm64 for 64bit Ubuntu for Raspberry Pi.
+
+## How to start the container
+
+```shell
+$ docker run --rm -it samuelhbne/server-v2ray:amd64
+Usage: /run.sh -u <client uuid> [-p <port numbert>] [-v <level>] [-a <alterid>]
+
+$ docker run --name server-v2ray -p 10086:10086 -d samuelhbne/server-v2ray:amd64 -p 10086 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
+...
 ```
 
-### How to stop and remove the running container
-```
+### NOTE2
+
+- Please replace "10086" with the port you want to listen.
+- Please replace "bec24d96-410f-4723-8b3b-46987a1d9ed8" with the uuid you want to set.
+
+## How to stop and remove the running container
+
+```shell
 $ docker stop server-v2ray
+...
 $ docker rm server-v2ray
+...
 ```
-
-### Standalone server deployment
-Instructions below will launch server-v2ray container on standalone server.
-```
-$ cat server-v2ray.env
-V2RAYUUID="e6daf07f-15f1-4785-8a7f-7aeeae446bdb"
-V2RAYPORT="10086"
-V2RAYLEVEL="1"
-V2RAYAID="64"
-$ ./server-v2ray.sh
-```
-
