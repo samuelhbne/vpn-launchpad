@@ -23,8 +23,6 @@ Usage: /run.sh -d <domain-name> -w <password> [-f <fake-domain-name>]
 
 $ docker run --name server-trojan -p 80:80 -p 443:443 -d samuelhbne/server-trojan:amd64 -d my-domain.somedomain.com -w my-secret
 ...
-server-trojan started.
-Done
 $
 ```
 

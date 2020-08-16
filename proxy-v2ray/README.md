@@ -11,6 +11,10 @@ $ docker build -t samuelhbne/proxy-v2ray:amd64 -f Dockerfile.amd64 .
 ...
 ```
 
+### NOTE1
+
+- Please replace Dockerfile.amd64 with the Dockerfile.ARCH match your server accordingly. For example: Dockerfile.arm for 32bit Raspbian, Dockerfile.arm64 for 64bit Ubuntu for Raspberry Pi.
+
 ## How to start the container
 
 ```shell
@@ -20,6 +24,11 @@ Usage: /run.sh -h <v2ray-host> -u <uuid> [-p <port-numbert>] [-a <alterid>] [-l 
 $ docker run --name proxy-v2ray -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-v2ray:amd64 -h 12.34.56.78 -p 10086 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
 ...
 ```
+
+### NOTE2
+
+- Please replace "10086" with the port you want to connect to.
+- Please replace "bec24d96-410f-4723-8b3b-46987a1d9ed8" with the uuid you want to set.
 
 ## How to verify if proxy tunnel is working properly
 
@@ -42,7 +51,7 @@ $ docker exec -it proxy-v2ray proxychains whois 104.244.42.193|grep OrgId
 OrgId:          TWITT
 ```
 
-### NOTE
+### NOTE3
 
 - curl should return the VPN server address given above if SOCKS5/HTTP proxy works properly.
 - dig should return resolved IP recorders of twitter.com if DNS server works properly.
