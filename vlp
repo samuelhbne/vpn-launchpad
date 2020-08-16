@@ -20,11 +20,18 @@ if [ "$DKUID" = "0" ]; then
 	exit 255
 fi
 
-DKVER=`docker -v 2>/dev/null|awk '{print $3}'`
-if [ "$DKVER" = "" ]; then
+DOCKERVER=`docker -v 2>/dev/null|awk '{print $3}'`
+if [ "$DOCKERVER" = "" ]; then
 	echo "Docker executable not found.."
 	echo "Abort."
 	exit 255
+fi
+
+DKVERMAJOR=`echo $DOCKERVER|cut -d. -f1`
+DKVERMINOR=`echo $DOCKERVER|cut -d. -f2`
+if (("$DKVERMAJOR" < 18)); then
+	echo "Unsupported Docker version $DOCKERVER, please upgrade to Docker version 18.09 at least"
+	exit
 fi
 
 case $ARCH in
@@ -49,26 +56,26 @@ case "$VLPOPT" in
 		shift
 		echo "Building vpnlaunchpad image..."
 		docker build -t $IMGNAME:$TARGET -f $VLPDKDIR/Dockerfile.$TARGET $VLPDKDIR/
-		docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
+		docker stop $CTNNAME 2>/dev/null
 		echo "Done."
 		;;
 	*)
 		;;
 esac
 
-BEXIST=`docker ps| grep $CTNNAME.$DKUID.$DKGID|wc -l`
+BEXIST=`docker ps| grep $CTNNAME|wc -l`
 if [ $BEXIST -eq 0 ]; then
-	docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
-	docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
-	echo "Start vpnlaunchpad sandbox..."
-	docker run --name=$CTNNAME.$DKUID.$DKGID -v $VLPHOME:/vlp -itd $IMGNAME:$TARGET /bin/bash
-	docker exec -it $CTNNAME.$DKUID.$DKGID groupmod -g $DKGID $VLPGROUP
-	docker exec -it $CTNNAME.$DKUID.$DKGID usermod -u $DKUID -g $DKGID $VLPUSER
+	docker stop $CTNNAME 2>/dev/null
+	docker rm $CTNNAME 2>/dev/null
+	echo "Start vpnlaunchpad container..."
+	docker run --name=$CTNNAME -v $VLPHOME:/vlp -itd $IMGNAME:$TARGET /bin/bash
+	docker exec -it $CTNNAME groupmod -g $DKGID $VLPGROUP
+	docker exec -it $CTNNAME usermod -u $DKUID -g $DKGID $VLPUSER
 	echo "Done."
 	echo
 fi
 
-DOCKERCMD="docker exec --user $DKUID:$DKGID -it $CTNNAME.$DKUID.$DKGID"
+DOCKERCMD="docker exec --user $DKUID:$DKGID -it $CTNNAME"
 
 subcmd="$1"
 case $subcmd in
@@ -97,8 +104,8 @@ case $subcmd in
 		$DOCKERCMD /vlp/bin/vlp-purge
 		echo
 		echo "Stop vpnlaunchpad sandbox..."
-		docker stop $CTNNAME.$DKUID.$DKGID 2>/dev/null
-		docker rm $CTNNAME.$DKUID.$DKGID 2>/dev/null
+		docker stop $CTNNAME 2>/dev/null
+		docker rm $CTNNAME 2>/dev/null
 		echo "Done."
 		exit 0
 		;;
