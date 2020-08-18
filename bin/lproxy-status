@@ -18,54 +18,66 @@ else
 	echo
 fi
 
-SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' $CTNNAME`
-HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' $CTNNAME`
-DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' $CTNNAME`
+SOCKSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "1080/tcp") 0).HostPort}}' $CTNNAME 2>/dev/null`
+HTTPPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "8123/tcp") 0).HostPort}}' $CTNNAME 2>/dev/null`
+DNSPORT=`docker inspect -f '{{(index (index .NetworkSettings.Ports "53/udp") 0).HostPort}}' $CTNNAME 2>/dev/null`
 VPSADDR=`docker exec -t $CTNNAME /status.sh|grep VPS-Server|cut -d ' ' -f2|tr -d '[:space:]'`
 
 docker exec -t $CTNNAME /status.sh
-
-echo "Checking SOCKS5 proxy on $PXYIP:$SOCKSPORT TCP ..."
-echo "curl -sx socks5h://$PXYIP:$SOCKSPORT http://ifconfig.co"
-IFADDR=`curl -sx socks5h://$PXYIP:$SOCKSPORT http://ifconfig.co`
-echo "$IFADDR"
-if [ "$IFADDR" = "$VPSADDR" ]; then
-	echo -e "SOCKS5 proxy check passed."
-else
-	echo -e "SOCKS5 proxy check failed."
-fi
 echo
 
-echo "Checking HTTP proxy on $PXYIP:$HTTPPORT TCP ..."
-echo "curl -sx http://$PXYIP:$HTTPPORT http://ifconfig.co"
-IFADDR=`curl -sx http://$PXYIP:$HTTPPORT http://ifconfig.co`
-echo "$IFADDR"
-if [ "$IFADDR" = "$VPSADDR" ]; then
-	echo -e "HTTP proxy check passed."
+if [ -z "$SOCKSPORT" ]; then
+	echo "SOCKS5 proxy doesn't exposed. Skip check."
 else
-	echo -e "HTTP proxy check failed."
-fi
-echo
-
-echo "Checking DNS server on $PXYIP:$DNSPORT UDP ..."
-echo "dig +short @$PXYIP -p $DNSPORT twitter.com"
-TWITTIP=`dig +short @$PXYIP -p $DNSPORT twitter.com`
-echo "$TWITTIP"
-
-TWITTIP=`echo "$TWITTIP"|head -n1`
-if [ "$TWITTIP" = "" ]; then
-	echo "Failed"
-else
-	echo "Checking $TWITTIP IP owner ..."
-	echo "docker exec $CTNNAME proxychains whois $TWITTIP|grep OrgId"
-	ORGID=`docker exec $CTNNAME proxychains whois $TWITTIP|grep OrgId`
-	echo "$ORGID"
-	ORGID=`echo "$ORGID"|awk '{print $2}'|tr -d '\r\n'`
-	if [ "$ORGID" = "TWITT" ]; then
-		echo -e "DNS server check passed."
+	echo "Checking SOCKS5 proxy on $PXYIP:$SOCKSPORT TCP ..."
+	echo "curl -sx socks5h://$PXYIP:$SOCKSPORT http://ifconfig.co"
+	IFADDR=`curl -sx socks5h://$PXYIP:$SOCKSPORT http://ifconfig.co`
+	echo "$IFADDR"
+	if [ "$IFADDR" = "$VPSADDR" ]; then
+		echo -e "SOCKS5 proxy check passed."
 	else
-		echo -e "DNS server check failed."
+		echo -e "SOCKS5 proxy check failed."
 	fi
-	echo
+fi
+echo
+
+if [ -z "$HTTPPORT" ]; then
+	echo "HTTP proxy doesn't exposed. Skip check."
+else
+	echo "Checking HTTP proxy on $PXYIP:$HTTPPORT TCP ..."
+	echo "curl -sx http://$PXYIP:$HTTPPORT http://ifconfig.co"
+	IFADDR=`curl -sx http://$PXYIP:$HTTPPORT http://ifconfig.co`
+	echo "$IFADDR"
+	if [ "$IFADDR" = "$VPSADDR" ]; then
+		echo -e "HTTP proxy check passed."
+	else
+		echo -e "HTTP proxy check failed."
+	fi
+fi
+echo
+
+if [ -z "$DNSPORT" ]; then
+	echo "DNS server doesn't exposed. Skip check."
+else
+	echo "Checking DNS server on $PXYIP:$DNSPORT UDP ..."
+	echo "dig +short @$PXYIP -p $DNSPORT twitter.com"
+	TWITTIP=`dig +short @$PXYIP -p $DNSPORT twitter.com`
+	echo "$TWITTIP"
+	TWITTIP=`echo "$TWITTIP"|head -n1`
+	if [ "$TWITTIP" = "" ]; then
+		echo "Failed"
+	else
+		echo "Checking $TWITTIP IP owner ..."
+		echo "docker exec $CTNNAME proxychains whois $TWITTIP|grep OrgId"
+		ORGID=`docker exec $CTNNAME proxychains whois $TWITTIP|grep OrgId`
+		echo "$ORGID"
+		ORGID=`echo "$ORGID"|awk '{print $2}'|tr -d '\r\n'`
+		if [ "$ORGID" = "TWITT" ]; then
+			echo -e "DNS server check passed."
+		else
+			echo -e "DNS server check failed."
+		fi
+		echo
+	fi
 fi
 echo "Done."
