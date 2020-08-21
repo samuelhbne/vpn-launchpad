@@ -140,7 +140,7 @@ Note: Terminating VPN server instance from AWS after surfing is always recommend
 4. Input the "User name" and tick "Programmatic access" box below
 5. Click "Next: Permissions" button
 6. Click "Create group" button
-7. Fill "Group name" with "vlpadmin" and tick "AdministratorAccess" selection box which on the top of the policy list
+7. Fill "Group name" with "vlpadmin" and tick "AmazonEC2FullAccess" selection box which on the top of the policy list
 8. Click "Create group" blue button at the bottom right of the page.
 9. Tick the "vlpadmin" selection box in "Add user to group" page
 10. Click "Next: Tags", click "Next: Review" then click "Create user" button
