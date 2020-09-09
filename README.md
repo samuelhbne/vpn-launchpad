@@ -41,7 +41,7 @@ Note: './vlp init' need to download docker image(about 100MB) during the 1st tim
 ### 3. Build VPN server on AWS
 
 ```console
-$ ./vlp build --without-random --with-v2ray
+$ ./vlp build --without-random --with-sslibev
 ...
 Shadowsocks-URI: ss://YWVzLTI1Ni1nY206U1NTTElCRVYtUEFTUw==@13.231.224.253:28388#VLP-shadowsocks
 ...
@@ -162,8 +162,9 @@ vlp [--from-src] <command> [options]
       --from-src        -- Build VPN server from source rather than docker image downloading
       --with-brook      -- Build VPN server with Brook services installed
       --with-l2tp       -- Build VPN server with L2TP services installed
-      --with-trojan     -- Build VPN server with Trojan services installed
       --with-v2ray      -- Build VPN server with V2Ray services installed
+      --with-trojan     -- Build VPN server with Trojan services installed
+      --with-sslibev    -- Build VPN server with Shadowsocks services installed
       --with-random     -- Build VPN server with VPN passwords randomisation.
       --without-random  -- Build VPN server without VPN passwords randomisation.
     status              -- Check VPN server status.
