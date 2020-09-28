@@ -1,5 +1,4 @@
-FROM arm32v6/alpine:3.10
-MAINTAINER Samuel Huang "samuelh2006@gmail.com"
+FROM arm32v6/alpine:3.12
 
 RUN set -ex \
  && apk add --no-cache --virtual .build-deps \
