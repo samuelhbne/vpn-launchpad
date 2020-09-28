@@ -22,7 +22,5 @@ RUN apk update && apk add bash openssl jq curl bind-tools whois dnscrypt-proxy c
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 
-USER nobody
-
 ENTRYPOINT ["/run.sh"]
 
