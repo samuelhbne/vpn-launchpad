@@ -76,7 +76,7 @@ Usage: /run.sh -h <trojan-host> -w <password> [-p <port-number>]
 $ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h my-domain.duckdns.org -w my-secret
 ...
 
-$ curl -sx socks5h://127.0.0.1:1080 http://ifconfig.co
+$ curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co
 12.34.56.78
 ```
 

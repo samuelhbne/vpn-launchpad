@@ -60,7 +60,7 @@ if [ -z "${LEVEL}" ]; then
 fi
 
 if [ -n "${HOOKURL}" ]; then
-	curl -L "${HOOKURL}"
+	curl -sSL "${HOOKURL}"
 fi
 
 cd /tmp

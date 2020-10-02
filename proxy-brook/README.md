@@ -21,10 +21,10 @@ $ docker run --name proxy-brook -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d sam
 ## How to verify if proxy tunnel is working properly
 
 ```shell
-$ curl -sx socks5h://127.0.0.1:1080 http://ifconfig.co
+$ curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co
 12.34.56.78
 
-$ curl -sx http://127.0.0.1:8123 http://ifconfig.co
+$ curl -sSx http://127.0.0.1:8123 http://ifconfig.co
 12.34.56.78
 
 $ dig +short @127.0.0.1 -p 65353 twitter.com

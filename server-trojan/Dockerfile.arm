@@ -18,7 +18,7 @@ RUN apk add boost-system boost-program_options \
     socat curl openssl \
     && mkdir /config
 
-RUN curl https://get.acme.sh | sh
+RUN curl -sSL https://get.acme.sh | sh
 
 ADD run.sh /run.sh
 RUN chmod 755 /run.sh

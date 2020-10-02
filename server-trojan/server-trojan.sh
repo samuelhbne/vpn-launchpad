@@ -40,7 +40,7 @@ done
 case $DNSUPDATE in
 	duckdns)
 		echo "Update $DUCKDNSDOMAIN.duckdns.org IP address..."
-		RESULT=`curl -L "https://duckdns.org/update/$DUCKDNSDOMAIN/$DUCKDNSTOKEN"`
+		RESULT=`curl -sSL "https://duckdns.org/update/$DUCKDNSDOMAIN/$DUCKDNSTOKEN"`
 		echo "$RESULT"
 		if [ "$RESULT" != "OK" ]; then
 			echo "DNS update failed."

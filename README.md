@@ -77,12 +77,12 @@ Local proxy is running.
 VPN sever address: 13.231.224.253
 
 Checking SOCKS5 proxy on 127.0.0.1:1080 TCP ...
-curl -sx socks5h://127.0.0.1:1080 http://ifconfig.co
+curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co
 13.231.224.253
 SOCKS5 proxy check passed.
 
 Checking HTTP proxy on 127.0.0.1:8123 TCP ...
-curl -sx http://127.0.0.1:8123 http://ifconfig.co
+curl -sSx http://127.0.0.1:8123 http://ifconfig.co
 13.231.224.253
 HTTP proxy check passed.
 
