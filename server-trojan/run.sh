@@ -1,19 +1,48 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 -d <domain-name> -w <password> [-f <fake-domain-name>]" 1>&2; exit 1; }
-while getopts ":d:f:w:" o; do
-	case "${o}" in
-		d)
-			DOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+usage() {
+	echo "server-trojan -d|--domain <domain-name> -w|--password <password> [-p|--port port-num] [-f|--fake fake-domain] [-k|--hook hook-url]"
+	echo "    -d|--domain <domain-name> Trojan server domain name"
+	echo "    -w|--password <password>  Password for Trojan service access"
+	echo "    -p|--port <port-num>      [optional] Port number for incoming HTTPS connection"
+	echo "    -f|--fake <fake-domain>   [optional] Fake domain name when access Trojan without correct password"
+	echo "    -k|--hook <hook-url>      [optional] URL to be hit before server execution, for DDNS update or notification"
+}
+
+TEMP=`getopt -o d:w:p:f: --long domain:,password:,port:,fake: -n "$0" -- $@`
+if [ $? != 0 ] ; then usage; exit 1 ; fi
+
+eval set -- "$TEMP"
+while true ; do
+	case "$1" in
+		-d|--domain)
+			DOMAIN="$2"
+			shift 2
 			;;
-		f)
-			FAKEDOMAIN="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-w|--password)
+			PASSWORD="$2"
+			shift 2
 			;;
-		w)
-			PASSWORD="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-p|--port)
+			PORT="$2"
+			shift 2
+			;;
+		-f|--fake)
+			FAKEDOMAIN="$2"
+			shift 2
+			;;
+		-k|--hook)
+			HOOKURL="$2"
+			shift 2
+			;;
+		--)
+			shift
+			break
 			;;
 		*)
-		       	usage;
+			usage;
+			exit 1
+			;;
 	esac
 done
 
@@ -26,9 +55,13 @@ if [ -z "${FAKEDOMAIN}" ]; then
 	FAKEDOMAIN="www.microsoft.com"
 fi
 
-PORT=443
+if [ -z "${PORT}" ]; then
+	PORT=443
+fi
 
-shift $((OPTIND-1))
+if [ -n "${HOOKURL}" ]; then
+	curl -L "${HOOKURL}"
+fi
 
 TRY=0
 while [ ! -f "/root/.acme.sh/${DOMAIN}/fullchain.cer" ]

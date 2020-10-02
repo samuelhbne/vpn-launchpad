@@ -19,8 +19,12 @@ $ docker build -t samuelhbne/server-trojan:amd64 -f Dockerfile.amd64 .
 
 ```shell
 $ docker run --rm -it samuelhbne/server-trojan:amd64
-Usage: /run.sh -d <domain-name> -w <password> [-f <fake-domain-name>]
-
+server-trojan -d|--domain <domain-name> -w|--password <password> [-p|--port port-num] [-f|--fake fake-domain] [-k|--hook hook-url]
+    -d|--domain <domain-name> Trojan server domain name
+    -w|--password <password>  Password for Trojan service access
+    -p|--port <port-num>      [optional] Port number for incoming HTTPS connection
+    -f|--fake <fake-domain>   [optional] Fake domain name when access Trojan without correct password
+    -k|--hook <hook-url>      [optional] URL to be hit before server execution, for DDNS update or notification
 $ docker run --name server-trojan -p 80:80 -p 443:443 -d samuelhbne/server-trojan:amd64 -d my-domain.somedomain.com -w my-secret
 ...
 $
