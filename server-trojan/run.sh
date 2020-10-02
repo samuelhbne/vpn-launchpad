@@ -9,7 +9,7 @@ usage() {
 	echo "    -k|--hook <hook-url>      [optional] URL to be hit before server execution, for DDNS update or notification"
 }
 
-TEMP=`getopt -o d:w:p:f: --long domain:,password:,port:,fake: -n "$0" -- $@`
+TEMP=`getopt -o d:w:p:f:k: --long domain:,password:,port:,fake:hook: -n "$0" -- $@`
 if [ $? != 0 ] ; then usage; exit 1 ; fi
 
 eval set -- "$TEMP"
@@ -60,7 +60,8 @@ if [ -z "${PORT}" ]; then
 fi
 
 if [ -n "${HOOKURL}" ]; then
-	curl -L "${HOOKURL}"
+	curl -sSL "${HOOKURL}"
+	echo
 fi
 
 TRY=0

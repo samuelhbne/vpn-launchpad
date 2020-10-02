@@ -12,14 +12,15 @@ RUN apk add --no-cache --virtual .build-deps \
 FROM alpine:3.12
 
 COPY --from=builder /trojan  /trojan
-ADD run.sh /run.sh
 
 RUN apk add boost-system boost-program_options \
 	mariadb-connector-c libstdc++ bash jq \
     socat curl openssl \
-    && mkdir /config \
-    && chmod 755 /run.sh
+    && mkdir /config
 
 RUN curl https://get.acme.sh | sh
+
+ADD run.sh /run.sh
+RUN chmod 755 /run.sh
 
 ENTRYPOINT ["/run.sh"]
