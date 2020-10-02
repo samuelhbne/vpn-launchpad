@@ -17,7 +17,10 @@ RUN mkdir -p /usr/bin/v2ray/
 COPY --from=builder /tmp/v2ray.tgz /tmp
 RUN tar xvfz /tmp/v2ray.tgz -C /usr/bin/v2ray
 
-RUN apk update && apk add bash openssl jq curl bind-tools whois dnscrypt-proxy ca-certificates && update-ca-certificates
+RUN apk update && apk add bash openssl jq \
+	curl bind-tools whois \
+	dnscrypt-proxy ca-certificates \
+	&& update-ca-certificates
 
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
