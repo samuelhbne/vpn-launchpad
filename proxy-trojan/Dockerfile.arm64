@@ -1,4 +1,4 @@
-FROM arm64v8/alpine:3.11 as builder
+FROM arm64v8/alpine:3.12 as builder
 
 ARG VERSION='v1.16.0'
 
@@ -14,7 +14,7 @@ RUN git clone --branch=${VERSION} https://github.com/trojan-gfw/trojan.git \
 RUN cd /root && git clone https://github.com/jech/polipo && cd polipo && make
 
 
-FROM arm64v8/alpine:3.11
+FROM arm64v8/alpine:3.12
 
 RUN apk add bash openssl jq curl bind-tools whois \
 	dnscrypt-proxy ca-certificates proxychains-ng \
