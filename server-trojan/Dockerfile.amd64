@@ -1,4 +1,4 @@
-FROM alpine:3.11 as builder
+FROM alpine:3.12 as builder
 
 ARG VERSION='v1.16.0'
 
@@ -9,7 +9,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && cd trojan && cmake . && make -j $(nproc) && strip -s trojan
 
 
-FROM alpine:3.11
+FROM alpine:3.12
 
 COPY --from=builder /trojan  /trojan
 ADD run.sh /run.sh
