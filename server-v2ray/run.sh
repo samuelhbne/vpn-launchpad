@@ -1,29 +1,50 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 -u <client uuid> [-p <port numbert>] [-v <level>] [-a <alterid>]" 1>&2; exit 1; }
+usage() {
+	echo "server-v2ray -u|--uuid <vmess-uuid> [-p|--port <port-num>] [-l|--level <level>] [-a|--alterid <alterid>] [-k|--hook hook-url]"
+	echo "    -u|--uuid <vmess-uuid>    Vmess UUID for initial V2ray connection"
+	echo "    -p|--port <port-num>      [optional] Port number for incoming V2ray connection"
+	echo "    -l|--level <level>        [optional] Level number for V2ray service access, default to be 0"
+	echo "    -a|--alterid <alterid>    [optional] AlterID number for V2ray service access, default to be 16"
+	echo "    -k|--hook <hook-url>      [optional] URL to be hit before server execution, for DDNS update or notification"
+}
 
-while getopts ":a:p:u:v:" o; do
-	case "${o}" in
-		a)
-			ALTERID="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+TEMP=`getopt -o u:p:l:a: --long uuid:,port:,level:,alterid: -n "$0" -- $@`
+if [ $? != 0 ] ; then usage; exit 1 ; fi
+
+eval set -- "$TEMP"
+while true ; do
+	case "$1" in
+		-u|--uuid)
+			UUID="$2"
+			shift 2
 			;;
-		v)
-			LEVEL="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-p|--port)
+			PORT="$2"
+			shift 2
 			;;
-		p)
-			PORT="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-l|--level)
+			LEVEL="$2"
+			shift 2
 			;;
-		u)
-			UUID="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-a|--alterid)
+			ALTERID="$2"
+			shift 2
+			;;
+		--)
+			shift
+			break
 			;;
 		*)
-		       	usage;
+			usage;
+			exit 1
+			;;
 	esac
 done
-shift $((OPTIND-1))
 
 if [ -z "${UUID}" ]; then
 	usage
+	exit 1
 fi
 
 if [ -z "${PORT}" ]; then
@@ -36,6 +57,10 @@ fi
 
 if [ -z "${LEVEL}" ]; then
 	LEVEL=0
+fi
+
+if [ -n "${HOOKURL}" ]; then
+	curl -L "${HOOKURL}"
 fi
 
 cd /tmp

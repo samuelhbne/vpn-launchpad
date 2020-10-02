@@ -19,9 +19,13 @@ $ docker build -t samuelhbne/server-v2ray:amd64 -f Dockerfile.amd64 .
 
 ```shell
 $ docker run --rm -it samuelhbne/server-v2ray:amd64
-Usage: /run.sh -u <client uuid> [-p <port numbert>] [-v <level>] [-a <alterid>]
-
-$ docker run --name server-v2ray -p 10086:10086 -d samuelhbne/server-v2ray:amd64 -p 10086 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
+server-v2ray -u|--uuid <vmess-uuid> [-p|--port <port-num>] [-l|--level <level>] [-a|--alterid <alterid>] [-k|--hook hook-url]
+    -u|--uuid <vmess-uuid>    Vmess UUID for initial V2ray connection
+    -p|--port <port-num>      [optional] Port number for incoming V2ray connection
+    -l|--level <level>        [optional] Level number for V2ray service access, default to be 0
+    -a|--alterid <alterid>    [optional] AlterID number for V2ray service access, default to be 16
+    -k|--hook <hook-url>      [optional] URL to be hit before server execution, for DDNS update or notification
+$ docker run --name server-v2ray -p 10086:10086 -d samuelhbne/server-v2ray:amd64 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
 ...
 ```
 
