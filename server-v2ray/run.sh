@@ -61,6 +61,7 @@ fi
 
 if [ -n "${HOOKURL}" ]; then
 	curl -sSL "${HOOKURL}"
+	echo
 fi
 
 cd /tmp
