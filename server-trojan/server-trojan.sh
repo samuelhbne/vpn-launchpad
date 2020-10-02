@@ -40,7 +40,8 @@ done
 case $DNSUPDATE in
 	duckdns)
 		echo "Update $DUCKDNSDOMAIN.duckdns.org IP address..."
-		RESULT=`wget --progress=dot:noscroll -O- "https://duckdns.org/update/$DUCKDNSDOMAIN/$DUCKDNSTOKEN"`
+		RESULT=`curl -L "https://duckdns.org/update/$DUCKDNSDOMAIN/$DUCKDNSTOKEN"`
+		echo "$RESULT"
 		if [ "$RESULT" != "OK" ]; then
 			echo "DNS update failed."
 			exit 253
