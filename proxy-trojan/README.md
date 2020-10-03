@@ -21,7 +21,7 @@ $ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d sa
 ...
 ```
 
-### NOTE
+### NOTE1
 
 - Please replace "<span>my-domain.somedomain.com</span>" and "my-secret" above with your FULL domain-name and Trojan service access password accordingly.
 
