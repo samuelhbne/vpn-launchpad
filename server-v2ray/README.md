@@ -33,6 +33,7 @@ $ docker run --name server-v2ray -p 10086:10086 -d samuelhbne/server-v2ray:amd64
 
 - Please replace "10086" with the port you want to listen.
 - Please replace "bec24d96-410f-4723-8b3b-46987a1d9ed8" with the uuid you want to set.
+- You can optionally assign a HOOK-URL from command line to update DDNS domain-name pointing to the current server public IP address.
 
 ## How to stop and remove the running container
 
