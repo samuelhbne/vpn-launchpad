@@ -15,7 +15,7 @@ $ docker build -t samuelhbne/server-trojan:amd64 -f Dockerfile.amd64 .
 
 - Please replace Dockerfile.amd64 with the Dockerfile.ARCH match the current server accordingly. For example: Dockerfile.arm for 32bit Raspbian, Dockerfile.arm64 for 64bit Ubuntu for Raspberry Pi.
 
-## How to start server-trojan container manually if you already have a domain name pointed to the current server
+## How to start server-trojan container
 
 ```shell
 $ docker run --rm -it samuelhbne/server-trojan:amd64
@@ -32,40 +32,15 @@ $
 
 ### NOTE2
 
-- Please ensure your TCP port 80 and 443 are reachable.
-- server-trojan assumes you already have a domain name and pointed to the current server. Otherwise server-trojan will fail as unable to obtian Letsencrypt cert for the domain-name you set.
-- Please replace "my-domain.somedomain.com" and "my-secret" above with your FULL domain-name and password accordingly.
-- You may reach the limitation of 10 times renewal a day applied by Letsencrypt soon if you remove and restart server-trojan container too frequent.
-
-## Start server-trojan via help script with duckdns free domain name (Recommended)
-
-```shell
-$ cat server-trojan.env
-SGTCP="80:443"
-TRJPORT="443"
-TRJPASS="my-secret"
-TRJFAKEDOMAIN="www.microsoft.com"
-DUCKDNSTOKEN="0f8d8cb0-fec5-4339-8026-ca051cc0ce4a"
-DUCKDNSDOMAIN="my-domain"
-DNSUPDATE=duckdns
-
-$ ./server-trojan.sh
-...
-server-trojan started.
-Done
-$
-```
-
-### NOTE3
-
-- Please ensure your TCP port 80 and 443 are reachable.
-- Please register your free domain name on [duckdns.org](https://duckdns.org) and get your token from duckdns home page after login.
-- Please replace DUCKDNSDOMAIN, TRJPASS and DUCKDNSTOKEN settings above with yours accordingly.
+- Please ensure your TCP port 80 (domain name verification) and 443 (Trojan service) are reachable.
+- Please replace "<span>my-domain.somedomain.com</span>" and "my-secret" above with your FULL domain-name and Trojan service access password accordingly.
+- You can optionally assign a HOOK-URL from command line to update DDNS domain-name pointing to the current server public IP address.
+- Alternatively, server-trojan assumes you've ALREADY set the domain-name pointed to the current server public IP address. server-trojan may fail as unable to obtian Letsencrypt cert for the domain-name you set otherwise .
 - You may reach the limitation of 10 times renewal a day applied by Letsencrypt soon if you remove and restart server-trojan container too frequent.
 
 ## How to verify if server-trojan is running properly
 
-Try to connect the server from trojan compatible mobile app like [Igniter](https://github.com/trojan-gfw/igniter) with the full domain-name and password set above. Or verify it on Ubuntu / Debian / Raspbian client host follow the instructions below.
+Try to connect the server from trojan compatible mobile app like [Igniter](https://github.com/trojan-gfw/igniter) for Android or [Shadowrocket](https://apps.apple.com/us/app/shadowrocket/id932747118) for iOS with the domain-name and password set above. Or verify it on Ubuntu / Debian / Raspbian client host follow the instructions below.
 
 ### Please run the following instructions from Ubuntu / Debian / Raspbian client host for verifying
 
