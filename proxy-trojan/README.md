@@ -21,6 +21,10 @@ $ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d sa
 ...
 ```
 
+### NOTE
+
+- Please replace "<span>my-domain.somedomain.com</span>" and "my-secret" above with your FULL domain-name and Trojan service access password accordingly.
+
 ## How to verify if proxy tunnel is working properly
 
 ```shell
@@ -42,12 +46,13 @@ $ docker exec -it proxy-trojan proxychains whois 104.244.42.193|grep OrgId
 OrgId:          TWITT
 ```
 
-### NOTE
+### NOTE2
 
 - curl should return the VPN server address given above if SOCKS5/HTTP proxy works properly.
 - dig should return resolved IP recorders of twitter.com if DNS server works properly.
 - Whois should return "OrgId: TWITT". That means the IP address returned from dig query belongs to twitter.com indeed, hence untaminated.
-- Whois was actually running inside the proxy container through proxychains to avoid potential access blocking.
+- Whois was actually running inside the proxy container through the proxy tunnel to avoid potential access blocking.
+- Please have a look over the sibling project [server-trojan](https://github.com/samuelhbne/vpn-launchpad/tree/master/server-trojan) if you'd like to set a Trojan server.
 
 ## How to get the Trojan QR code for mobile connection
 
