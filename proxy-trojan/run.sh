@@ -45,8 +45,6 @@ if [ -z "${TJPORT}" ]; then
 	TJPORT=443
 fi
 
-shift $((OPTIND-1))
-
 cat /trojan/examples/client.json-example  \
 	| jq " .\"local_addr\" |= \"0.0.0.0\" " \
 	| jq " .\"local_port\" |= 1080 " \

@@ -72,8 +72,6 @@ if [ -z "${SECURITY}" ]; then
 	SECURITY="auto"
 fi
 
-shift $((OPTIND-1))
-
 LSTNADDR="0.0.0.0"
 SOCKSPORT=1080
 
