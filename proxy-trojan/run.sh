@@ -1,25 +1,44 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 -h <trojan-host> -w <password> [-p <port-number>]" 1>&2; exit 1; }
+usage() {
+	echo "proxy-trojan -d|--domain <trojan-domain> -w|--password <password> [-p|--port <port-number>]"
+	echo "    -d|--domain <trojan-domain>   Trojan server domain name"
+	echo "    -w|--password <password>      Password for Trojan server access"
+	echo "    -p|--port <port-num>          [optional] Port number for Trojan server connection"
+}
 
-while getopts ":h:p:w:" o; do
-	case "${o}" in
-		h)
-			TJHOST="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+TEMP=`getopt -o h:w:p: --long host:,password:,port: -n "$0" -- $@`
+if [ $? != 0 ] ; then usage; exit 1 ; fi
+
+eval set -- "$TEMP"
+while true ; do
+	case "$1" in
+		-d|--domain)
+			TJDOMAIN="$2"
+			shift 2
 			;;
-		p)
-			TJPORT="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-w|--password)
+			PASSWORD="$2"
+			shift 2
 			;;
-		w)
-			PASSWORD="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-p|--port)
+			TJPORT="$2"
+			shift 2
+			;;
+		--)
+			shift
+			break
 			;;
 		*)
 			usage;
+			exit 1
+			;;
 	esac
 done
 
-if [ -z "${TJHOST}" ] || [ -z "${PASSWORD}" ]; then
+if [ -z "${TJDOMAIN}" ] || [ -z "${PASSWORD}" ]; then
 	usage
+	exit 1
 fi
 
 if [ -z "${TJPORT}" ]; then
@@ -31,7 +50,7 @@ shift $((OPTIND-1))
 cat /trojan/examples/client.json-example  \
 	| jq " .\"local_addr\" |= \"0.0.0.0\" " \
 	| jq " .\"local_port\" |= 1080 " \
-	| jq " .\"remote_addr\" |= \"${TJHOST}\" " \
+	| jq " .\"remote_addr\" |= \"${TJDOMAIN}\" " \
 	| jq " .\"remote_port\" |= \"${TJPORT}\" " \
 	| jq " .\"password\"[0] |= \"${PASSWORD}\" " \
 	>/config/client.json

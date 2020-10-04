@@ -15,15 +15,17 @@ $ docker build -t samuelhbne/proxy-trojan:amd64 -f Dockerfile.amd64 .
 
 ```shell
 $ docker run --rm -it samuelhbne/proxy-trojan:amd64
-Usage: /run.sh -h <trojan-host> -w <password> [-p <port-number>]
-
-$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h my-domain.duckdns.org -w my-secret -p 443
+proxy-trojan -d|--domain <trojan-domain> -w|--password <password> [-p|--port <port-number>]
+    -d|--domain <trojan-domain>   Trojan server domain name
+    -w|--password <password>      Password for Trojan server access
+    -p|--port <port-num>          [optional] Port number for Trojan server connection
+$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h my-domain.com -w my-secret
 ...
 ```
 
 ### NOTE1
 
-- Please replace "<span>my-domain.somedomain.com</span>" and "my-secret" above with your FULL domain-name and Trojan service access password accordingly.
+- Please replace "<span>my-domain.com</span>" and "my-secret" above with your FULL domain-name and Trojan service access password accordingly.
 
 ## How to verify if proxy tunnel is working properly
 
@@ -59,7 +61,7 @@ OrgId:          TWITT
 ```shell
 $ docker exec -it proxy-trojan /status.sh
 VPS-Server: 12.34.56.78
-Trojan-URL: trojan://my-secret@my-domain.duckdns.org:443
+Trojan-URL: trojan://my-secret@my-domain.com:443
 ```
 
 ![QR code example](https://github.com/samuelhbne/vpn-launchpad/blob/master/images/qr-trojan.png)
