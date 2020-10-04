@@ -1,10 +1,10 @@
 #!/bin/bash
 
 usage() {
-	echo "server-trojan -d|--domain <domain-name> -w|--password <password> [-p|--port port-num] [-f|--fake fake-domain] [-k|--hook hook-url]"
+	echo "server-trojan -d|--domain <domain-name> -w|--password <password> [-p|--port <port-num>] [-f|--fake <fake-domain>] [-k|--hook <hook-url>]"
 	echo "    -d|--domain <domain-name> Trojan server domain name"
 	echo "    -w|--password <password>  Password for Trojan service access"
-	echo "    -p|--port <port-num>      [optional] Port number for incoming HTTPS connection"
+	echo "    -p|--port <port-num>      [optional] Port number for incoming Trojan connection"
 	echo "    -f|--fake <fake-domain>   [optional] Fake domain name when access Trojan without correct password"
 	echo "    -k|--hook <hook-url>      [optional] URL to be hit before server execution, for DDNS update or notification"
 }
