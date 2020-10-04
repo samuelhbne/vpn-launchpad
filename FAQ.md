@@ -5,6 +5,7 @@
   - [What if Local proxy stops working after I rebuilt VPN server](#what-if-local-proxy-stops-working-after-i-rebuilt-vpn-server)
   - [Can I build multiple VPN servers with the same AWS account](#can-i-build-multiple-vpn-servers-with-the-same-aws-account)
   - [Can I create an instance other than t2.micro for saving money](#can-i-create-an-instance-other-than-t2micro-for-saving-money)
+    - [NOTE1](#note1)
   - [Can I share VPN server with multiple Pi boxes located in different sites](#can-i-share-vpn-server-with-multiple-pi-boxes-located-in-different-sites)
 
 ## What if 'vlp build' command stalled with no response
@@ -28,9 +29,13 @@ $ cat vlp.env
 UBUNTUVER="bionic"
 STACKID="vlp-$UBUNTUVER"
 PROFILE="default"
-INSTYPE="t2.micro"
-INSTARCH="x86_64"
+INSTYPE="t4g.micro"
+INSTARCH="ARM64"
 ```
+
+### NOTE1
+
+Currently server-softether support only X86_64 platform due to the upstream limitation. This could chang in the future.
 
 ## Can I share VPN server with multiple Pi boxes located in different sites
 

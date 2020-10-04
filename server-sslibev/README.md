@@ -13,7 +13,7 @@ $ docker build -t samuelhbne/server-sslibev:amd64 -f Dockerfile.amd64 .
 
 ### NOTE1
 
-- Please replace Dockerfile.amd64 with the Dockerfile.ARCH match the current server accordingly. For example: Dockerfile.arm for 32bit Raspbian, Dockerfile.arm64 for 64bit Ubuntu for Raspberry Pi.
+- Please replace Dockerfile.amd64 with the Dockerfile.ARCH match the current server accordingly. For example: Dockerfile.arm64 for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. Dockerfile.arm for 32bit Raspbian.
 
 ## How to start the container
 
