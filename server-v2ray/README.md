@@ -2,7 +2,7 @@
 
 Yet another unofficial [v2ray](https://github.com/v2ray) server installation scripts.
 
-## How to build the image
+## [Optional] How to build server-v2ray docker image
 
 ```shell
 $ git clone https://github.com/samuelhbne/vpn-launchpad.git
@@ -31,9 +31,40 @@ $ docker run --name server-v2ray -p 10086:10086 -d samuelhbne/server-v2ray:amd64
 
 ### NOTE2
 
+- Please replace "amd64" with the arch match the current server accordingly. For example: "arm64" for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
 - Please replace "10086" with the port you want to listen.
 - Please replace "bec24d96-410f-4723-8b3b-46987a1d9ed8" with the uuid you want to set.
 - You can optionally assign a HOOK-URL from command line to update DDNS domain-name pointing to the current server public IP address.
+
+## How to verify if server-v2ray is running properly
+
+Try to connect the server from v2ray compatible mobile app like [v2rayNG](https://github.com/2dust/v2rayNG) for Android or [Shadowrocket](https://apps.apple.com/us/app/shadowrocket/id932747118) for iOS with the host-name, port, UUID, alterid etc. set above. Or verify it from Ubuntu / Debian / Raspbian client host follow the instructions below.
+
+### Please run the following instructions from Ubuntu / Debian / Raspbian client host for verifying
+
+```shell
+$ docker run --rm -it samuelhbne/proxy-v2ray:amd64
+proxy-v2ray -h|--host <v2ray-host> -u|--uuid <vmess-uuid> [-p|--port <port-num>] [-l|--level <level>] [-a|--alterid <alterid>] [-s|--security <client-security>]
+    -h|--host <v2ray-host>            V2ray server host name or IP address
+    -u|--uuid <vmess-uuid>            Vmess UUID for initial V2ray connection
+    -p|--port <port-num>              [optional] Port number for V2ray connection
+    -l|--level <level>                [optional] Level number for V2ray service access, default to be 0
+    -a|--alterid <alterid>            [optional] AlterID number for V2ray service access, default to be 16
+    -s|--security <client-security>   [optional] V2ray client security setting, default to be 'auto'
+$ docker run --name proxy-v2ray -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-v2ray:amd64 -h 12.34.56.78 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
+...
+
+$ curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co
+12.34.56.78
+```
+
+### NOTE4
+
+- First we ran proxy-v2ray as SOCKS5 proxy that tunneling traffic through your v2ray server.
+- Then launching curl with client-IP address query through the proxy.
+- This query was sent through your server with server-v2ray running.
+- You should get the public IP address of your server with server-v2ray running if all good.
+- Please have a look over the sibling project [proxy-v2ray](https://github.com/samuelhbne/vpn-launchpad/tree/master/proxy-v2ray) for more details.
 
 ## How to stop and remove the running container
 

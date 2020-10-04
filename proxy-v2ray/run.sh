@@ -1,29 +1,53 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 -h <v2ray-host> -u <uuid> [-p <port-numbert>] [-a <alterid>] [-l <level>] [-s <security>]" 1>&2; exit 1; }
+usage() {
+	echo "proxy-v2ray -h|--host <v2ray-host> -u|--uuid <vmess-uuid> [-p|--port <port-num>] [-l|--level <level>] [-a|--alterid <alterid>] [-s|--security <client-security>]"
+	echo "    -h|--host <v2ray-host>            V2ray server host name or IP address"
+	echo "    -u|--uuid <vmess-uuid>            Vmess UUID for initial V2ray connection"
+	echo "    -p|--port <port-num>              [optional] Port number for V2ray connection"
+	echo "    -l|--level <level>                [optional] Level number for V2ray service access, default to be 0"
+	echo "    -a|--alterid <alterid>            [optional] AlterID number for V2ray service access, default to be 16"
+	echo "    -s|--security <client-security>   [optional] V2ray client security setting, default to be 'auto'"
+}
 
-while getopts ":a:l:h:p:s:u:" o; do
-	case "${o}" in
-		a)
-			ALTERID="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+TEMP=`getopt -o h:u:p:l:a:s: --long host:,uuid:,port:,level:,alterid:security: -n "$0" -- $@`
+if [ $? != 0 ] ; then usage; exit 1 ; fi
+
+eval set -- "$TEMP"
+while true ; do
+	case "$1" in
+		-h|--host)
+			VHOST="$2"
+			shift 2
 			;;
-		l)
-			LEVEL="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-u|--uuid)
+			UUID="$2"
+			shift 2
 			;;
-		h)
-			VHOST="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-p|--port)
+			PORT="$2"
+			shift 2
 			;;
-		p)
-			VPORT="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-l|--level)
+			LEVEL="$2"
+			shift 2
 			;;
-		s)
-			SECURITY="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-a|--alterid)
+			ALTERID="$2"
+			shift 2
 			;;
-		u)
-			UUID="$(echo -e "${OPTARG}" | tr -d '[:space:]')"
+		-s|--security)
+			SECURITY="$2"
+			shift 2
+			;;
+		--)
+			shift
+			break
 			;;
 		*)
 			usage;
+			exit 1
+			;;
 	esac
 done
 

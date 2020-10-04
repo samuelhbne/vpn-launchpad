@@ -19,9 +19,14 @@ $ docker build -t samuelhbne/proxy-v2ray:amd64 -f Dockerfile.amd64 .
 
 ```shell
 $ docker run --rm -it samuelhbne/proxy-v2ray:amd64
-Usage: /run.sh -h <v2ray-host> -u <uuid> [-p <port-numbert>] [-a <alterid>] [-l <level>] [-s <security>]
-
-$ docker run --name proxy-v2ray -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-v2ray:amd64 -h 12.34.56.78 -p 10086 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
+proxy-v2ray -h|--host <v2ray-host> -u|--uuid <vmess-uuid> [-p|--port <port-num>] [-l|--level <level>] [-a|--alterid <alterid>] [-s|--security <client-security>]
+    -h|--host <v2ray-host>            V2ray server host name or IP address
+    -u|--uuid <vmess-uuid>            Vmess UUID for initial V2ray connection
+    -p|--port <port-num>              [optional] Port number for V2ray connection
+    -l|--level <level>                [optional] Level number for V2ray service access, default to be 0
+    -a|--alterid <alterid>            [optional] AlterID number for V2ray service access, default to be 16
+    -s|--security <client-security>   [optional] V2ray client security setting, default to be 'auto'
+$ docker run --name proxy-v2ray -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-v2ray:amd64 -h 12.34.56.78 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
 ...
 ```
 
