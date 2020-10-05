@@ -18,7 +18,14 @@ $ docker build -t samuelhbne/proxy-sslibev:amd64 -f Dockerfile.amd64 .
 ## How to start the container
 
 ```shell
-$ docker run --name proxy-sslibev -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-sslibev:amd64 -s 12.34.56.78 -p 8388 -b 0.0.0.0 -l 1080 -k "my-secret" -m "aes-256-gcm"
+$ docker run --rm -it samuelhbne/proxy-sslibev:amd64
+proxy-sslibev -s|--host <sslibev-server> -w|--password <password> [-p|--port <port-number>] [-m|--method <encrypt-method>] [-t|--timeout <timeout-seconds>]
+    -s|--server <sslibev-server>      sslibev server name or address
+    -w|--password <password>          Password for sslibev server access
+    -p|--port <port-num>              [Optional] Port number for sslibev server connection, default 8388
+    -m|--method <encrypt-method>      [Optional] Encrypt method used by sslibev server, default aes-256-gcm
+    -t|--timeout <timeout-seconds>    [Optional] Connection timeout in seconds
+$ docker run --name proxy-sslibev -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-sslibev:amd64 -s 12.34.56.78 -w "my-secret"
 ...
 ```
 
