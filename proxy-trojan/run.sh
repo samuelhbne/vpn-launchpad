@@ -7,7 +7,7 @@ usage() {
 	echo "    -p|--port <port-num>          [optional] Port number for Trojan server connection"
 }
 
-TEMP=`getopt -o h:w:p: --long host:,password:,port: -n "$0" -- $@`
+TEMP=`getopt -o d:w:p: --long domain:,password:,port: -n "$0" -- $@`
 if [ $? != 0 ] ; then usage; exit 1 ; fi
 
 eval set -- "$TEMP"
