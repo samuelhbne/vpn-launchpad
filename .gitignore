@@ -1,5 +1,7 @@
 proxy-sslibev/server-sslibev.env
 proxy-trojan/server-trojan.env
+proxy-v2ray/server-v2ray.env
+proxy-brook/server-brook.env
 .vpn-launchpad
 .bash_history
 .ash_history
