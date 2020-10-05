@@ -37,4 +37,4 @@ done
 
 . $DIR/server-sslibev.env
 
-docker run --restart unless-stopped --name server-sslibev -p $SSPORT:8388 -p $SSPORT:8388/udp -d $IMGNAME:$TARGET -s 0.0.0.0 -s ::0 -p 8388 -k $SSPASS -m $SSMTHD -t 300 --fast-open -d 8.8.8.8,8.8.4.4 -u
+docker run --restart unless-stopped --name server-sslibev -p $SSPORT:8388 -p $SSPORT:8388/udp -d $IMGNAME:$TARGET -w $SSPASS -m $SSMTHD

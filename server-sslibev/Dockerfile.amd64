@@ -23,10 +23,13 @@ RUN set -ex \
  && make install \
  && apk del .build-deps \
  && apk add --no-cache \
-      rng-tools \
+      rng-tools bash \
       $(scanelf --needed --nobanner /usr/bin/ss-* \
       | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
       | sort -u) \
  && rm -rf /tmp/repo
 
-ENTRYPOINT ["/usr/bin/ss-server"]
+ADD run.sh /run.sh
+RUN chmod 755 /*.sh
+
+ENTRYPOINT ["/run.sh"]
