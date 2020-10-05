@@ -19,7 +19,7 @@ proxy-trojan -d|--domain <trojan-domain> -w|--password <password> [-p|--port <po
     -d|--domain <trojan-domain>   Trojan server domain name
     -w|--password <password>      Password for Trojan server access
     -p|--port <port-num>          [Optional] Port number for Trojan server connection
-$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -h my-domain.com -w my-secret
+$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -d my-domain.com -w my-secret
 ...
 ```
 
