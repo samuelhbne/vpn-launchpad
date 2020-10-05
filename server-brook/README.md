@@ -2,7 +2,7 @@
 
 Yet another unofficial [Brook](https://github.com/txthinking/brook) server installation scripts.
 
-## How to build the image
+## [Optional] How to build server-brook docker image
 
 ```shell
 $ git clone https://github.com/samuelhbne/vpn-launchpad.git
@@ -24,6 +24,7 @@ $ docker run --name server-brook -p 26060:6060 -d samuelhbne/server-brook:amd64 
 
 ### NOTE2
 
+- Please replace "amd64" with the arch match the current server accordingly. For example: "arm64" for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
 - Please ensure your server port TCP 26060 is reachable.
 - Please replace 26060 with the TCP port number you want to listen.
 
