@@ -276,7 +276,6 @@ Credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEt
 
 ```console
 $ cat proxy-sslibev/proxy-sslibev.env
-LSTNADDR="0.0.0.0"
 SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"
