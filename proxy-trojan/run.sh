@@ -4,7 +4,7 @@ usage() {
 	echo "proxy-trojan -d|--domain <trojan-domain> -w|--password <password> [-p|--port <port-number>]"
 	echo "    -d|--domain <trojan-domain>   Trojan server domain name"
 	echo "    -w|--password <password>      Password for Trojan server access"
-	echo "    -p|--port <port-num>          [optional] Port number for Trojan server connection"
+	echo "    -p|--port <port-num>          [Optional] Port number for Trojan server connection"
 }
 
 TEMP=`getopt -o d:w:p: --long domain:,password:,port: -n "$0" -- $@`
