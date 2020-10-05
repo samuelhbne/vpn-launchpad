@@ -30,7 +30,7 @@ UBUNTUVER="bionic"
 STACKID="vlp-$UBUNTUVER"
 PROFILE="default"
 INSTYPE="t4g.micro"
-INSTARCH="ARM64"
+INSTARCH="arm64"
 ```
 
 ### NOTE1
