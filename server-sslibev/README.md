@@ -13,7 +13,7 @@ $ docker build -t samuelhbne/server-sslibev:amd64 -f Dockerfile.amd64 .
 
 ### NOTE1
 
-- Please replace Dockerfile.amd64 with the Dockerfile.ARCH match the current server accordingly. For example: Dockerfile.arm64 for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. Dockerfile.arm for 32bit Raspbian.
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1, t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
 
 ## How to start the container
 
@@ -31,11 +31,11 @@ $ docker run --name server-sslibev -p 28388:8388 -p 28388:8388/udp -d samuelhbne
 
 ### NOTE2
 
-- Please replace "amd64" with the arch match the current server accordingly. For example: "arm64" for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
-- Please ensure your server port TCP 28388 is reachable.
-- Please replace 28388 with the TCP port number you want to listen.
-- Please replace "my-secret" with the password you want to set.
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1, t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
+- Please replace 28388 with the TCP port number you want to listen for sslibev service.
+- Please replace "my-secret" with the password you want to set for client auth.
 - Please replace "aes-256-gcm" with the encrypt method you want to set.
+- You can optionally assign a HOOK-URL to update the DDNS domain-name pointing to the current server public IP address.
 
 ## How to verify if server-sslibev is running properly
 
@@ -51,7 +51,7 @@ proxy-sslibev -s|--host <sslibev-server> -w|--password <password> [-p|--port <po
     -p|--port <port-num>              [Optional] Port number for sslibev server connection, default 8388
     -m|--method <encrypt-method>      [Optional] Encrypt method used by sslibev server, default aes-256-gcm
     -t|--timeout <timeout-seconds>    [Optional] Connection timeout in seconds
-$ docker run --name proxy-sslibev -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-sslibev:amd64 -s 12.34.56.78 -w "my-secret"
+$ docker run --name proxy-sslibev -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-sslibev:amd64 -s 12.34.56.78 -p 28388 -w "my-secret"
 ...
 $ curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co
 12.34.56.78

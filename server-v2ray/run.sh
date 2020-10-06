@@ -3,10 +3,10 @@
 usage() {
 	echo "server-v2ray -u|--uuid <vmess-uuid> [-p|--port <port-num>] [-l|--level <level>] [-a|--alterid <alterid>] [-k|--hook hook-url]"
 	echo "    -u|--uuid <vmess-uuid>    Vmess UUID for initial V2ray connection"
-	echo "    -p|--port <port-num>      [optional] Port number for incoming V2ray connection"
-	echo "    -l|--level <level>        [optional] Level number for V2ray service access, default to be 0"
-	echo "    -a|--alterid <alterid>    [optional] AlterID number for V2ray service access, default to be 16"
-	echo "    -k|--hook <hook-url>      [optional] URL to be hit before server execution, for DDNS update or notification"
+	echo "    -p|--port <port-num>      [Optional] Port number for incoming V2ray connection, default 10086"
+	echo "    -l|--level <level>        [Optional] Level number for V2ray service access, default 0"
+	echo "    -a|--alterid <alterid>    [Optional] AlterID number for V2ray service access, default 16"
+	echo "    -k|--hook <hook-url>      [Optional] URL to be hit before server execution, for DDNS update or notification"
 }
 
 TEMP=`getopt -o u:p:l:a: --long uuid:,port:,level:,alterid: -n "$0" -- $@`

@@ -13,7 +13,7 @@ $ docker build -t samuelhbne/server-trojan:amd64 -f Dockerfile.amd64 .
 
 ### NOTE1
 
-- Please replace Dockerfile.amd64 with the Dockerfile.ARCH match the current server accordingly. For example: Dockerfile.arm64 for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. Dockerfile.arm for 32bit Raspbian.
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
 
 ## How to start server-trojan container
 
@@ -25,17 +25,18 @@ server-trojan -d|--domain <domain-name> -w|--password <password> [-p|--port <por
     -p|--port <port-num>      [Optional] Port number for incoming Trojan connection
     -f|--fake <fake-domain>   [Optional] Fake domain name when access Trojan without correct password
     -k|--hook <hook-url>      [Optional] URL to be hit before server execution, for DDNS update or notification
-$ docker run --name server-trojan -p 80:80 -p 443:443 -d samuelhbne/server-trojan:amd64 -d my-domain.com -w my-secret
+$ docker run --name server-trojan -p 80:80 -p 8443:443 -d samuelhbne/server-trojan:amd64 -d my-domain.com -w my-secret
 ...
 $
 ```
 
 ### NOTE2
 
-- Please replace "amd64" with the arch match the current server accordingly. For example: "arm64" for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
-- Please ensure your TCP port 80 (domain name verification) and 443 (Trojan service) are reachable.
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
+- Please ensure TCP port 80 of the current server is reachable, or TLS cert acquisition will fail otherwise.
+- Please replace 8443 with the TCP port number you want to listen for Trojan service.
 - Please replace "<span>my-domain.com</span>" and "my-secret" above with your FULL domain-name and Trojan service access password accordingly.
-- You can optionally assign a HOOK-URL from command line to update DDNS domain-name pointing to the current server public IP address.
+- You can optionally assign a HOOK-URL to update the DDNS domain-name pointing to the current server public IP address.
 - Alternatively, server-trojan assumes you've ALREADY set the domain-name pointed to the current server public IP address. server-trojan may fail as unable to obtian Letsencrypt cert for the domain-name you set otherwise .
 - You may reach the limitation of 10 times renewal a day applied by Letsencrypt soon if you remove and restart server-trojan container too frequent.
 
@@ -51,7 +52,7 @@ proxy-trojan -d|--domain <trojan-domain> -w|--password <password> [-p|--port <po
     -d|--domain <trojan-domain>   Trojan server domain name
     -w|--password <password>      Password for Trojan server access
     -p|--port <port-num>          [Optional] Port number for Trojan server connection
-$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -d my-domain.com -w my-secret
+$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -d my-domain.com -p 8443 -w my-secret
 ...
 
 $ curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co

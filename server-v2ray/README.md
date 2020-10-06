@@ -13,7 +13,7 @@ $ docker build -t samuelhbne/server-v2ray:amd64 -f Dockerfile.amd64 .
 
 ### NOTE1
 
-- Please replace Dockerfile.amd64 with the Dockerfile.ARCH match the current server accordingly. For example: Dockerfile.arm64 for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. Dockerfile.arm for 32bit Raspbian.
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1, t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
 
 ## How to start the container
 
@@ -21,20 +21,20 @@ $ docker build -t samuelhbne/server-v2ray:amd64 -f Dockerfile.amd64 .
 $ docker run --rm -it samuelhbne/server-v2ray:amd64
 server-v2ray -u|--uuid <vmess-uuid> [-p|--port <port-num>] [-l|--level <level>] [-a|--alterid <alterid>] [-k|--hook hook-url]
     -u|--uuid <vmess-uuid>    Vmess UUID for initial V2ray connection
-    -p|--port <port-num>      [optional] Port number for incoming V2ray connection
-    -l|--level <level>        [optional] Level number for V2ray service access, default to be 0
-    -a|--alterid <alterid>    [optional] AlterID number for V2ray service access, default to be 16
-    -k|--hook <hook-url>      [optional] URL to be hit before server execution, for DDNS update or notification
-$ docker run --name server-v2ray -p 10086:10086 -d samuelhbne/server-v2ray:amd64 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
+    -p|--port <port-num>      [Optional] Port number for incoming V2ray connection, default 10086
+    -l|--level <level>        [Optional] Level number for V2ray service access, default 0
+    -a|--alterid <alterid>    [Optional] AlterID number for V2ray service access, default 16
+    -k|--hook <hook-url>      [Optional] URL to be hit before server execution, for DDNS update or notification
+$ docker run --name server-v2ray -p 20086:10086 -d samuelhbne/server-v2ray:amd64 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
 ...
 ```
 
 ### NOTE2
 
-- Please replace "amd64" with the arch match the current server accordingly. For example: "arm64" for AWS ARM64 platform like A1 and t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
-- Please replace "10086" with the port you want to listen.
-- Please replace "bec24d96-410f-4723-8b3b-46987a1d9ed8" with the uuid you want to set.
-- You can optionally assign a HOOK-URL from command line to update DDNS domain-name pointing to the current server public IP address.
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1, t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
+- Please replace "20086" with the TCP port number you want to listen for V2ray service.
+- Please replace "bec24d96-410f-4723-8b3b-46987a1d9ed8" with the uuid you want to set for V2ray client auth.
+- You can optionally assign a HOOK-URL to update the DDNS domain-name pointing to the current server public IP address.
 
 ## How to verify if server-v2ray is running properly
 
@@ -47,11 +47,11 @@ $ docker run --rm -it samuelhbne/proxy-v2ray:amd64
 proxy-v2ray -h|--host <v2ray-host> -u|--uuid <vmess-uuid> [-p|--port <port-num>] [-l|--level <level>] [-a|--alterid <alterid>] [-s|--security <client-security>]
     -h|--host <v2ray-host>            V2ray server host name or IP address
     -u|--uuid <vmess-uuid>            Vmess UUID for initial V2ray connection
-    -p|--port <port-num>              [optional] Port number for V2ray connection
-    -l|--level <level>                [optional] Level number for V2ray service access, default to be 0
-    -a|--alterid <alterid>            [optional] AlterID number for V2ray service access, default to be 16
-    -s|--security <client-security>   [optional] V2ray client security setting, default to be 'auto'
-$ docker run --name proxy-v2ray -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-v2ray:amd64 -h 12.34.56.78 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
+    -p|--port <port-num>              [Optional] Port number for V2ray connection, default 10086
+    -l|--level <level>                [Optional] Level number for V2ray service access, default 0
+    -a|--alterid <alterid>            [Optional] AlterID number for V2ray service access, default 16
+    -s|--security <client-security>   [Optional] V2ray client security setting, default 'auto'
+$ docker run --name proxy-v2ray -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-v2ray:amd64 -h 12.34.56.78 -p 20086 -u bec24d96-410f-4723-8b3b-46987a1d9ed8
 ...
 
 $ curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co
