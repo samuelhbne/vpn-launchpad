@@ -11,6 +11,10 @@ $ docker build -t samuelhbne/proxy-trojan:amd64 -f Dockerfile.amd64 .
 ...
 ```
 
+### NOTE1
+
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1, t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
+
 ## How to start proxy-trojan container
 
 ```shell
@@ -19,21 +23,25 @@ proxy-trojan -d|--domain <trojan-domain> -w|--password <password> [-p|--port <po
     -d|--domain <trojan-domain>   Trojan server domain name
     -w|--password <password>      Password for Trojan server access
     -p|--port <port-num>          [Optional] Port number for Trojan server connection
-$ docker run --name proxy-trojan -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-trojan:amd64 -d my-domain.com -w my-secret
+$ docker run --name proxy-trojan -p 21080:1080 -p 65353:53/udp -p 28123:8123 -d samuelhbne/proxy-trojan:amd64 -d my-domain.com -w my-secret
 ...
 ```
 
-### NOTE1
+### NOTE2
 
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1, t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
 - Please replace "<span>my-domain.com</span>" and "my-secret" above with your FULL domain-name and Trojan service access password accordingly.
+- Please replace 21080 with the port you want for SOCKS5 proxy TCP listerning.
+- Please replace 28123 with the port you want for HTTP proxy TCP listerning.
+- Please replace 65353 with the port you want for DNS UDP listerning.
 
 ## How to verify if proxy tunnel is working properly
 
 ```shell
-$ curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co
+$ curl -sSx socks5h://127.0.0.1:21080 http://ifconfig.co
 12.34.56.78
 
-$ curl -sSx http://127.0.0.1:8123 http://ifconfig.co
+$ curl -sSx http://127.0.0.1:28123 http://ifconfig.co
 12.34.56.78
 
 $ dig +short @127.0.0.1 -p 65353 twitter.com
@@ -48,7 +56,7 @@ $ docker exec -it proxy-trojan proxychains whois 104.244.42.193|grep OrgId
 OrgId:          TWITT
 ```
 
-### NOTE2
+### NOTE3
 
 - curl should return the VPN server address given above if SOCKS5/HTTP proxy works properly.
 - dig should return resolved IP recorders of twitter.com if DNS server works properly.
