@@ -2,7 +2,7 @@
 
 A SOCKS/HTTP/DNS proxy that tunnelling traffic through existing V2Ray VPN server.
 
-## How to build the image
+## [Optional] How to build proxy-v2ray docker image
 
 ```shell
 $ git clone https://github.com/samuelhbne/vpn-launchpad.git
@@ -15,7 +15,7 @@ $ docker build -t samuelhbne/proxy-v2ray:amd64 -f Dockerfile.amd64 .
 
 - Please replace Dockerfile.amd64 with the Dockerfile.ARCH match your server accordingly. For example: Dockerfile.arm for 32bit Raspbian, Dockerfile.arm64 for 64bit Ubuntu for Raspberry Pi.
 
-## How to start the container
+## How to start proxy-v2ray container
 
 ```shell
 $ docker run --rm -it samuelhbne/proxy-v2ray:amd64

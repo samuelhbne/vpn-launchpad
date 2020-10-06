@@ -2,7 +2,7 @@
 
 A SOCKS5/HTTP/DNS proxy that tunnelling traffic through existing Trojan VPN server.
 
-## How to build the image
+## [Optional] How to build proxy-trojan docker image
 
 ```shell
 $ git clone https://github.com/samuelhbne/vpn-launchpad.git
