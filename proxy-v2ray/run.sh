@@ -4,10 +4,10 @@ usage() {
 	echo "proxy-v2ray -h|--host <v2ray-host> -u|--uuid <vmess-uuid> [-p|--port <port-num>] [-l|--level <level>] [-a|--alterid <alterid>] [-s|--security <client-security>]"
 	echo "    -h|--host <v2ray-host>            V2ray server host name or IP address"
 	echo "    -u|--uuid <vmess-uuid>            Vmess UUID for initial V2ray connection"
-	echo "    -p|--port <port-num>              [optional] Port number for V2ray connection"
-	echo "    -l|--level <level>                [optional] Level number for V2ray service access, default to be 0"
-	echo "    -a|--alterid <alterid>            [optional] AlterID number for V2ray service access, default to be 16"
-	echo "    -s|--security <client-security>   [optional] V2ray client security setting, default to be 'auto'"
+	echo "    -p|--port <port-num>              [Optional] Port number for V2ray connection, default 10086"
+	echo "    -l|--level <level>                [Optional] Level number for V2ray service access, default 0"
+	echo "    -a|--alterid <alterid>            [Optional] AlterID number for V2ray service access, default 16"
+	echo "    -s|--security <client-security>   [Optional] V2ray client security setting, default 'auto'"
 }
 
 TEMP=`getopt -o h:u:p:l:a:s: --long host:,uuid:,port:,level:,alterid:security: -n "$0" -- $@`
