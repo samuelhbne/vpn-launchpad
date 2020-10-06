@@ -63,6 +63,6 @@ if [ `docker ps -a| grep $CTNNAME|wc -l` -gt 0 ]; then
 fi
 
 echo "Starting up local proxy daemon..."
-docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET client --socks5 ${LSTNADDR}:1080 -s ${VHOST}:${BRKPORT} -p "${BRKPASS}" >/dev/null
+docker run --name $CTNNAME -p $SOCKSPORT:1080 -p $DNSPORT:53/udp -p $HTTPPORT:8123 -d $IMGNAME:$TARGET -s ${VHOST} -p ${BRKPORT} -w "${BRKPASS}" >/dev/null
 echo "Done."
 echo

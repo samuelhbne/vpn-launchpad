@@ -37,4 +37,4 @@ done
 
 . $DIR/server-brook.env
 
-docker run --restart unless-stopped --name server-brook -p $BRKPORT:6060 -d $IMGNAME:$TARGET server -l :6060 -p $BRKPASS
+docker run --restart unless-stopped --name server-brook -p $BRKPORT:6060 -d $IMGNAME:$TARGET -w $BRKPASS

@@ -2,7 +2,7 @@
 
 SOCKS/HTTP/DNS proxy that tunnelling traffic via remote Brook server.
 
-## How to build the image
+## [Optional] How to build proxy-brook docker image
 
 ```shell
 $ git clone https://github.com/samuelhbne/vpn-launchpad.git
@@ -11,20 +11,38 @@ $ docker build -t samuelhbne/proxy-brook:amd64 -f Dockerfile.amd64 .
 ...
 ```
 
-## How to start the container
+### NOTE1
+
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1, t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
+
+## How to start proxy-brook container
 
 ```shell
-$ docker run --name proxy-brook -p 1080:1080 -p 65353:53/udp -p 8123:8123 -d samuelhbne/proxy-brook:amd64 client --socks5 0.0.0.0:1080 -s 12.34.56.78:6060 -p my-secret
+$ docker run --rm -it samuelhbne/proxy-brook:amd64
+proxy-brook -s|--host <brook-server> -w|--password <password> [-p|--port <port-number>]
+    -s|--server <brook-server>    brook server name or address
+    -w|--password <password>      Password for brook server access
+    -p|--port <port-num>          [Optional] Port number for brook server connection, default 6060
+$ docker run --name proxy-brook -p 21080:1080 -p 65353:53/udp -p 28123:8123 -d samuelhbne/proxy-brook:amd64 -s 12.34.56.78 -w my-secret
 ...
 ```
+
+### NOTE2
+
+- Please replace "amd64" with the arch match the current box accordingly. For example: "arm64" for AWS ARM64 platform like A1, t4g instance or 64bit Ubuntu on Raspberry Pi. "arm" for 32bit Raspbian.
+- Please replace "12.34.56.78" with the brook server hotsname/IP you want to connect
+- Please replace "my-secret" with the password you want to set.
+- Please replace 21080 with the port number you want for SOCKS5 proxy TCP listerning.
+- Please replace 28123 with the port number you want for HTTP proxy TCP listerning.
+- Please replace 65353 with the port number you want for DNS UDP listerning.
 
 ## How to verify if proxy tunnel is working properly
 
 ```shell
-$ curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co
+$ curl -sSx socks5h://127.0.0.1:21080 http://ifconfig.co
 12.34.56.78
 
-$ curl -sSx http://127.0.0.1:8123 http://ifconfig.co
+$ curl -sSx http://127.0.0.1:28123 http://ifconfig.co
 12.34.56.78
 
 $ dig +short @127.0.0.1 -p 65353 twitter.com
@@ -39,12 +57,13 @@ $ docker exec -it proxy-brook proxychains whois 104.244.42.193|grep OrgId
 OrgId:          TWITT
 ```
 
-### NOTE
+### NOTE3
 
 - curl should return the VPN server address given above if SOCKS5/HTTP proxy works properly.
 - dig should return resolved IP recorders of twitter.com if DNS server works properly.
 - Whois should return "OrgId: TWITT". That means the IP address returned from dig query belongs to twitter.com indeed, hence untaminated.
 - Whois was actually running inside the proxy container through proxychains to avoid potential access blocking.
+- Please have a look over the sibling project [server-brook](https://github.com/samuelhbne/vpn-launchpad/tree/master/server-brook) if you'd like to set a Shadowsocks server.
 
 ## How to get the Brook QR code for mobile connection
 
