@@ -25,7 +25,25 @@ server-sslibev -w|--password <password> [-p|--port <port-number>] [-m|--method <
     -m|--method <encrypt-method>      [Optional] Encrypt method used by sslibev server, default aes-256-gcm
     -t|--timeout <timeout-seconds>    [Optional] Connection timeout in seconds, default 300
     -k|--hook <hook-url>              [Optional] URL to be hit before server execution, for DDNS update or notification
-$ docker run --name server-sslibev -p 28388:8388 -p 28388:8388/udp -d samuelhbne/server-sslibev:amd64 -k my-secret
+$ docker run --name server-sslibev -p 28388:8388 -p 28388:8388/udp -d samuelhbne/server-sslibev:amd64 -k my-secret -m aes-256-gcm
+...
+```
+
+Full list of Shadowsocks encryption methods can be found here:
+
+```shell
+$ docker run --rm --entrypoint /usr/bin/ss-local -it samuelhbne/proxy-sslibev:amd64 --help
+...
+       -m <encrypt_method>        Encrypt method: rc4-md5,
+                                  aes-128-gcm, aes-192-gcm, aes-256-gcm,
+                                  aes-128-cfb, aes-192-cfb, aes-256-cfb,
+                                  aes-128-ctr, aes-192-ctr, aes-256-ctr,
+                                  camellia-128-cfb, camellia-192-cfb,
+                                  camellia-256-cfb, bf-cfb,
+                                  chacha20-ietf-poly1305,
+                                  xchacha20-ietf-poly1305,
+                                  salsa20, chacha20 and chacha20-ietf.
+                                  The default cipher is chacha20-ietf-poly1305.
 ...
 ```
 

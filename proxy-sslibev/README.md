@@ -25,7 +25,7 @@ proxy-sslibev -s|--host <sslibev-server> -w|--password <password> [-p|--port <po
     -p|--port <port-num>              [Optional] Port number for sslibev server connection, default 8388
     -m|--method <encrypt-method>      [Optional] Encrypt method used by sslibev server, default aes-256-gcm
     -t|--timeout <timeout-seconds>    [Optional] Connection timeout in seconds
-$ docker run --name proxy-sslibev -p 21080:1080 -p 65353:53/udp -p 28123:8123 -d samuelhbne/proxy-sslibev:amd64 -s 12.34.56.78 -w "my-secret"
+$ docker run --name proxy-sslibev -p 21080:1080 -p 65353:53/udp -p 28123:8123 -d samuelhbne/proxy-sslibev:amd64 -s 12.34.56.78 -w "my-secret" -m aes-256-gcm
 ...
 ```
 
@@ -38,6 +38,24 @@ $ docker run --name proxy-sslibev -p 21080:1080 -p 65353:53/udp -p 28123:8123 -d
 - Please replace 21080 with the port number you want for SOCKS5 proxy TCP listerning.
 - Please replace 28123 with the port number you want for HTTP proxy TCP listerning.
 - Please replace 65353 with the port number you want for DNS UDP listerning.
+
+Full list of Shadowsocks encryption methods can be found here:
+
+```shell
+$ docker run --rm --entrypoint /usr/bin/ss-local -it samuelhbne/proxy-sslibev:amd64 --help
+...
+       -m <encrypt_method>        Encrypt method: rc4-md5,
+                                  aes-128-gcm, aes-192-gcm, aes-256-gcm,
+                                  aes-128-cfb, aes-192-cfb, aes-256-cfb,
+                                  aes-128-ctr, aes-192-ctr, aes-256-ctr,
+                                  camellia-128-cfb, camellia-192-cfb,
+                                  camellia-256-cfb, bf-cfb,
+                                  chacha20-ietf-poly1305,
+                                  xchacha20-ietf-poly1305,
+                                  salsa20, chacha20 and chacha20-ietf.
+                                  The default cipher is chacha20-ietf-poly1305.
+...
+```
 
 ## How to verify if proxy tunnel is working properly
 
