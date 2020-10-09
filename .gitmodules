@@ -1,0 +1,24 @@
+[submodule "server-trojan"]
+	path = server-trojan
+	url = https://github.com/samuelhbne/server-trojan.git
+[submodule "proxy-trojan"]
+	path = proxy-trojan
+	url = https://github.com/samuelhbne/proxy-trojan.git
+[submodule "server-v2ray"]
+	path = server-v2ray
+	url = https://github.com/samuelhbne/server-v2ray.git
+[submodule "server-sslibev"]
+	path = server-sslibev
+	url = https://github.com/samuelhbne/server-sslibev.git
+[submodule "server-brook"]
+	path = server-brook
+	url = https://github.com/samuelhbne/server-brook.git
+[submodule "proxy-v2ray"]
+	path = proxy-v2ray
+	url = https://github.com/samuelhbne/proxy-v2ray.git
+[submodule "proxy-sslibev"]
+	path = proxy-sslibev
+	url = https://github.com/samuelhbne/proxy-sslibev.git
+[submodule "proxy-brook"]
+	path = proxy-brook
+	url = https://github.com/samuelhbne/proxy-brook.git
