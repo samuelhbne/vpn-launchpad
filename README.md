@@ -25,7 +25,7 @@ Note: For Raspberry Pi users, please update to Raspbian Buster before Docker ins
 ### 2. Initialize AWS credential and VPN server region
 
 ```console
-$ git clone https://github.com/samuelhbne/vpn-launchpad.git
+$ git clone --recurse-submodules https://github.com/samuelhbne/vpn-launchpad.git
 $ cd vpn-launchpad
 $ ./vlp init
 AWS Access Key ID [None]: INPUT-YOUR-AWS-ID-HERE
