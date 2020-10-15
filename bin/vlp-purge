@@ -7,7 +7,7 @@ VLPCFG="$VLPHOME/.vpn-launchpad"
 REGION=`aws --profile $PROFILE configure get region`
 VLPKEY="$VLPCFG/$STACKID.$REGION.$PROFILE.pem"
 
-aws --profile $PROFILE --output table iam get-user >/dev/null
+aws --profile $PROFILE ec2 describe-instances >/dev/null
 if [ "$?" != "0" ]; then
 	echo "Please run 'vlp --init' first."
 	exit 255

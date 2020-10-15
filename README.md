@@ -25,7 +25,7 @@ Note: For Raspberry Pi users, please update to Raspbian Buster before Docker ins
 ### 2. Initialize AWS credential and VPN server region
 
 ```console
-$ git clone https://github.com/samuelhbne/vpn-launchpad.git
+$ git clone --recurse-submodules https://github.com/samuelhbne/vpn-launchpad.git
 $ cd vpn-launchpad
 $ ./vlp init
 AWS Access Key ID [None]: INPUT-YOUR-AWS-ID-HERE
@@ -41,7 +41,7 @@ Note: './vlp init' need to download docker image(about 100MB) during the 1st tim
 ### 3. Build VPN server on AWS
 
 ```console
-$ ./vlp build --without-random --with-v2ray
+$ ./vlp build --without-random --with-sslibev
 ...
 Shadowsocks-URI: ss://YWVzLTI1Ni1nY206U1NTTElCRVYtUEFTUw==@13.231.224.253:28388#VLP-shadowsocks
 ...
@@ -77,12 +77,12 @@ Local proxy is running.
 VPN sever address: 13.231.224.253
 
 Checking SOCKS5 proxy on 127.0.0.1:1080 TCP ...
-curl -sx socks5h://127.0.0.1:1080 http://ifconfig.co
+curl -sSx socks5h://127.0.0.1:1080 http://ifconfig.co
 13.231.224.253
 SOCKS5 proxy check passed.
 
 Checking HTTP proxy on 127.0.0.1:8123 TCP ...
-curl -sx http://127.0.0.1:8123 http://ifconfig.co
+curl -sSx http://127.0.0.1:8123 http://ifconfig.co
 13.231.224.253
 HTTP proxy check passed.
 
@@ -140,7 +140,7 @@ Note: Terminating VPN server instance from AWS after surfing is always recommend
 4. Input the "User name" and tick "Programmatic access" box below
 5. Click "Next: Permissions" button
 6. Click "Create group" button
-7. Fill "Group name" with "vlpadmin" and tick "AdministratorAccess" selection box which on the top of the policy list
+7. Fill "Group name" with "vlpadmin" and tick "AmazonEC2FullAccess" selection box which on the top of the policy list
 8. Click "Create group" blue button at the bottom right of the page.
 9. Tick the "vlpadmin" selection box in "Add user to group" page
 10. Click "Next: Tags", click "Next: Review" then click "Create user" button
@@ -162,8 +162,9 @@ vlp [--from-src] <command> [options]
       --from-src        -- Build VPN server from source rather than docker image downloading
       --with-brook      -- Build VPN server with Brook services installed
       --with-l2tp       -- Build VPN server with L2TP services installed
-      --with-trojan     -- Build VPN server with Trojan services installed
       --with-v2ray      -- Build VPN server with V2Ray services installed
+      --with-trojan     -- Build VPN server with Trojan services installed
+      --with-sslibev    -- Build VPN server with Shadowsocks services installed
       --with-random     -- Build VPN server with VPN passwords randomisation.
       --without-random  -- Build VPN server without VPN passwords randomisation.
     status              -- Check VPN server status.
@@ -275,7 +276,6 @@ Credits to [Tomohisa Kusano](https://github.com/siomiz/SoftEtherVPN) and [SoftEt
 
 ```console
 $ cat proxy-sslibev/proxy-sslibev.env
-LSTNADDR="0.0.0.0"
 SOCKSPORT="1080"
 HTTPPORT="8123"
 DNSPORT="65353"
