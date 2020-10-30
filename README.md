@@ -4,6 +4,8 @@ EC2 VPN server builder with multiple VPN support including L2TP, Shadowsocks, V2
 
 Works in Ubuntu(Xenial and above), Mac OSX(Yosemite and above) and Debian(Buster and above) variants including Raspbian. Running in Windows with dind (Docker in docker) container is possible, but not yet verified.
 
+![docker-build](https://github.com/samuelhbne/vpn-launchpad/workflows/docker-build/badge.svg)
+
 ## How it works
 
 Command vlp creates EC2 instance with VPN services installed out of box. Command lproxy creates proxy (SOCKS/HTTP/DNS) container running locally on your PC, Mac or Raspberry Pi, which tunneling all traffic through the VPN server on EC2. AWS account ID/key are necessary.
