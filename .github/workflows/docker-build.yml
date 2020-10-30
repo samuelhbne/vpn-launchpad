@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
             context: vpnlaunchpad
-            file: ./Dockerfile.amd64
+            file: Dockerfile.amd64
             platforms: linux/amd64
             push: true
             tags: |
@@ -47,7 +47,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
             context: vpnlaunchpad
-            file: ./Dockerfile.arm64
+            file: Dockerfile.arm64
             platforms: linux/arm64
             push: true
             tags: ${{ github.repository }}:arm64
@@ -56,7 +56,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
             context: vpnlaunchpad
-            file: ./Dockerfile.arm
+            file: Dockerfile.arm
             platforms: linux/arm/v6
             push: true
             tags: ${{ github.repository }}:arm
