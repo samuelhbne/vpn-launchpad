@@ -35,7 +35,7 @@ jobs:
         name: Build and push AMD64
         uses: docker/build-push-action@v2
         with:
-            context: ./vpnlaunchpad
+            context: vpnlaunchpad/
             file: ./Dockerfile.amd64
             platforms: linux/amd64
             push: true
@@ -46,7 +46,7 @@ jobs:
         name: Build and push ARM64v8
         uses: docker/build-push-action@v2
         with:
-            context: ./vpnlaunchpad
+            context: vpnlaunchpad/
             file: ./Dockerfile.arm64
             platforms: linux/arm64
             push: true
@@ -55,7 +55,7 @@ jobs:
         name: Build and push ARM32v6
         uses: docker/build-push-action@v2
         with:
-            context: ./vpnlaunchpad
+            context: vpnlaunchpad/
             file: ./Dockerfile.arm
             platforms: linux/arm/v6
             push: true
