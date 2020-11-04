@@ -1,16 +1,18 @@
-name: docker-build
+name: docker-buildx-latest
 
 on:
   push:
     branches: master
 
 jobs:
-  buildx:
+  multi-arch-latest:
     runs-on: ubuntu-latest
     steps:
       -
         name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -32,6 +34,19 @@ jobs:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
+        name: Build and push multi-arch latest
+        uses: docker/build-push-action@v2
+        with:
+            context: vpnlaunchpad
+            file: vpnlaunchpad/Dockerfile.amd64
+            platforms: |
+              linux/amd64
+              linux/arm64
+              linux/arm/v7
+              linux/arm/v6
+            push: true
+            tags: ${{ github.repository }}:latest
+      -
         name: Build and push AMD64
         uses: docker/build-push-action@v2
         with:
@@ -39,9 +54,7 @@ jobs:
             file: vpnlaunchpad/Dockerfile.amd64
             platforms: linux/amd64
             push: true
-            tags: |
-              samuelhbne/vpnlaunchpad:amd64
-              samuelhbne/vpnlaunchpad:latest
+            tags: ${{ github.repository }}:amd64
       -
         name: Build and push ARM64v8
         uses: docker/build-push-action@v2
@@ -50,7 +63,16 @@ jobs:
             file: vpnlaunchpad/Dockerfile.arm64
             platforms: linux/arm64
             push: true
-            tags: samuelhbne/vpnlaunchpad:arm64
+            tags: ${{ github.repository }}:arm64
+      -
+        name: Build and push ARM32v7
+        uses: docker/build-push-action@v2
+        with:
+            context: vpnlaunchpad
+            file: vpnlaunchpad/Dockerfile.arm
+            platforms: linux/arm/v7
+            push: true
+            tags: ${{ github.repository }}:armv7
       -
         name: Build and push ARM32v6
         uses: docker/build-push-action@v2
@@ -59,4 +81,4 @@ jobs:
             file: vpnlaunchpad/Dockerfile.arm
             platforms: linux/arm/v6
             push: true
-            tags: samuelhbne/vpnlaunchpad:arm
+            tags: ${{ github.repository }}:arm
