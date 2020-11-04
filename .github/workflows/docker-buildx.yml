@@ -45,7 +45,7 @@ jobs:
               linux/arm/v7
               linux/arm/v6
             push: true
-            tags: ${{ github.repository }}:latest
+            tags: samuelhbne/vpnlaunchpad:latest
       -
         name: Build and push AMD64
         uses: docker/build-push-action@v2
@@ -54,7 +54,7 @@ jobs:
             file: vpnlaunchpad/Dockerfile.amd64
             platforms: linux/amd64
             push: true
-            tags: ${{ github.repository }}:amd64
+            tags: samuelhbne/vpnlaunchpad:amd64
       -
         name: Build and push ARM64v8
         uses: docker/build-push-action@v2
@@ -63,7 +63,7 @@ jobs:
             file: vpnlaunchpad/Dockerfile.arm64
             platforms: linux/arm64
             push: true
-            tags: ${{ github.repository }}:arm64
+            tags: samuelhbne/vpnlaunchpad:arm64
       -
         name: Build and push ARM32v7
         uses: docker/build-push-action@v2
@@ -72,7 +72,7 @@ jobs:
             file: vpnlaunchpad/Dockerfile.arm
             platforms: linux/arm/v7
             push: true
-            tags: ${{ github.repository }}:armv7
+            tags: samuelhbne/vpnlaunchpad:armv7
       -
         name: Build and push ARM32v6
         uses: docker/build-push-action@v2
@@ -81,4 +81,4 @@ jobs:
             file: vpnlaunchpad/Dockerfile.arm
             platforms: linux/arm/v6
             push: true
-            tags: ${{ github.repository }}:arm
+            tags: samuelhbne/vpnlaunchpad:arm
