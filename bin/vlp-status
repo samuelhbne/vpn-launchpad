@@ -88,8 +88,17 @@ if [ "$V2RAYENV" != "" ]; then
 		echo "Incorrect V2RAY configuration. Incomplete VPN server installation?"
 		exit 2
 	fi
-	V2RAYINFO=`echo "{'add':'$IPADDR','aid':'$V2RAYAID','id':'$V2RAYUUID','net':'tcp','port':'$V2RAYPORT','ps':'VLP-V2RAY'}"`
-	V2RAYINFO=`echo $V2RAYINFO|base64|tr -d '\n'`
+    V2RAYINFO="{}"
+    V2RAYINFO=$( echo $V2RAYINFO| jq ". += {\"ps\":\"$IPADDR:$V2RAYPORT\"}" )
+    V2RAYINFO=$( echo $V2RAYINFO| jq ". += {\"type\":\"none\"}" )
+    V2RAYINFO=$( echo $V2RAYINFO| jq ". += {\"v\":\"2\"}" )
+    V2RAYINFO=$( echo $V2RAYINFO| jq ". += {\"add\":\"$IPADDR\"}" )
+    V2RAYINFO=$( echo $V2RAYINFO| jq ". += {\"aid\":\"$V2RAYAID\"}" )
+    V2RAYINFO=$( echo $V2RAYINFO| jq ". += {\"id\":\"$V2RAYUUID\"}" )
+    V2RAYINFO=$( echo $V2RAYINFO| jq ". += {\"port\":\"$V2RAYPORT\"}" )
+    V2RAYINFO=$( echo $V2RAYINFO| jq ". += {\"host\":\"\"}" )
+    V2RAYINFO=$( echo $V2RAYINFO| jq ". += {\"net\":\"tcp\"}" )
+	V2RAYINFO=`echo $V2RAYINFO|jq -c|base64|tr -d '\n'`
 	echo "V2Ray-vmess-URI: vmess://$V2RAYINFO"
 	if [ "$QRCODE" = "1" ]; then
 		qrcode-terminal "vmess://$V2RAYINFO"

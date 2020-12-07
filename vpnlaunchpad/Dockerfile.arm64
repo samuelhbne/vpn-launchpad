@@ -3,7 +3,7 @@ FROM arm64v8/alpine:3.12
 ENV DKUID 1000
 ENV DKGID 1000
 
-RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make bash py-pip pwgen bc npm shadow
+RUN apk update && apk add git openssh gcc musl-dev libffi-dev openssl-dev make bash py-pip pwgen bc npm shadow jq
 RUN npm config set unsafe-perm true
 RUN npm install -g qrcode-terminal
 RUN npm install -g url-cli
