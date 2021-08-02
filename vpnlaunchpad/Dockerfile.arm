@@ -1,4 +1,4 @@
-FROM arm32v6/alpine:3.12
+FROM arm32v6/alpine:3.14
 
 ENV DKUID 1000
 ENV DKGID 1000
