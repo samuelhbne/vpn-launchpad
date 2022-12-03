@@ -30,8 +30,8 @@ if [ -z "$SOCKSPORT" ]; then
 	echo "SOCKS5 proxy doesn't exposed. Skip check."
 else
 	echo "Checking SOCKS5 proxy on $PXYIP:$SOCKSPORT TCP ..."
-	echo "curl -sSx socks5h://$PXYIP:$SOCKSPORT http://ifconfig.co"
-	IFADDR=`curl -sSx socks5h://$PXYIP:$SOCKSPORT http://ifconfig.co`
+	echo "curl -sSx socks5h://$PXYIP:$SOCKSPORT https://checkip.amazonaws.com"
+	IFADDR=`curl -sSx socks5h://$PXYIP:$SOCKSPORT https://checkip.amazonaws.com`
 	echo "$IFADDR"
 	if [ "$IFADDR" = "$VPSADDR" ]; then
 		echo -e "SOCKS5 proxy check passed."
@@ -45,8 +45,8 @@ if [ -z "$HTTPPORT" ]; then
 	echo "HTTP proxy doesn't exposed. Skip check."
 else
 	echo "Checking HTTP proxy on $PXYIP:$HTTPPORT TCP ..."
-	echo "curl -sSx http://$PXYIP:$HTTPPORT http://ifconfig.co"
-	IFADDR=`curl -sSx http://$PXYIP:$HTTPPORT http://ifconfig.co`
+	echo "curl -sSx http://$PXYIP:$HTTPPORT https://checkip.amazonaws.com"
+	IFADDR=`curl -sSx http://$PXYIP:$HTTPPORT https://checkip.amazonaws.com`
 	echo "$IFADDR"
 	if [ "$IFADDR" = "$VPSADDR" ]; then
 		echo -e "HTTP proxy check passed."
